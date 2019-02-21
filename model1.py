@@ -9,7 +9,7 @@ from torch_geometric.nn import SplineConv
 import numpy as np
 
 
-path=osp.join(osp.dirname(osp.realpath(__file__)), 'HCPdata')
+path=osp.join(osp.dirname(osp.realpath(__file__)), 'data')
 print(path)
 #path='/home/uqfribe1/PycharmProjects/pytorch_geometric/my_stuff/my_own_data'
 pre_transform=T.Compose([T.FaceToEdge(),T.NormalizeFeatures()])

@@ -13,7 +13,7 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,eccentr
     R2 = scipy.io.loadmat(osp.join(path,'cifti_R2_all.mat'))['cifti_R2']
 
     # Loading list of subjects
-    with open(osp.join(path,'list_subj')) as fp:
+    with open(osp.join(path,'..','..','list_subj')) as fp:
         subjects = fp.read().split("\n")
     subjects = subjects[0:len(subjects) - 1]
 
