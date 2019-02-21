@@ -39,7 +39,7 @@ class Retinotopy(InMemoryDataset):
 
     def process(self):
         # extract_zip(self.raw_paths[0], self.raw_dir, log=False)
-        path = osp.join(self.raw_dir, 'S1200_7T_Retinotopy_9Zkk')
+        path = osp.join(self.raw_dir, 'converted')
         data_list=[]
         for i in range(0,self.n_examples):
             data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',threshold=2.2)
