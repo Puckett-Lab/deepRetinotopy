@@ -1,8 +1,8 @@
 import os.path as osp
-
 import torch
 import torch.nn.functional as F
-from HCP_gCNN.HCP_v3 import Retinotopy
+
+from dataset.HCP_v3 import Retinotopy
 import torch_geometric.transforms as T
 from torch_geometric.nn import SplineConv
 
@@ -31,25 +31,15 @@ class Net(torch.nn.Module):
 
     def forward(self, data):
         x, edge_index, pseudo = data.x, data.edge_index, data.edge_attr
-        print(np.shape(x))
         x = F.elu(norm(self.conv1(x, edge_index, pseudo), edge_index))
-        print(np.shape(x))
         x = F.elu(norm(self.conv2(x, edge_index, pseudo), edge_index))
-        print(np.shape(x))
         x = F.elu(norm(self.conv3(x, edge_index, pseudo), edge_index))
-        print(np.shape(x))
         x = F.elu(norm(self.conv4(x, edge_index, pseudo), edge_index))
-        print(np.shape(x))
         x = F.elu(norm(self.conv5(x, edge_index, pseudo), edge_index))
-        print(np.shape(x))
         x = F.elu(norm(self.conv6(x, edge_index, pseudo), edge_index))
-        print(np.shape(x))
         x = F.elu(self.fc1(x))
-        print(np.shape(x))
         x = F.dropout(x, training=self.training)
-        print(np.shape(x))
         x = self.fc2(x)
-        print(np.shape(x))
         return F.log_softmax(x, dim=1)
 
 

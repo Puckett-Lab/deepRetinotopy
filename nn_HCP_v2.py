@@ -1,9 +1,8 @@
-
 import os.path as osp
-
 import torch
 import torch.nn.functional as F
-from HCP_v3 import Retinotopy
+
+from dataset.HCP_3sets import Retinotopy
 import torch_geometric.transforms as T
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
