@@ -3,13 +3,13 @@ import shutil
 
 import torch
 from torch_geometric.data import InMemoryDataset, extract_zip
-from HCP_gCNN.read_HCPdata_curv import read_HCP
+from read.read_HCPdata_curv import read_HCP
 
 #Generates the training and test set separately
 
 
 class Retinotopy(InMemoryDataset):
-    url = 'bla'
+    url = 'https://balsa.wustl.edu/study/show/9Zkk'
     def __init__(self,
                  root,
                  train=True,
@@ -25,7 +25,8 @@ class Retinotopy(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return 'my_version_retinotopy.zip'
+        return 'S1200_7T_Retinotopy_9Zkk.zip'
+
 
     @property
     def processed_file_names(self):
@@ -33,12 +34,12 @@ class Retinotopy(InMemoryDataset):
 
     def download(self):
         raise RuntimeError(
-            'Dataset not found. Please download my_version_retinotopy.zip from {} and '
-            'move it to {}'.format(self.url, self.raw_dir))
+            'Dataset not found. Please download S1200_7T_Retinotopy_9Zkk.zip from {} and '
+            'move it to {} and execute SettingDataset.sh'.format(self.url, self.raw_dir))
 
     def process(self):
-        extract_zip(self.raw_paths[0], self.raw_dir, log=False)
-        path=osp.join(self.raw_dir, 'my_version_retinotopy')
+        # extract_zip(self.raw_paths[0], self.raw_dir, log=False)
+        path = osp.join(self.raw_dir, 'S1200_7T_Retinotopy_9Zkk')
         data_list=[]
         for i in range(0,self.n_examples):
             data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',threshold=2.2)
