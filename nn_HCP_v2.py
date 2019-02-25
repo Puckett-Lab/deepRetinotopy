@@ -11,13 +11,13 @@ import numpy as np
 
 path=osp.join(osp.dirname(osp.realpath(__file__)), 'data')
 print(path)
-#path='/home/uqfribe1/PycharmProjects/pytorch_geometric/my_stuff/my_own_data'
+#path='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data'
 pre_transform=T.Compose([T.FaceToEdge(),T.NormalizeFeatures()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
 #test_dataset=Retinotopy(path,'Test',transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
-train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
-dev_loader = DataLoader(dev_dataset, batch_size=1)
+train_loader = DataLoader(train_dataset[0], batch_size=1, shuffle=True)
+dev_loader = DataLoader(train_dataset[0], batch_size=1)
 d = train_dataset[0]
 
 
