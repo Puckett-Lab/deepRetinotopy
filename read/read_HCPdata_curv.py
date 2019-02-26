@@ -47,8 +47,9 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,eccentr
 
         nocurv=np.isnan(curvature)
         curvature[nocurv==1] = 0
-        eccentricity_values[nocurv == 1] = -1  # no data in those positions
-        polarAngle_values[nocurv==1] = -1 # no data in those positions
+
+        noR2=np.isnan(R2_values)
+        R2_values[noR2==1]=0
 
         condition=R2_values < threshold
         condition2=np.isnan(eccentricity_values)
@@ -63,7 +64,7 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,eccentr
 
         data=Data(x=curvature,y=eccentricity_values,pos=pos)
         data.face=faces
-
+        data.R2 = R2_values
 
 
     if Hemisphere=='Left':
@@ -87,8 +88,10 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,eccentr
 
         nocurv=np.isnan(curvature)
         curvature[nocurv==1] = 0
-        eccentricity_values[nocurv == 1] = -1  # no data in those positions
-        polarAngle_values[nocurv==1] = -1 # no data in those positions
+
+        noR2=np.isnan(R2_values)
+        R2_values[noR2==1]=0
+
 
         condition=R2_values < threshold
         condition2=np.isnan(eccentricity_values)
@@ -103,6 +106,6 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,eccentr
 
         data = Data(x=curvature, y=polarAngle_values, pos=pos)
         data.face = faces
-
+        data.R2 = R2_values
 
     return data
