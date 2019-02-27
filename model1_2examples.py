@@ -33,8 +33,7 @@ class Net(torch.nn.Module):
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
 optimizer=torch.optim.Adam(model.parameters(),lr=0.1)
-y=[]
-y_hat=[]
+
 
 def train(epoch):
     model.train()
@@ -63,7 +62,8 @@ def train(epoch):
 def test():
     model.eval()
     MeanAbsError =0
-
+    y=[]
+    y_hat=[]
     for data in dev_loader:
         pred = model(data.to(device)).detach()
         threshold=data.to(device).R2.view(-1)>2.2
@@ -73,17 +73,19 @@ def test():
         MeanAbsError += MAE
         #print('Mean Absolute Error: {:.4f}'.format(MAE))
     test_MAE=MeanAbsError/len(dev_loader)
-    output={'Predicted_values':y_hat,'Measured_values':y,'MAE':test_MAE}
+    output={'Predicted_values':pred,'Measured_values':y,'MAE':test_MAE}
     return output
 
 
 
-for epoch in range(1, 100):
+for epoch in range(1, 30000):
     loss=train(epoch)
     test_output = test()
     print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
     if epoch%50==0:
         torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','model12_2examples_output_epoch'+str(epoch)+'.pt'))
+    if loss<=10.94: #MeanAbsError from Benson2014
+        break
 
 
 #Saving the model's learned parameter and predicted/y values
