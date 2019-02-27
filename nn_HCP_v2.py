@@ -6,8 +6,6 @@ from dataset.HCP_3sets import Retinotopy
 import torch_geometric.transforms as T
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
-import numpy as np
-
 
 path=osp.join(osp.dirname(osp.realpath(__file__)), 'data')
 print(path)

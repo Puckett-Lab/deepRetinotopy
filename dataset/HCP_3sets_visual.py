@@ -1,10 +1,8 @@
 import os.path as osp
-import shutil
-import subprocess
 import scipy.io
 from functions.def_ROIs import roi
 import torch
-from torch_geometric.data import InMemoryDataset, extract_zip
+from torch_geometric.data import InMemoryDataset
 from read.read_HCPdata_visual import read_HCP
 from functions.labels import labels
 
