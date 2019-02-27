@@ -54,7 +54,7 @@ def train(epoch):
         #print(output_loss.item())
         output_loss.backward()
         optimizer.step()
-    return output_loss
+    return output_loss.detach()
 
 
 def test():
@@ -62,7 +62,7 @@ def test():
     MeanAbsError =0
 
     for data in test_loader:
-        pred = model(data.to(device))
+        pred = model(data.to(device)).detach()
         threshold=data.to(device).R2.view(-1)>2.2
         y_hat.append(pred)
         y.append(data.to(device).y.view(-1))
