@@ -1,16 +1,12 @@
 import numpy as np
 
 def labels(input,labels):
-    output=[]
-    for k in range(len(labels)):
-        for i in range(len(input)):
-            for j in range(3):
-                if input[i][j] == labels[k]:
-                    input[i] = np.array([0, 0, 0])
+    faces_indexes = np.array([])
+    for j in range(len(labels)):
+        faces_indexes = np.concatenate((faces_indexes, np.where(input == labels[j])[0]), axis=0)
 
+    faces = []
+    for i in range(len(faces_indexes)):
+        faces.append(input[int(faces_indexes[i])])
 
-    for i in range(len(input)):
-        if np.sum(input[i] == np.array([0, 0, 0])) != 3:
-            output.append(input[i])
-
-    return np.array(output)
+    return np.reshape(faces,(len(faces),3))
