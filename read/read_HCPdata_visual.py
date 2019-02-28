@@ -8,7 +8,7 @@ from numpy.random import seed
 
 from torch_geometric.data import Data
 
-def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle=True,visual_mask_L=None,visual_mask_R=None,nodes_visual_L=None,nodes_visual_R=None,faces_L=None,faces_R=None,eccentricity=None,polar_angle=None,):
+def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle=True,visual_mask_L=None,visual_mask_R=None,faces_L=None,faces_R=None,eccentricity=None,polar_angle=None,):
     # Loading the measures
     curv = scipy.io.loadmat(osp.join(path,'cifti_curv_all.mat'))['cifti_curv']
     eccentricity = scipy.io.loadmat(osp.join(path,'cifti_eccentricity_all.mat'))['cifti_eccentricity']

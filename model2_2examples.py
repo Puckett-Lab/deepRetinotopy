@@ -60,16 +60,19 @@ def test():
     MeanAbsError =0
     y = []
     y_hat = []
+    R2_plot=[]
     for data in dev_loader:
         pred = model(data.to(device)).detach()
-        threshold=data.to(device).R2.view(-1)>2.2
+        R2 = data.to(device).R2
+        threshold = R2.view(-1) > 2.2
+        R2_plot.append(R2)
         y_hat.append(pred)
         y.append(data.to(device).y.view(-1))
         MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold]-pred[threshold])).item()
         MeanAbsError += MAE
         #print('Mean Absolute Error: {:.4f}'.format(MAE))
     test_MAE=MeanAbsError/len(dev_loader)
-    output={'Predicted_values':y_hat,'Measured_values':y,'MAE':test_MAE}
+    output={'Predicted_values':y_hat,'Measured_values':y,'R2':R2_plot,'MAE':test_MAE}
     return output
 
 

@@ -50,16 +50,16 @@ class Retinotopy(InMemoryDataset):
 
         # Selecting only V1,V2 and V3
         label_primary_visual_areas = ['V1d', 'V1v', 'V2d', 'V2v', 'V3d', 'V3v']
-        final_mask_L, final_mask_R, index_L_mask, index_R_mask, index_L_exclude, index_R_exclude= roi(label_primary_visual_areas)
+        final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 
-        faces_R = labels(scipy.io.loadmat(osp.join(path,'tri_faces_R.mat'))['tri_faces_R']-1, index_R_exclude)
+        faces_R = labels(scipy.io.loadmat(osp.join(path,'tri_faces_R.mat'))['tri_faces_R']-1, index_R_mask)
         print(len(faces_R))
-        faces_L = labels(scipy.io.loadmat(osp.join(path, 'tri_faces_L.mat'))['tri_faces_L'] - 1, index_L_exclude)
+        faces_L = labels(scipy.io.loadmat(osp.join(path, 'tri_faces_L.mat'))['tri_faces_L'] - 1, index_L_mask)
         print(len(faces_L))
 
 
         for i in range(0,self.n_examples):
-            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',threshold=2.2,visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,nodes_visual_L=index_L_mask,nodes_visual_R=index_R_mask,faces_L=faces_L,faces_R=faces_R)
+            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',threshold=2.2,visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R)
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
             data_list.append(data)

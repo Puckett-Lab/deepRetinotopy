@@ -52,11 +52,11 @@ class Retinotopy(InMemoryDataset):
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
 
-            data.y=(data.y-torch.mean(data.y))/torch.std(data.y)
+            data.y=((data.y-torch.mean(data.y))/torch.std(data.y)).detach()
             data.Ymean=torch.mean(data.y)
             data.Ystd=torch.std(data.y)
 
-            data.x = (data.x - torch.mean(data.x)) / torch.std(data.x)
+            data.x =((data.x - torch.mean(data.x)) / torch.std(data.x)).detach()
             data.Xmean = torch.mean(data.x)
             data.Xstd = torch.std(data.x)
 
