@@ -64,27 +64,30 @@ def test():
     MeanAbsError =0
     y=[]
     y_hat=[]
+    R2_plot=[]
     for data in dev_loader:
         pred = model(data.to(device)).detach()
-        threshold=data.to(device).R2.view(-1)>2.2
+        R2=data.to(device).R2
+        threshold=R2.view(-1)>2.2
+        R2_plot.append(R2)
         y_hat.append(pred)
         y.append(data.to(device).y.view(-1))
         MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold]-pred[threshold])).item()
         MeanAbsError += MAE
         #print('Mean Absolute Error: {:.4f}'.format(MAE))
     test_MAE=MeanAbsError/len(dev_loader)
-    output={'Predicted_values':pred,'Measured_values':y,'MAE':test_MAE}
+    output={'Predicted_values':pred,'Measured_values':y,'R2':R2_plot,'MAE':test_MAE}
     return output
 
 
 
-for epoch in range(1, 30000):
+for epoch in range(1, 10000):
     loss=train(epoch)
     test_output = test()
     print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
     if epoch%1000==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','model12_2examples_output_epoch'+str(epoch)+'.pt'))
-    if loss<=10.94: #MeanAbsError from Benson2014
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','model12_2examples_output_epoch'+str(epoch)+'.pt'))
+    if test_output<=10.94: #MeanAbsError from Benson2014
         break
 
 
