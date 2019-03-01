@@ -27,7 +27,7 @@ class Net(torch.nn.Module):
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
-        x=F.elu(self.conv4(x,edge_index,pseudo)).view(-1)-1
+        x=F.elu(self.conv4(x,edge_index,pseudo)).view(-1)
         return x
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')

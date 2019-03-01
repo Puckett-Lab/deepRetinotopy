@@ -9,7 +9,7 @@ def roi(list_of_labels):
 
     list_primary_visual_areas = np.zeros([6, 64984])
     for i in range(len(list_of_labels)):
-        with open(osp.join('/home/uqfribe1/PycharmProjects/DEEP-fMRI/labels/VisualAreasLabels_Wang2015',
+        with open(osp.join(osp.dirname(osp.realpath(__file__)),'..','labels/VisualAreasLabels_Wang2015',
                            list_of_labels[i] + '_label.txt')) as fp:
             list_primary_visual_areas[i] = fp.read().split("\n")[0:64984]
 
