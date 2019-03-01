@@ -83,7 +83,7 @@ for epoch in range(1, 30000):
     print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
     if epoch%1000==0:
         torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output', 'model2_2examples_output_epoch'+str(epoch)+'.pt'))
-    if loss<=10.94: #MeanAbsError from Benson2014
+    if loss['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
