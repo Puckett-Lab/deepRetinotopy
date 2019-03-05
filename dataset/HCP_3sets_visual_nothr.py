@@ -3,7 +3,7 @@ import scipy.io
 from functions.def_ROIs import roi
 import torch
 from torch_geometric.data import InMemoryDataset
-from read.read_HCPdata_visual import read_HCP
+from read.read_HCPdata_visual_nothr import read_HCP
 from functions.labels import labels
 
 #Generates the training and test set separately
@@ -36,7 +36,7 @@ class Retinotopy(InMemoryDataset):
 
     @property
     def processed_file_names(self):
-        return ['training_visual.pt','development_visual.pt','test_visual.pt']
+        return ['training_visual_nothresh.pt','development_visual_nothresh.pt','test_visual_nothresh.pt']
 
     def download(self):
         raise RuntimeError(
@@ -58,7 +58,7 @@ class Retinotopy(InMemoryDataset):
 
 
         for i in range(0,self.n_examples):
-            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',threshold=2.2,visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R)
+            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R)
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
             data_list.append(data)

@@ -24,3 +24,4 @@ def labels(input,labels):
             final_faces.append(faces[i])
 
     return np.reshape(final_faces,(len(final_faces),3))
+
