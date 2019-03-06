@@ -46,9 +46,13 @@ def train(epoch):
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.01
 
-    if epoch == 350:
+    if epoch == 500:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.005
+
+    if epoch == 750:
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = 0.001
 
     for data in train_loader:
         data=data.to(device)
