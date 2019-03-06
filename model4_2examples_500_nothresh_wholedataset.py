@@ -11,8 +11,9 @@ from torch_geometric.nn import SplineConv
 path=osp.join(osp.dirname(osp.realpath(__file__)),'data')
 pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
-train_loader=DataLoader(train_dataset[0:2],batch_size=1,shuffle=True)
-dev_loader=DataLoader(train_dataset[0:2],batch_size=1)
+dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
+train_loader=DataLoader(train_dataset,batch_size=1,shuffle=True)
+dev_loader=DataLoader(dev_dataset,batch_size=1)
 
 class Net(torch.nn.Module):
     def __init__(self):
@@ -89,10 +90,10 @@ for epoch in range(1, 501):
     test_output = test()
     print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
     if epoch%50==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_2examples_500_nothresh_output_epoch'+str(epoch)+'.pt'))
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_2examples_500_nothresh_wholedataset_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_2examples_500_nothresh.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_2examples_500_nothresh_wholedataset.pt'))
