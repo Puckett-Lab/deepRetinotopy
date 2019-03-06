@@ -18,16 +18,18 @@ class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
         self.conv1=SplineConv(1,8,dim=3,kernel_size=5,norm=False)
-        self.conv2=SplineConv(8,8,dim=3,kernel_size=5,norm=False)
-        self.conv3=SplineConv(8,8,dim=3,kernel_size=5,norm=False)
-        self.conv4 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
+        self.conv2=SplineConv(8,16,dim=3,kernel_size=5,norm=False)
+        self.conv3=SplineConv(16,16,dim=3,kernel_size=5,norm=False)
+        self.conv4 = SplineConv(16, 8, dim=3, kernel_size=5, norm=False)
+        self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
         x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
-        x=F.elu(self.conv4(x,edge_index,pseudo)).view(-1)
+        x = F.elu(self.conv4(x, edge_index, pseudo))
+        x=F.elu(self.conv5(x,edge_index,pseudo)).view(-1)
         return x
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -89,10 +91,10 @@ for epoch in range(1, 501):
     test_output = test()
     print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
     if epoch%50==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_2examples_500_nothresh_output_epoch'+str(epoch)+'.pt'))
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_2examples_500_nothresh_5layers_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_2examples_500_nothresh.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_2examples_500_nothresh_5layers.pt'))
