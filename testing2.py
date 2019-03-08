@@ -13,7 +13,7 @@ pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
 train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
-dev_loader=DataLoader(train_dataset[0:10],batch_size=1)
+dev_loader=DataLoader(dev_dataset[0:10],batch_size=1)
 
 class Net(torch.nn.Module):
     def __init__(self):
@@ -38,7 +38,7 @@ class Net(torch.nn.Module):
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
 model.load_state_dict(torch.load(osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_1000_nothresh_6layers_featmap.pt')))
-optimizer=torch.optim.Adam(model.parameters(),lr=0.01)
+optimizer=torch.optim.Adam(model.parameters(),lr=0.02)
 
 
 def train(epoch):
