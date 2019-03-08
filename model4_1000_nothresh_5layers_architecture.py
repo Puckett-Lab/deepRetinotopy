@@ -87,7 +87,7 @@ def test():
 
 
 
-for epoch in range(1, 5001):
+for epoch in range(1, 1001):
     loss=train(epoch)
     test_output = test()
     print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
