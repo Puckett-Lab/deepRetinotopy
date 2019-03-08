@@ -12,7 +12,7 @@ path=osp.join(osp.dirname(osp.realpath(__file__)),'data')
 pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
-train_loader=DataLoader(train_dataset,batch_size=32,shuffle=True)
+train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
 dev_loader=DataLoader(train_dataset[0:10],batch_size=1)
 
 class Net(torch.nn.Module):
