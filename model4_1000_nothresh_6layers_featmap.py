@@ -21,7 +21,7 @@ class Net(torch.nn.Module):
         self.conv1=SplineConv(1,8,dim=3,kernel_size=5,norm=False)
         self.conv2=SplineConv(8,16,dim=3,kernel_size=5,norm=False)
         self.conv3=SplineConv(16,32,dim=3,kernel_size=5,norm=False)
-        self.conv4=SplineConv(32,16,dim=3,kernel_size=5,norm=False
+        self.conv4=SplineConv(32,16,dim=3,kernel_size=5,norm=False)
         self.conv5=SplineConv(16,8,dim=3,kernel_size=5,norm=False)
         self.conv6 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
