@@ -37,8 +37,8 @@ class Net(torch.nn.Module):
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-optimizer=torch.optim.Adam(model.parameters(),lr=0.1)
-
+model.load_state_dict(torch.load(osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_1000_nothresh_6layers.pt'),map_location='cpu'))
+optimizer=torch.optim.Adam(model.parameters(),lr=0.05)
 
 def train(epoch):
     model.train()
@@ -94,10 +94,10 @@ for epoch in range(1, 1001):
     test_output = test()
     print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
     if epoch%250==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_1000_nothresh_6layers_output_epoch'+str(epoch)+'v2.pt'))
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','Training_model4_1000_nothresh_6layers_output_epoch'+str(epoch)+'v2.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_1000_nothresh_6layers_v2.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output','Training_model4_1000_nothresh_6layers.pt'))
