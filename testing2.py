@@ -38,7 +38,7 @@ class Net(torch.nn.Module):
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
 model.load_state_dict(torch.load(osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_1000_nothresh_6layers_featmap.pt')))
-optimizer=torch.optim.Adam(model.parameters(),lr=0.02)
+optimizer=torch.optim.Adam(model.parameters(),lr=0.075)
 
 
 def train(epoch):
@@ -46,15 +46,15 @@ def train(epoch):
 
     if epoch == 300:
         for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.05
+            param_group['lr'] = 0.005
 
     if epoch == 800:
         for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.01
+            param_group['lr'] = 0.001
 
     if epoch == 900:
         for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.005
+            param_group['lr'] = 0.0005
 
     for data in train_loader:
         data=data.to(device)
