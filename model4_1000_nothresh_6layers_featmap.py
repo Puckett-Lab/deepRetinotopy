@@ -37,13 +37,13 @@ class Net(torch.nn.Module):
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-optimizer=torch.optim.Adam(model.parameters(),lr=0.95)
+optimizer=torch.optim.Adam(model.parameters(),lr=0.09)
 
 
 def train(epoch):
     model.train()
 
-    if epoch == 100:
+    if epoch == 300:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.05
 
@@ -51,7 +51,7 @@ def train(epoch):
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.01
 
-    if epoch == 3500:
+    if epoch == 900:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.005
 
