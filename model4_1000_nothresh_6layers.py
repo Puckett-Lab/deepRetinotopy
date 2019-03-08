@@ -38,7 +38,7 @@ class Net(torch.nn.Module):
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
 model.load_state_dict(torch.load(osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_1000_nothresh_6layers.pt'),map_location='cpu'))
-optimizer=torch.optim.Adam(model.parameters(),lr=0.05)
+optimizer=torch.optim.Adam(model.parameters(),lr=0.01)
 
 def train(epoch):
     model.train()

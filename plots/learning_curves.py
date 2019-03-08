@@ -3,11 +3,12 @@ import numpy as np
 import os.path as osp
 
 
-text_file=open(osp.join(osp.dirname(osp.realpath(__file__)),'test_out_model4_5000_nothresh_wholedataset_batch_5layers_featmap.txt'))
+text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/output/test_out_model4_1000_nothresh_6layers.txt')
 lines=text_file.readlines()
 epochs=[]
 MSE=[]
 MAE=[]
+
 for x in lines:
     epochs.append(x.split(',')[0][7:])
     MSE.append(x.split(',')[1][8:])
@@ -19,5 +20,5 @@ for i in range(len(MSE)):
     MAE[i]=float(MAE[i])
 
 
-plt.scatter(np.arange(5000),MAE[0:5000])
+plt.scatter(np.arange(1000),MAE[0:1000])
 plt.show()
