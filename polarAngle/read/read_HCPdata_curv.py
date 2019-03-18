@@ -62,7 +62,7 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,eccentr
         polarAngle_values[condition==1] = curvature[condition==1]
         polarAngle_values[condition3 == 1] = curvature[condition3==1]
 
-        data=Data(x=curvature,y=eccentricity_values,pos=pos)
+        data=Data(x=curvature,y=polarAngle_values,pos=pos)
         data.face=faces
         data.R2 = R2_values
 
