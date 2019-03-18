@@ -2,7 +2,7 @@ import os.path as osp
 
 import torch
 from torch_geometric.data import InMemoryDataset
-from polarAngle.read.read_HCPdata_visual import read_HCP
+from eccentricity.read.read_HCPdata_visual import read_HCP
 
 #Generates the training and test set separately
 

@@ -1,10 +1,11 @@
 import os.path as osp
 import scipy.io
-from polarAngle.functions.def_ROIs import roi
+from functions.def_ROIs import roi
 import torch
 from torch_geometric.data import InMemoryDataset
 from polarAngle.read.read_HCPdata_visual import read_HCP
-from polarAngle.functions import labels
+from functions import labels
+
 
 #Generates the training and test set separately
 
@@ -52,7 +53,7 @@ class Retinotopy(InMemoryDataset):
         label_primary_visual_areas = ['V1d', 'V1v', 'V2d', 'V2v', 'V3d', 'V3v']
         final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 
-        faces_R = labels(scipy.io.loadmat(osp.join(path,'tri_faces_R.mat'))['tri_faces_R']-1, index_R_mask)
+        faces_R = labels(scipy.io.loadmat(osp.join(path, 'tri_faces_R.mat'))['tri_faces_R'] - 1, index_R_mask)
         faces_L = labels(scipy.io.loadmat(osp.join(path, 'tri_faces_L.mat'))['tri_faces_L'] - 1, index_L_mask)
 
 
