@@ -1,19 +1,18 @@
 import os.path as osp
 import torch
 import torch.nn.functional as F
-
-from dataset.HCP_curv_3sets import Retinotopy
 import torch_geometric.transforms as T
+from polarAngle.dataset.HCP_3sets_normXY import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
-path=osp.join(osp.dirname(osp.realpath(__file__)), 'data')
-pre_transform=T.Compose([T.FaceToEdge(),T.NormalizeFeatures()])
-train_dataset=Retinotopy(path,True, transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
-train_loader = DataLoader(train_dataset[0:2], batch_size=1, shuffle=True)
-test_loader = DataLoader(train_dataset[0:2], batch_size=1)
-d = train_dataset[0]
 
+
+path=osp.join(osp.dirname(osp.realpath(__file__)),'data')
+pre_transform=T.Compose([T.FaceToEdge()])
+train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
+train_loader=DataLoader(train_dataset[0:2],batch_size=1,shuffle=True)
+dev_loader=DataLoader(train_dataset[0:2],batch_size=1)
 
 class Net(torch.nn.Module):
     def __init__(self):
@@ -61,8 +60,8 @@ def test():
     MeanAbsError =0
     y = []
     y_hat = []
-    R2_plot= []
-    for data in test_loader:
+    R2_plot=[]
+    for data in dev_loader:
         pred = model(data.to(device)).detach()
         R2 = data.to(device).R2
         threshold = R2.view(-1) > 2.2
@@ -72,7 +71,7 @@ def test():
         MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold]-pred[threshold])).item()
         MeanAbsError += MAE
         #print('Mean Absolute Error: {:.4f}'.format(MAE))
-    test_MAE=MeanAbsError/len(test_loader)
+    test_MAE=MeanAbsError/len(dev_loader)
     output={'Predicted_values':y_hat,'Measured_values':y,'R2':R2_plot,'MAE':test_MAE}
     return output
 
@@ -83,10 +82,10 @@ for epoch in range(1, 30000):
     test_output = test()
     print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
     if epoch%1000==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','model3_2examples_output_epoch'+str(epoch)+'.pt'))
-    if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output', 'model2_2examples_output_epoch'+str(epoch)+'.pt'))
+    if loss['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output', 'model3_2examples.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output', 'model2_2examples.pt'))
