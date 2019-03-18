@@ -1,9 +1,8 @@
 import os.path as osp
-import shutil
 
 import torch
-from torch_geometric.data import InMemoryDataset, extract_zip
-from read.read_HCPdata import read_HCP
+from torch_geometric.data import InMemoryDataset
+from polarAngle.read.read_HCPdata import read_HCP
 
 #Generates the training and test set separately
 

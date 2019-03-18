@@ -2,7 +2,7 @@ import os.path as osp
 import torch
 import torch.nn.functional as F
 import torch_geometric.transforms as T
-from dataset.HCP_3sets_visual_nothr import Retinotopy
+from polarAngle.dataset.HCP_3sets_visual_nothr import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
@@ -13,17 +13,16 @@ pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181)
 train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
-dev_loader=DataLoader(dev_dataset[0:10],batch_size=1)
+dev_loader=DataLoader(train_dataset,batch_size=1)
 
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
         self.conv1=SplineConv(1,8,dim=3,kernel_size=5,norm=False)
-        self.conv2=SplineConv(8,16,dim=3,kernel_size=5,norm=False)
-        self.conv3=SplineConv(16,32,dim=3,kernel_size=5,norm=False)
-        self.conv4=SplineConv(32,16,dim=3,kernel_size=5,norm=False)
-        self.conv5=SplineConv(16,8,dim=3,kernel_size=5,norm=False)
-        self.conv6 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
+        self.conv2=SplineConv(8,32,dim=3,kernel_size=5,norm=False)
+        self.conv3=SplineConv(32,32,dim=3,kernel_size=5,norm=False)
+        self.conv4=SplineConv(32,8,dim=3,kernel_size=5,norm=False)
+        self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
         x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
@@ -31,30 +30,29 @@ class Net(torch.nn.Module):
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
         x = F.elu(self.conv4(x, edge_index, pseudo))
-        x = F.elu(self.conv5(x, edge_index, pseudo))
-        x=F.elu(self.conv6(x,edge_index,pseudo)).view(-1)
+        x=F.elu(self.conv5(x,edge_index,pseudo)).view(-1)
         return x
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-model.load_state_dict(torch.load(osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_1000_nothresh_6layers_featmap.pt')))
+model.load_state_dict(torch.load(osp.join(osp.dirname(osp.realpath(__file__)),'output','model4_5000_nothresh_5layers_lr_natch_feat.pt')))
 optimizer=torch.optim.Adam(model.parameters(),lr=0.005)
 
 
 def train(epoch):
     model.train()
 
-    if epoch == 300:
-        for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.0025
-
-    if epoch == 800:
+    if epoch == 5000:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.001
 
+    '''if epoch == 5000:
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = 0.01
+
     if epoch == 900:
         for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.0005
+            param_group['lr'] = 0.005'''
 
     for data in train_loader:
         data=data.to(device)
@@ -90,15 +88,15 @@ def test():
 
 
 
-for epoch in range(1, 1001):
+for epoch in range(1, 10001):
     loss=train(epoch)
     test_output = test()
     print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
-    if epoch%250==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','testing_model4_1000_nothresh_6layers_featmap_output_epoch'+str(epoch)+'.pt'))
+    if epoch%1000==0:
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'output','retraining_model4_nothresh_5layers_lr_batch_feat_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output','testing_model4_1000_nothresh_6layers_featmap.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'output','final_retraining_model4_nothresh_5layers_lr_batch_feat.pt'))
