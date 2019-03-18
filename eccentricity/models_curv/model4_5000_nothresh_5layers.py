@@ -2,7 +2,7 @@ import os.path as osp
 import torch
 import torch.nn.functional as F
 import torch_geometric.transforms as T
-from polarAngle.dataset.HCP_3sets_visual_nothr import Retinotopy
+from eccentricity.dataset.HCP_3sets_visual_nothr import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 

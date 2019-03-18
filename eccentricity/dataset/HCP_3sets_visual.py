@@ -1,10 +1,10 @@
 import os.path as osp
 import scipy.io
-from polarAngle.functions.def_ROIs import roi
+from eccentricity.functions.def_ROIs import roi
 import torch
 from torch_geometric.data import InMemoryDataset
-from polarAngle.read.read_HCPdata_visual import read_HCP
-from polarAngle.functions import labels
+from eccentricity.read.read_HCPdata_visual import read_HCP
+from eccentricity.functions import labels
 
 #Generates the training and test set separately
 
