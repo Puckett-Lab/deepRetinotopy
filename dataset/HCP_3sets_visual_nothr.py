@@ -17,7 +17,10 @@ class Retinotopy(InMemoryDataset):
                  transform=None,
                  pre_transform=None,
                  pre_filter=None,
-                 n_examples=None,prediction=None):
+                 n_examples=None,
+                 myelination=None,
+                 prediction=None):
+        self.myelination=myelination
         self.prediction=prediction
         self.n_examples = int(n_examples)
         super(Retinotopy, self).__init__(root, transform, pre_transform, pre_filter)
@@ -37,7 +40,10 @@ class Retinotopy(InMemoryDataset):
 
     @property
     def processed_file_names(self):
-        return ['training_visual_nothresh.pt','development_visual_nothresh.pt','test_visual_nothresh.pt']
+        if self.prediction=='eccentricity':
+            return ['training_ecc_visual_nothresh.pt','development_ecc_visual_nothresh.pt','test_ecc_visual_nothresh.pt']
+        else:
+            return ['training_PA_visual_nothresh.pt','development_PA_visual_nothresh.pt','test_PA_visual_nothresh.pt']
 
     def download(self):
         raise RuntimeError(
@@ -59,7 +65,7 @@ class Retinotopy(InMemoryDataset):
 
 
         for i in range(0,self.n_examples):
-            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R,prediction=self.prediction)
+            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R,myelination=self.myelination,prediction=self.prediction)
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
             data_list.append(data)
