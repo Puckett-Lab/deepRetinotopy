@@ -5,7 +5,7 @@ import os.path as osp
 
 from torch_geometric.data import Data
 
-def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,eccentricity=None,polar_angle=None):
+def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,prediction=None):
     # Loading the measures
     curv = scipy.io.loadmat(osp.join(path,'cifti_curv_all.mat'))['cifti_curv']
     eccentricity = scipy.io.loadmat(osp.join(path,'cifti_eccentricity_all.mat'))['cifti_eccentricity']
@@ -62,7 +62,10 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,eccentr
         polarAngle_values[condition==1] = curvature[condition==1]
         polarAngle_values[condition3 == 1] = curvature[condition3==1]
 
-        data=Data(x=curvature,y=eccentricity_values,pos=pos)
+        if prediction=='polarAngle':
+            data=Data(x=curvature,y=polarAngle_values,pos=pos)
+        else:
+            data = Data(x=curvature, y=eccentricity_values, pos=pos)
         data.face=faces
         data.R2 = R2_values
 
@@ -104,7 +107,10 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,eccentr
         polarAngle_values[condition==1] = curvature[condition==1]
         polarAngle_values[condition3 == 1] = curvature[condition3==1]
 
-        data = Data(x=curvature, y=eccentricity_values, pos=pos)
+        if prediction=='polarAngle':
+            data=Data(x=curvature,y=polarAngle_values,pos=pos)
+        else:
+            data = Data(x=curvature, y=eccentricity_values, pos=pos)
         data.face = faces
         data.R2 = R2_values
 

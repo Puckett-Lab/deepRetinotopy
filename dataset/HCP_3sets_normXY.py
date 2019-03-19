@@ -2,7 +2,7 @@ import os.path as osp
 
 import torch
 from torch_geometric.data import InMemoryDataset
-from eccentricity.read.read_HCPdata_visual import read_HCP
+from read.read_HCPdata import read_HCP
 
 #Generates the training and test set separately
 
@@ -15,7 +15,8 @@ class Retinotopy(InMemoryDataset):
                  transform=None,
                  pre_transform=None,
                  pre_filter=None,
-                 n_examples=None):
+                 n_examples=None,prediction=None):
+        self.prediction=prediction
         self.n_examples = int(n_examples)
         super(Retinotopy, self).__init__(root, transform, pre_transform, pre_filter)
         self.set=set
@@ -34,7 +35,7 @@ class Retinotopy(InMemoryDataset):
 
     @property
     def processed_file_names(self):
-        return ['training_visual_norm.pt','development_visual_norm.pt','test_visual_norm.pt']
+        return ['training_norm.pt','development_norm.pt','test_norm.pt']
 
     def download(self):
         raise RuntimeError(
@@ -46,14 +47,15 @@ class Retinotopy(InMemoryDataset):
         path=osp.join(self.raw_dir, 'converted')
         data_list=[]
         for i in range(0,self.n_examples):
-            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',threshold=2.2)
+            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',threshold=2.2,prediction=self.prediction)
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
-            data.y=(data.y-torch.mean(data.y))/torch.std(data.y)
+
+            data.y=((data.y-torch.mean(data.y))/torch.std(data.y)).detach()
             data.Ymean=torch.mean(data.y)
             data.Ystd=torch.std(data.y)
 
-            data.x = (data.x - torch.mean(data.x)) / torch.std(data.x)
+            data.x =((data.x - torch.mean(data.x)) / torch.std(data.x)).detach()
             data.Xmean = torch.mean(data.x)
             data.Xstd = torch.std(data.x)
 
