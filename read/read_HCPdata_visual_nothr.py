@@ -8,7 +8,7 @@ from numpy.random import seed
 
 from torch_geometric.data import Data
 
-def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle=True,visual_mask_L=None,visual_mask_R=None,faces_L=None,faces_R=None,eccentricity=None,polar_angle=None,):
+def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle=True,visual_mask_L=None,visual_mask_R=None,faces_L=None,faces_R=None,prediction=None):
     # Loading the measures
     curv = scipy.io.loadmat(osp.join(path,'cifti_curv_all.mat'))['cifti_curv']
     eccentricity = scipy.io.loadmat(osp.join(path,'cifti_eccentricity_all.mat'))['cifti_eccentricity']
@@ -64,20 +64,23 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         R2_values[noR2==1]=0
 
 
-        condition=R2_values < threshold
+        #condition=R2_values < threshold
         condition2=np.isnan(eccentricity_values)
         condition3 = np.isnan(polarAngle_values)
 
 
-        eccentricity_values[condition == 1] = -1
+        #eccentricity_values[condition == 1] = -1
         eccentricity_values[condition2 == 1] = -1
 
 
-        polarAngle_values[condition==1] = -1
+        #polarAngle_values[condition==1] = -1
         polarAngle_values[condition3 == 1] = -1
 
 
-        data=Data(x=curvature,y=eccentricity_values,pos=pos)
+        if prediction=='polarAngle':
+            data=Data(x=curvature,y=polarAngle_values,pos=pos)
+        else:
+            data = Data(x=curvature, y=eccentricity_values, pos=pos)
         data.face=faces
         data.R2 = R2_values
 
@@ -111,18 +114,21 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         R2_values[noR2==1]=0
 
 
-        condition=R2_values < threshold
+        #condition=R2_values < threshold
         condition2=np.isnan(eccentricity_values)
         condition3=np.isnan(polarAngle_values)
 
 
-        eccentricity_values[condition == 1] = -1
+        #eccentricity_values[condition == 1] = -1
         eccentricity_values[condition2 == 1] = -1
 
-        polarAngle_values[condition==1] = -1
+        #polarAngle_values[condition==1] = -1
         polarAngle_values[condition3 == 1] = -1
 
-        data = Data(x=curvature, y=eccentricity_values, pos=pos)
+        if prediction=='polarAngle':
+            data=Data(x=curvature,y=polarAngle_values,pos=pos)
+        else:
+            data = Data(x=curvature, y=eccentricity_values, pos=pos)
         data.face = faces
         data.R2=R2_values
 
