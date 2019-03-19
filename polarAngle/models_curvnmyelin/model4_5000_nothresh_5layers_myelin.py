@@ -44,18 +44,18 @@ optimizer=torch.optim.Adam(model.parameters(),lr=0.1)
 
 def train(epoch):
     model.train()
-    '''
-    if epoch == 5000:
-        for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.001
 
-    if epoch == 5000:
+    if epoch == 1000:
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = 0.05
+
+    if epoch == 2000:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.01
 
-    if epoch == 900:
+    if epoch == 3500:
         for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.005'''
+            param_group['lr'] = 0.005
 
     for data in train_loader:
         data = data.to(device)
