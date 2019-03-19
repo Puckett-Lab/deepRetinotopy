@@ -17,7 +17,7 @@ pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,myelination=True)
 train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
-dev_loader=DataLoader(train_dataset,batch_size=1)
+dev_loader=DataLoader(dev_dataset,batch_size=1)
 
 class Net(torch.nn.Module):
     def __init__(self):
