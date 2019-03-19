@@ -15,6 +15,7 @@ dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform
 train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
 dev_loader=DataLoader(train_dataset,batch_size=1)
 
+
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
