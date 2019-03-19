@@ -25,7 +25,7 @@ cifti_curv=ft_read_cifti('S1200_7T_Retinotopy181.All.curvature_MSMAll.32k_fs_LR.
 save('cifti_curv_all','cifti_curv')
 
 %Myelin values
-cifti_myelin=ft_read_cifti('S1200_7T_Retinotopy181.All.MyelinMap_BC_MSMAll.32k_fs_LR.dscalar.nii')
+cifti_myelin=ft_read_cifti('S1200_7T_Retinotopy181.All.MyelinMap_BC_MSMAll.32k_fs_LR.dscalar.nii');
 save('cifti_myelin_all','cifti_myelin')
 
 %R2 fit values
