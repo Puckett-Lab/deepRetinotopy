@@ -61,15 +61,17 @@ def train(epoch):
             param_group['lr'] = 0.005'''
 
     for data in train_loader:
-        data=data.to(device)
-        #print('shape of the data {}'.format(np.shape(data)))
+        data = data.to(device)
         optimizer.zero_grad()
-        loss=torch.nn.MSELoss()
-        output_loss=loss(model(data),data.y.view(-1))
-        #print(output_loss.item())
+
+        loss = torch.nn.MSELoss()
+        output_loss = loss(model(data), data.y.view(-1))
         output_loss.backward()
+
+        MAE = torch.mean(abs(data.to(device).y.view(-1) - model(data))).item()
+
         optimizer.step()
-    return output_loss.detach()
+    return output_loss.detach(), MAE
 
 
 def test():
@@ -95,9 +97,9 @@ def test():
 
 
 for epoch in range(1, 10001):
-    loss=train(epoch)
+    loss,MAE=train(epoch)
     test_output = test()
-    print('Epoch: {:02d}, Train: {:.4f}, Test: {:.4f}'.format(epoch, loss, test_output['MAE']))
+    print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))
     if epoch%1000==0:
         torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','retraining_model4_nothresh_6layers_featmap_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
