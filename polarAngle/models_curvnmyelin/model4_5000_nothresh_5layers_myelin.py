@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import torch_geometric.transforms as T
 
 import sys
-sys.path.append('..')
+sys.path.append('../..')
 
 from dataset.HCP_3sets_visual_nothr import Retinotopy
 from torch_geometric.data import DataLoader
