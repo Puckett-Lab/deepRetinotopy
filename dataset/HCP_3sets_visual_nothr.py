@@ -40,7 +40,7 @@ class Retinotopy(InMemoryDataset):
 
     @property
     def processed_file_names(self):
-        if self.myelination==True
+        if self.myelination==True:
             if self.prediction == 'eccentricity':
                 return ['training_ecc_visual_nothresh_myelin.pt', 'development_ecc_visual_nothresh_myelin.pt',
                         'test_ecc_visual_nothresh.pt']
