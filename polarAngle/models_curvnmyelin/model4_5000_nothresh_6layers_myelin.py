@@ -108,3 +108,4 @@ for epoch in range(1, 5001):
 
 #Saving the model's learned parameter and predicted/y values
 torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_6layers_myelincurv.pt'))
+500
