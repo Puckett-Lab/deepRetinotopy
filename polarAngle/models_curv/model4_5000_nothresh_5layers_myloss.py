@@ -22,7 +22,7 @@ dev_loader=DataLoader(dev_dataset,batch_size=1)
 
 def loss(y,y_hat,weight):
     loss=((y-y_hat)**2)*weight
-    return sum(loss)
+    return torch.sum(loss)
 
 class Net(torch.nn.Module):
     def __init__(self):
