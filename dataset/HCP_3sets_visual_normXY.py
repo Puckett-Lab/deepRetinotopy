@@ -2,7 +2,7 @@ import os.path as osp
 
 import torch
 from torch_geometric.data import InMemoryDataset
-from read.read_HCPdata_visual import read_HCP
+from read.normalize_read_HCPdata_visual_nothr import read_HCP
 
 #Generates the training and test set separately
 
@@ -53,14 +53,6 @@ class Retinotopy(InMemoryDataset):
             data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',threshold=2.2,prediction=self.prediction)
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
-            data.y=(data.y-torch.mean(data.y))/torch.std(data.y)
-            data.Ymean=torch.mean(data.y)
-            data.Ystd=torch.std(data.y)
-
-            data.x = (data.x - torch.mean(data.x)) / torch.std(data.x)
-            data.Xmean = torch.mean(data.x)
-            data.Xstd = torch.std(data.x)
-
             data_list.append(data)
 
         train = data_list[0:int(round(len(data_list) * 0.6))]
