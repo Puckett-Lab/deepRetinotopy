@@ -4,11 +4,11 @@ import torch
 import os.path as osp
 from numpy.random import seed
 
+from torch_geometric.data import Data
 
 def normalize(feature):
     norm=feature-np.mean(feature)/np.std(feature)
 
-from torch_geometric.data import Data
 
 def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle=True,visual_mask_L=None,visual_mask_R=None,faces_L=None,faces_R=None,myelination=None,prediction=None):
     # Loading the measures
@@ -84,16 +84,16 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         polarAngle_values[condition3 == 1] = -1
 
 
-        if myelination==False:
+        if myelination==None:
             if prediction=='polarAngle':
                 data=Data(x=curvature,y=polarAngle_values,pos=pos)
             else:
                 data = Data(x=curvature, y=eccentricity_values, pos=pos)
         else:
             if prediction=='polarAngle':
-                data=Data(x=torch.tensor(np.reshape([normalize(np.array(curvature)),normalize(np.array(myelin_values))],(-1,2))),y=polarAngle_values,pos=pos)
+                data=Data(x=myelin_values,y=polarAngle_values,pos=pos)
             else:
-                data = Data(x=torch.tensor(np.reshape([normalize(np.array(curvature)),normalize(np.array(myelin_values))],(-1,2))), y=eccentricity_values, pos=pos)
+                data = Data(x=myelin_values, y=eccentricity_values, pos=pos)
 
         data.face=faces
         data.R2 = R2_values
@@ -145,16 +145,16 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         polarAngle_values[condition3 == 1] = -1
 
 
-        if myelination == False:
+        if myelination == None:
             if prediction=='polarAngle':
                 data=Data(x=normalize(curvature),y=normalize(polarAngle_values),pos=pos)
             else:
-                data = Data(x=curvature, y=eccentricity_values, pos=pos)
+                data = Data(x=normalize(curvature), y=normalize(eccentricity_values), pos=pos)
         else:
             if prediction=='polarAngle':
-                data=Data(x=torch.tensor(np.reshape([normalize(np.array(curvature)),normalize(np.array(myelin_values))],(-1,2))),y=polarAngle_values,pos=pos)
+                data=Data(x=myelin_values,y=polarAngle_values,pos=pos)
             else:
-                data = Data(x=torch.tensor(np.reshape([normalize(np.array(curvature)),normalize(np.array(myelin_values))],(-1,2))), y=eccentricity_values, pos=pos)
+                data = Data(x=myelin_values, y=eccentricity_values, pos=pos)
 
         data.face = faces
         data.R2=R2_values
