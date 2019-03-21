@@ -43,7 +43,7 @@ class Net(torch.nn.Module):
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-optimizer=torch.optim.Adam(model.parameters(),lr=0.1)
+optimizer=torch.optim.Adam(model.parameters(),lr=0.01)
 
 
 def train(epoch):
