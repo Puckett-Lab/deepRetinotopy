@@ -42,11 +42,11 @@ class Retinotopy(InMemoryDataset):
     def processed_file_names(self):
         if self.myelination==True:
             if self.prediction == 'eccentricity':
-                return ['training_ecc_visual_nothresh_myelin.pt', 'development_ecc_visual_nothresh_myelin.pt',
-                        'test_ecc_visual_nothresh.pt']
+                return ['training_ecc_visual_nothresh_myelincurv.pt', 'development_ecc_visual_nothresh_myelincurv.pt',
+                        'test_ecc_visual_nothresh_myelincurv.pt']
             else:
-                return ['training_PA_visual_nothresh_myelin.pt', 'development_PA_visual_nothresh_myelin.pt',
-                        'test_PA_visual_nothresh.pt']
+                return ['training_PA_visual_nothresh_myelincurv.pt', 'development_PA_visual_nothresh_myelincurv.pt',
+                        'test_PA_visual_nothresh_myelincurv.pt']
         else:
             if self.prediction=='eccentricity':
                 return ['training_ecc_visual_nothresh.pt','development_ecc_visual_nothresh.pt','test_ecc_visual_nothresh.pt']
