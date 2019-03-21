@@ -20,9 +20,9 @@ train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1)
 
 
-def loss(y,y_hat,weight):
-    loss=((y-y_hat)**2)*weight
-    return torch.sum(loss)
+
+def weighted_mse_loss(input, target, weight):
+    return torch.sum(weight * (input - target) ** 2
 
 class Net(torch.nn.Module):
     def __init__(self):
@@ -70,7 +70,7 @@ def train(epoch):
         threshold = R2.view(-1) > 2.2
 
         #loss=torch.nn.MSELoss()
-        output_loss=loss(model(data),data.y.view(-1),R2)
+        output_loss=weighted_mse_loss(model(data),data.y.view(-1),R2)
         output_loss.backward()
 
         MAE = torch.mean(abs(data.to(device).y.view(-1)[threshold==1] - model(data)[threshold==1])).item()
