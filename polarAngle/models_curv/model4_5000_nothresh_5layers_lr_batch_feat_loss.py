@@ -61,8 +61,11 @@ def train(epoch):
         data=data.to(device)
         optimizer.zero_grad()
 
+        R2=data.R2.view(-1)
+
+
         loss=torch.nn.MSELoss()
-        output_loss=loss(model(data),data.y.view(-1))
+        output_loss=loss(model(data)*R2/data.y.view(-1),data.y.view(-1)*R2/data.y.view(-1))
         output_loss.backward()
 
         MAE = torch.mean(abs(data.to(device).y.view(-1) - model(data))).item()
