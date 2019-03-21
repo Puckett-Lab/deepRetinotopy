@@ -8,6 +8,7 @@ from torch_geometric.data import Data
 
 def normalize(feature):
     norm=feature-np.mean(feature)/np.std(feature)
+    return norm
 
 
 def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle=True,visual_mask_L=None,visual_mask_R=None,faces_L=None,faces_R=None,myelination=None,prediction=None):
@@ -118,11 +119,11 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         myelin_values =torch.tensor(np.reshape(
             myelin['x' + subjects[index] + '_myelinmap'][0][0][0:number_hemi_nodes].reshape(
                 (number_hemi_nodes))[visual_mask_L == 1], (-1, 1)), dtype=torch.float)
-        curvature=torch.tensor(np.reshape(
+        curvature=torch.tensor(normalize(np.reshape(
             curv['x' + subjects[index] + '_curvature'][0][0][0:number_hemi_nodes].reshape(
-                (number_hemi_nodes))[visual_mask_L == 1], (-1, 1)), dtype=torch.float)
+                (number_hemi_nodes))[visual_mask_L == 1], (-1, 1))), dtype=torch.float)
         eccentricity_values= torch.tensor(np.reshape(eccentricity['x' + subjects[index] + '_fit1_eccentricity_msmall'][0][0][0:number_hemi_nodes].reshape((number_hemi_nodes))[visual_mask_L == 1], (-1, 1)), dtype=torch.float)
-        polarAngle_values= torch.tensor(np.reshape(polarAngle['x' + subjects[index] + '_fit1_polarangle_msmall'][0][0][0:number_hemi_nodes].reshape((number_hemi_nodes))[visual_mask_L == 1],(-1,1)),dtype=torch.float)
+        polarAngle_values= torch.tensor(normalize(np.reshape(polarAngle['x' + subjects[index] + '_fit1_polarangle_msmall'][0][0][0:number_hemi_nodes].reshape((number_hemi_nodes))[visual_mask_L == 1],(-1,1))),dtype=torch.float)
 
         nocurv=np.isnan(curvature)
         curvature[nocurv == 1] = 0
@@ -147,9 +148,9 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
 
         if myelination == None:
             if prediction=='polarAngle':
-                data=Data(x=normalize(curvature),y=normalize(polarAngle_values),pos=pos)
+                data=Data(x=curvature,y=polarAngle_values,pos=pos)
             else:
-                data = Data(x=normalize(curvature), y=normalize(eccentricity_values), pos=pos)
+                data = Data(x=curvature, y=eccentricity_values, pos=pos)
         else:
             if prediction=='polarAngle':
                 data=Data(x=myelin_values,y=polarAngle_values,pos=pos)
