@@ -71,7 +71,7 @@ def train(epoch):
         MAE = torch.mean(abs(data.to(device).y.view(-1) - model(data))).item()
 
         optimizer.step()
-    return output_loss.detach()
+    return output_loss.detach(), MAE
 
 
 def test():
