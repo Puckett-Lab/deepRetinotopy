@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import os.path as osp
 from numpy.random import seed
-import torchvision.transforms.Normalize as norm
+
 
 def normalize(feature):
     norm=feature-np.mean(feature)/np.std(feature)
