@@ -22,7 +22,7 @@ dev_loader=DataLoader(dev_dataset,batch_size=1)
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
-        self.conv1=SplineConv(train_dataset.num_features,8,dim=3,kernel_size=3,norm=False)
+        self.conv1=SplineConv(train_dataset.num_features,8,dim=3,kernel_size=7,norm=False)
         self.conv2=SplineConv(8,16,dim=3,kernel_size=5,norm=False)
         self.conv3=SplineConv(16,16,dim=3,kernel_size=5,norm=False)
         self.conv4=SplineConv(16,8,dim=3,kernel_size=5,norm=False)
