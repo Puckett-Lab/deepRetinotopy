@@ -64,7 +64,7 @@ class Retinotopy(InMemoryDataset):
 
 
         for i in range(0,self.n_examples):
-            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R,myelination=self.myelination,prediction=self.prediction)
+            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R,prediction=self.prediction)
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
             data_list.append(data)
