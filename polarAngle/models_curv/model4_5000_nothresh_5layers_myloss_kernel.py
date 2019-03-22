@@ -27,11 +27,11 @@ def weighted_mse_loss(input, target, weight):
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
-        self.conv1=SplineConv(1,8,dim=3,kernel_size=9,norm=False)
-        self.conv2=SplineConv(8,16,dim=3,kernel_size=9,norm=False)
-        self.conv3=SplineConv(16,16,dim=3,kernel_size=9,norm=False)
-        self.conv4=SplineConv(16,8,dim=3,kernel_size=9,norm=False)
-        self.conv5 = SplineConv(8, 1, dim=3, kernel_size=9, norm=False)
+        self.conv1=SplineConv(1,8,dim=3,kernel_size=12,norm=False)
+        self.conv2=SplineConv(8,16,dim=3,kernel_size=12,norm=False)
+        self.conv3=SplineConv(16,16,dim=3,kernel_size=12,norm=False)
+        self.conv4=SplineConv(16,8,dim=3,kernel_size=12,norm=False)
+        self.conv5 = SplineConv(8, 1, dim=3, kernel_size=12, norm=False)
 
     def forward(self, data):
         x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
