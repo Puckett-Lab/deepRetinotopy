@@ -69,7 +69,7 @@ def train(epoch):
         threshold = R2.view(-1) > 2.2
 
         loss=torch.nn.MSELoss()
-        output_loss=loss(model(data),data.y.view(-1),R2)
+        output_loss=loss(model(data),data.y.view(-1))
         output_loss.backward()
 
         MAE = torch.mean(abs(data.to(device).y.view(-1)[threshold==1] - model(data)[threshold==1])).item()
