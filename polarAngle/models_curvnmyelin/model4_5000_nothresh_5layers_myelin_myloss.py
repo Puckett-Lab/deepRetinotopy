@@ -93,7 +93,7 @@ def test():
         R2 = data.R2.view(-1)
         threshold = R2.view(-1) > 2.2
 
-        MAE=torch.mean(abs(data.to(device).y.view(-1)-pred[threshold==1])).item()
+        MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold==1]-pred[threshold==1])).item()
         MeanAbsError += MAE
 
     test_MAE=MeanAbsError/len(dev_loader)
