@@ -43,23 +43,23 @@ class Net(torch.nn.Module):
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-optimizer=torch.optim.Adam(model.parameters(),lr=0.01)
+optimizer=torch.optim.Adam(model.parameters(),lr=0.1)
 
 
 def train(epoch):
     model.train()
-    MeanAbsError = 0
-    if epoch == 100:
+
+    if epoch == 1000:
         for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.005
-    '''
+            param_group['lr'] = 0.05
+
     if epoch == 2000:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.01
 
     if epoch == 3500:
         for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.005'''
+            param_group['lr'] = 0.005
 
     for data in train_loader:
         data=data.to(device)
@@ -74,10 +74,8 @@ def train(epoch):
 
         MAE = torch.mean(abs(data.to(device).y.view(-1) - model(data))).item()
 
-        MeanAbsError += MAE
         optimizer.step()
-    train_MAE=MeanAbsError/len(train_loader)
-    return output_loss.detach(), train_MAE
+    return output_loss.detach(), MAE
 
 def test():
     model.eval()
@@ -102,7 +100,7 @@ def test():
 
 
 
-for epoch in range(1, 1001):
+for epoch in range(1, 5001):
     loss,MAE=train(epoch)
     test_output = test()
     print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))
