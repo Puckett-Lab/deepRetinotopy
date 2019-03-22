@@ -48,7 +48,7 @@ optimizer=torch.optim.Adam(model.parameters(),lr=0.01)
 
 def train(epoch):
     model.train()
-
+    MeanAbsError = 0
     if epoch == 1000:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.05
@@ -72,10 +72,12 @@ def train(epoch):
         output_loss=weighted_mse_loss(model(data),data.y.view(-1),R2)
         output_loss.backward()
 
-        MAE = torch.mean(abs(data.to(device).y.view(-1)[threshold==1] - model(data)[threshold==1])).item()
+        MAE_thr = torch.mean(abs(data.to(device).y.view(-1)[threshold==1] - model(data)[threshold==1])).item()
 
+        MeanAbsError += MAE_thr
         optimizer.step()
-    return output_loss.detach(), MAE
+    train_MAE=MeanAbsError/len(train_loader)
+    return output_loss.detach(), train_MAE
 
 def test():
     model.eval()
@@ -91,7 +93,7 @@ def test():
         R2 = data.R2.view(-1)
         threshold = R2.view(-1) > 2.2
 
-        MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold==1]-pred[threshold==1])).item()
+        MAE=torch.mean(abs(data.to(device).y.view(-1)-pred[threshold==1])).item()
         MeanAbsError += MAE
 
     test_MAE=MeanAbsError/len(dev_loader)
