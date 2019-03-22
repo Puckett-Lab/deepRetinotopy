@@ -68,8 +68,8 @@ def train(epoch):
         R2=data.R2.view(-1)
         threshold = R2.view(-1) > 2.2
 
-        #loss=torch.nn.MSELoss()
-        output_loss=weighted_mse_loss(model(data),data.y.view(-1),R2)
+        loss=torch.nn.MSELoss()
+        output_loss=loss(model(data),data.y.view(-1),R2)
         output_loss.backward()
 
         MAE = torch.mean(abs(data.to(device).y.view(-1)[threshold==1] - model(data)[threshold==1])).item()
@@ -107,10 +107,10 @@ for epoch in range(1, 1001):
     test_output = test()
     print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))
     if epoch%500==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_5layers_myelincurv_myloss_output_epoch'+str(epoch)+'.pt'))
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_5layers_myelincurv_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_5layers_myelincurv_myloss.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_5layers_myelincurv.pt'))
