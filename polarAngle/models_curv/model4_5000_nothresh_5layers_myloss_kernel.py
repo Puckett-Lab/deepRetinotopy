@@ -50,11 +50,11 @@ optimizer=torch.optim.Adam(model.parameters(),lr=0.1)
 def train(epoch):
     model.train()
 
-    if epoch == 500:
+    if epoch == 300:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.05
 
-    if epoch == 2000:
+    if epoch == 400:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.01
 
@@ -102,15 +102,15 @@ def test():
 
 
 
-for epoch in range(1, 5001):
+for epoch in range(1, 501):
     loss,MAE=train(epoch)
     test_output = test()
     print('Epoch: {:02d}, Trai n_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))
-    if epoch%1000==0:
+    if epoch%100==0:
         torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_5layers_myloss_kernel_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_5000_nothresh_5layers_myloss_kernel.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_500_nothresh_5layers_myloss_kernel.pt'))
