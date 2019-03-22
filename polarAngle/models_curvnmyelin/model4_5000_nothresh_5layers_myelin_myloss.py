@@ -49,9 +49,9 @@ optimizer=torch.optim.Adam(model.parameters(),lr=0.01)
 def train(epoch):
     model.train()
     MeanAbsError = 0
-    if epoch == 1000:
+    if epoch == 400:
         for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.05
+            param_group['lr'] = 0.005
     '''
     if epoch == 2000:
         for param_group in optimizer.param_groups:
