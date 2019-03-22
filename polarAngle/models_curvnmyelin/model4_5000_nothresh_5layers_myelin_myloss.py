@@ -72,7 +72,7 @@ def train(epoch):
         output_loss=weighted_mse_loss(model(data),data.y.view(-1),R2)
         output_loss.backward()
 
-        MAE = torch.mean(abs(data.to(device).y.view(-1)[threshold==1] - model(data)[threshold==1])).item()
+        MAE = torch.mean(abs(data.to(device).y.view(-1) - model(data))).item()
 
         MeanAbsError += MAE
         optimizer.step()
@@ -93,7 +93,7 @@ def test():
         R2 = data.R2.view(-1)
         threshold = R2.view(-1) > 2.2
 
-        MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold==1]-pred[threshold==1])).item()
+        MAE=torch.mean(abs(data.to(device).y.view(-1)-pred)).item()
         MeanAbsError += MAE
 
     test_MAE=MeanAbsError/len(dev_loader)
