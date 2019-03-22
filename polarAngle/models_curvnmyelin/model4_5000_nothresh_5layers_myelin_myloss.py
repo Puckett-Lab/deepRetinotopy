@@ -16,7 +16,7 @@ path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
 pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,myelination=True)
-train_loader=DataLoader(train_dataset,batch_size=8,shuffle=True)
+train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1)
 
 
@@ -102,7 +102,7 @@ def test():
 
 
 
-for epoch in range(1, 1001):
+for epoch in range(1, 5001):
     loss,MAE=train(epoch)
     test_output = test()
     print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))

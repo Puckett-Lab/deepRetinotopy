@@ -20,7 +20,7 @@ measured=np.zeros((32492,1))
 R2_thr=np.zeros((32492,1))
 
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_5layers_myloss_output_epoch5000.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_5000_nothresh_wholedataset_batch_5layers_featmap_output_epoch5000.pt',map_location='cpu')
 pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][1]),(-1,1))
 
 #R2_thr[final_mask_L==1]=np.reshape(np.array(a['R2'][0]),(-1,1))
