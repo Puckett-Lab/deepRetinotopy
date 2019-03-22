@@ -44,13 +44,13 @@ class Net(torch.nn.Module):
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-optimizer=torch.optim.Adam(model.parameters(),lr=0.1)
+optimizer=torch.optim.Adam(model.parameters(),lr=0.01)
 
 
 def train(epoch):
     model.train()
     MeanAbsError = 0
-    if epoch == 1000:
+    if epoch == 100:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.05
 
@@ -108,7 +108,7 @@ for epoch in range(1, 1001):
     loss,MAE=train(epoch)
     test_output = test()
     print('Epoch: {:02d}, Trai n_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))
-    if epoch%1000==0:
+    if epoch%500==0:
         torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','2_model4_nothresh_5layers_myloss_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
