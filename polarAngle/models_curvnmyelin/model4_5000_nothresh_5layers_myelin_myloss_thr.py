@@ -49,7 +49,7 @@ optimizer=torch.optim.Adam(model.parameters(),lr=0.1)
 def train(epoch):
     model.train()
 
-    if epoch == 1000:
+    if epoch == 500:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.05
 
