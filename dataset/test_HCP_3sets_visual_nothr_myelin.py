@@ -43,7 +43,7 @@ class Retinotopy(InMemoryDataset):
         if self.myelination==True:
             if self.prediction == 'eccentricity':
                 return ['training_ecc_visual_nothresh_myelinonly.pt', 'development_ecc_visual_nothresh_myelinonly.pt',
-                        'test_ecc_visual_nothresh.pt']
+                        'test_ecc_visual_nothresh_myelinonly.pt']
             else:
                 return ['training_PA_visual_nothresh_myelinonly.pt', 'development_PA_visual_nothresh_myelinonly.pt',
                         'test_PA_visual_nothresh_myelinonly.pt']
