@@ -21,7 +21,7 @@ dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
 
 def weighted_mse_loss(input, target, weight):
-    return torch.sum(weight * (input - target) ** 2)
+    return torch.mean(weight * (input - target) ** 2)
 
 class Net(torch.nn.Module):
     def __init__(self):
