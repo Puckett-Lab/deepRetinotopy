@@ -64,7 +64,7 @@ def train(epoch):
         R2 = data.R2.view(-1)
         threshold = R2.view(-1) > 2.2
 
-        loss = torch.nn.SmoothL1loss()
+        loss = torch.nn.SmoothL1Loss()
         output_loss = loss(model(data)[threshold==1], data.y.view(-1)[threshold==1])
         output_loss.backward()
 
