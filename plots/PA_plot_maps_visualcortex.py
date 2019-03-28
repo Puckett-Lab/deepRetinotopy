@@ -19,7 +19,7 @@ pred=np.zeros((32492,1))
 measured=np.zeros((32492,1))
 R2_thr=np.zeros((32492,1))
 
-1
+
 a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_5layers_smoothL1_thr_output_epoch5000.pt',map_location='cpu')
 pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][7]),(-1,1))
 
