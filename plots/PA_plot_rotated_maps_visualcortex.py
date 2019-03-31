@@ -20,13 +20,13 @@ measured=np.zeros((32492,1))
 R2_thr=np.zeros((32492,1))
 
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_5layers_smoothL1_R2_3kernel_output_epoch1000.pt',map_location='cpu')
-pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][7]),(-1,1))
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_6layers_smoothL1_R2_3kernel_output_epoch1000.pt',map_location='cpu')
+pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][0]),(-1,1))
 
 #R2_thr[final_mask_L==1]=np.reshape(np.array(a['R2'][0]),(-1,1))
 #R2_thr=R2_thr<2.2
 
-measured[final_mask_L==1]=np.reshape(np.array(a['Measured_values'][7]),(-1,1))
+measured[final_mask_L==1]=np.reshape(np.array(a['Measured_values'][0]),(-1,1))
 
 pred=np.array(pred)
 minus=pred>180
@@ -43,6 +43,8 @@ measured[minus]=measured[minus]-180
 measured[sum]=measured[sum]+180
 measured=np.array(measured)
 #measured[R2_thr]=0
+
+
 
 view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.midthickness_MSMAll.32k_fs_LR.surf.gii'),surf_map=np.reshape(pred[0:32492],(-1)),bg_map=background,cmap='gist_rainbow_r',black_bg=True,symmetric_cmap=False,vmax=360)
 view.open_in_browser()
