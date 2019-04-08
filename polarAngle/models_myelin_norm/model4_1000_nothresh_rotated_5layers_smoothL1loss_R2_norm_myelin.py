@@ -6,7 +6,7 @@ import torch_geometric.transforms as T
 import sys
 sys.path.append('../..')
 
-from dataset.HCP_3sets_visual_nothr_rotated import Retinotopy
+from dataset.HCP_3sets_visual_normXY import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
