@@ -6,7 +6,7 @@ import torch_geometric.transforms as T
 import sys
 sys.path.append('../..')
 
-from dataset.HCP_3sets_visual_normXY import Retinotopy
+from dataset.HCP_3sets_visual_nothr_rotated import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
@@ -15,14 +15,14 @@ from torch_geometric.nn import SplineConv
 path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
 pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
-dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,myelination=True)
+dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
 train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
-        self.conv1=SplineConv(train_dataset.num_features,8,dim=3,kernel_size=5,norm=False)
+        self.conv1=SplineConv(1,8,dim=3,kernel_size=5,norm=False)
         self.conv2=SplineConv(8,16,dim=3,kernel_size=5,norm=False)
         self.conv3=SplineConv(16,16,dim=3,kernel_size=5,norm=False)
         self.conv4=SplineConv(16,8,dim=3,kernel_size=5,norm=False)
@@ -73,6 +73,7 @@ def train(epoch):
         optimizer.step()
     return output_loss.detach(), MAE
 
+
 def test():
     model.eval()
     MeanAbsError =0
@@ -93,8 +94,6 @@ def test():
     test_MAE=MeanAbsError/len(dev_loader)
     output={'Predicted_values':y_hat,'Measured_values':y,'R2':R2_plot,'MAE':test_MAE}
     return output
-
-
 
 
 for epoch in range(1, 1001):
