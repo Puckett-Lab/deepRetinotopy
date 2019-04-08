@@ -3,7 +3,7 @@ import scipy.io
 from functions.def_ROIs import roi
 import torch
 from torch_geometric.data import InMemoryDataset
-from read.normalize_read_HCPdata_visual_nothr import read_HCP
+from read.normalize_read_HCPdata_visual_nothr_rotated import read_HCP
 from functions.labels import labels
 
 
