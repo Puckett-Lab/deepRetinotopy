@@ -109,3 +109,12 @@ for epoch in range(1, 1001):
 
 #Saving the model's learned parameter and predicted/y values
 torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_5000_nothresh_rotated_5layers_smoothL1_R2_4kernel_batch.pt'))
+
+
+
+
+
+
+
+
+
