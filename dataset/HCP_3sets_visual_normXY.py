@@ -19,7 +19,8 @@ class Retinotopy(InMemoryDataset):
                  transform=None,
                  pre_transform=None,
                  pre_filter=None,
-                 n_examples=None,prediction=None):
+                 n_examples=None,prediction=None,myelination=None):
+        self.myelination=myelination
         self.prediction=prediction
         self.n_examples = int(n_examples)
         super(Retinotopy, self).__init__(root, transform, pre_transform, pre_filter)
@@ -64,7 +65,7 @@ class Retinotopy(InMemoryDataset):
 
 
         for i in range(0,self.n_examples):
-            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R,prediction=self.prediction)
+            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R,prediction=self.prediction,myelination=self.myelination)
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
             data_list.append(data)
