@@ -40,10 +40,16 @@ class Retinotopy(InMemoryDataset):
 
     @property
     def processed_file_names(self):
-        if self.prediction=='eccentricity':
-            return ['training_ecc_visual_norm.pt','development_ecc_visual_norm.pt','test_ecc_visual_norm.pt']
+        if self.myelination==True:
+            if self.prediction=='eccentricity':
+                return ['training_ecc_visual_norm_myelin.pt','development_ecc_visual_norm_myelin.pt','test_ecc_visual_norm_myelin.pt']
+            else:
+                return ['training_PA_visual_norm_myelin.pt','development_PA_visual_norm_myelin.pt','test_PA_visual_norm_myelin.pt']
         else:
-            return ['training_PA_visual_norm.pt','development_PA_visual_norm.pt','test_PA_visual_norm.pt']
+            if self.prediction=='eccentricity':
+                return ['training_ecc_visual_norm_curv.pt','development_ecc_visual_norm_curv.pt','test_ecc_visual_norm_curv.pt']
+            else:
+                return ['training_PA_visual_norm_curv.pt','development_PA_visual_norm_curv.pt','test_PA_visual_norm_curv.pt']
 
     def download(self):
         raise RuntimeError(
