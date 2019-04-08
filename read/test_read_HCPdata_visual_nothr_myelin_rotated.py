@@ -87,7 +87,7 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         polarAngle_values[sum]=polarAngle_values[sum]+180
         polarAngle_values[minus]=polarAngle_values[minus]-180
 
-        if myelination==None:
+        if myelination==False:
             if prediction=='polarAngle':
                 data=Data(x=curvature,y=polarAngle_values,pos=pos)
             else:
@@ -153,7 +153,7 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         polarAngle_values[sum]=polarAngle_values[sum]+180
         polarAngle_values[minus]=polarAngle_values[minus]-180
 
-        if myelination == None:
+        if myelination == False:
             if prediction=='polarAngle':
                 data=Data(x=curvature,y=polarAngle_values,pos=pos)
             else:

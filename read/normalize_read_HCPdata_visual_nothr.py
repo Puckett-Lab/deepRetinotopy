@@ -49,12 +49,12 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
 
         #Measures for the Right hemisphere
         R2_values = torch.tensor(np.reshape(R2['x' + subjects[index] + '_fit1_r2_msmall'][0][0][number_hemi_nodes:number_cortical_nodes].reshape((number_hemi_nodes))[visual_mask_R == 1],(-1,1)),dtype=torch.float)
-        myelin_values = torch.tensor(np.reshape(
+        myelin_values = torch.tensor(normalize(np.reshape(
             myelin['x' + subjects[index] + '_myelinmap'][0][0][number_hemi_nodes:number_cortical_nodes].reshape(
-                (number_hemi_nodes))[visual_mask_R == 1], (-1, 1)), dtype=torch.float)
-        curvature = torch.tensor(np.reshape(
+                (number_hemi_nodes))[visual_mask_R == 1], (-1, 1))), dtype=torch.float)
+        curvature = torch.tensor(normalize(np.reshape(
             curv['x' + subjects[index] + '_curvature'][0][0][number_hemi_nodes:number_cortical_nodes].reshape(
-                (number_hemi_nodes))[visual_mask_R == 1], (-1, 1)), dtype=torch.float)
+                (number_hemi_nodes))[visual_mask_R == 1], (-1, 1))), dtype=torch.float)
         eccentricity_values = torch.tensor(np.reshape(
             eccentricity['x' + subjects[index] + '_fit1_eccentricity_msmall'][0][0][
             number_hemi_nodes:number_cortical_nodes].reshape((number_hemi_nodes))[visual_mask_R == 1], (-1, 1)), dtype=torch.float)
@@ -85,7 +85,7 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         polarAngle_values[condition3 == 1] = -1
 
 
-        if myelination==None:
+        if myelination==False:
             if prediction=='polarAngle':
                 data=Data(x=curvature,y=polarAngle_values,pos=pos)
             else:
@@ -116,14 +116,14 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
 
         # Measures for the Left hemisphere
         R2_values = torch.tensor(np.reshape(R2['x' + subjects[index] + '_fit1_r2_msmall'][0][0][0:number_hemi_nodes].reshape((number_hemi_nodes))[visual_mask_L == 1],(-1,1)),dtype=torch.float)
-        myelin_values =torch.tensor(np.reshape(
+        myelin_values =torch.tensor(normalize(np.reshape(
             myelin['x' + subjects[index] + '_myelinmap'][0][0][0:number_hemi_nodes].reshape(
-                (number_hemi_nodes))[visual_mask_L == 1], (-1, 1)), dtype=torch.float)
+                (number_hemi_nodes))[visual_mask_L == 1], (-1, 1))), dtype=torch.float)
         curvature=torch.tensor(normalize(np.reshape(
             curv['x' + subjects[index] + '_curvature'][0][0][0:number_hemi_nodes].reshape(
                 (number_hemi_nodes))[visual_mask_L == 1], (-1, 1))), dtype=torch.float)
         eccentricity_values= torch.tensor(np.reshape(eccentricity['x' + subjects[index] + '_fit1_eccentricity_msmall'][0][0][0:number_hemi_nodes].reshape((number_hemi_nodes))[visual_mask_L == 1], (-1, 1)), dtype=torch.float)
-        polarAngle_values= torch.tensor(normalize(np.reshape(polarAngle['x' + subjects[index] + '_fit1_polarangle_msmall'][0][0][0:number_hemi_nodes].reshape((number_hemi_nodes))[visual_mask_L == 1],(-1,1))),dtype=torch.float)
+        polarAngle_values= torch.tensor(np.reshape(polarAngle['x' + subjects[index] + '_fit1_polarangle_msmall'][0][0][0:number_hemi_nodes].reshape((number_hemi_nodes))[visual_mask_L == 1],(-1,1)),dtype=torch.float)
 
         nocurv=np.isnan(curvature)
         curvature[nocurv == 1] = 0
@@ -146,7 +146,7 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         polarAngle_values[condition3 == 1] = -1
 
 
-        if myelination == None:
+        if myelination == False:
             if prediction=='polarAngle':
                 data=Data(x=curvature,y=polarAngle_values,pos=pos)
             else:
