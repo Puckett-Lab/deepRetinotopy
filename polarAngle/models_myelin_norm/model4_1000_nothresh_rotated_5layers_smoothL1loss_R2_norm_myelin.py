@@ -6,14 +6,13 @@ import torch_geometric.transforms as T
 import sys
 sys.path.append('../..')
 
-import numpy as np
 
 from dataset.test_HCP_3sets_visual_nothr_rotated_myelin import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
 def normalize(feature):
-    norm=feature-np.mean(feature)/np.std(feature)
+    norm=feature-torch.mean(feature)/torch.std(feature)
     return norm
 
 
