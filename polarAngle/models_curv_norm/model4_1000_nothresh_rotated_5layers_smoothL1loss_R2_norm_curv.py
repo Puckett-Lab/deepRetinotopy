@@ -6,10 +6,15 @@ import torch_geometric.transforms as T
 import sys
 sys.path.append('../..')
 
-from dataset.HCP_3sets_visual_normXY import Retinotopy
+import numpy as np
+
+from dataset.HCP_3sets_visual_nothr_rotated import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
+def normalize(feature):
+    norm=feature-np.mean(feature)/np.std(feature)
+    return norm
 
 
 path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
@@ -29,7 +34,7 @@ class Net(torch.nn.Module):
         self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
-        x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
+        x, edge_index, pseudo=normalize(data.x),data.edge_index,data.edge_attr
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
@@ -109,4 +114,4 @@ for epoch in range(1, 1001):
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_norm_curv.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_norm_visual_curv.pt'))
