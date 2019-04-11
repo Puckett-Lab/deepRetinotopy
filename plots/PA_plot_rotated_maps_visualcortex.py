@@ -23,6 +23,7 @@ R2_thr=np.zeros((32492,1))
 a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testing_modelmyelin_curv.pt',map_location='cpu')
 pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][9]),(-1,1))
 
+
 #R2_thr[final_mask_L==1]=np.reshape(np.array(a['R2'][0]),(-1,1))
 #R2_thr=R2_thr<2.2
 
