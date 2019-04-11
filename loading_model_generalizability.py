@@ -17,7 +17,6 @@ pre_transform=T.Compose([T.FaceToEdge()])
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=False)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
-
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
@@ -28,13 +27,14 @@ class Net(torch.nn.Module):
         self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
-        x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
+        x, edge_index, pseudo=normalize(data.x),data.edge_index,data.edge_attr
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
         x = F.elu(self.conv4(x, edge_index, pseudo))
         x=F.elu(self.conv5(x,edge_index,pseudo)).view(-1)
         return x
+
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
