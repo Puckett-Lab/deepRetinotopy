@@ -19,8 +19,8 @@ pred=np.zeros((136849,1))
 
 
 a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testing_native.pt',map_location='cpu')
-pred[final_mask_L==1]=10000
-print(np.sum(final_mask_L==1))
+pred[final_mask_L==1]=100
+
 
 
 pred=np.array(pred)
@@ -31,5 +31,5 @@ pred=np.array(pred)
 #pred=pred
 #pred[R2_thr]=0
 
-view=plotting.view_surf(surf_mesh='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/102311_native/102311.L.sphere.native.surf.gii',surf_map=np.reshape(pred,(-1)),cmap='gist_rainbow_r',black_bg=True,symmetric_cmap=False,threshold=0)
+view=plotting.view_surf(surf_mesh='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/102311_native/102311.L.inflated.native.surf.gii',surf_map=np.reshape(pred,(-1)),cmap='gist_rainbow_r',black_bg=True,symmetric_cmap=False,threshold=0)
 view.open_in_browser()
