@@ -8,7 +8,7 @@ def roi(list_of_labels):
     number_cortical_nodes = int(64984)
     number_hemi_nodes = int(number_cortical_nodes / 2)
 
-    list_primary_visual_areas = np.zeros([6,64984])
+    list_primary_visual_areas = np.zeros([len(list_of_labels),64984])
     for i in range(len(list_of_labels)):
         list_primary_visual_areas[i] = np.reshape(scipy.io.loadmat(
             osp.join(osp.dirname(osp.realpath(__file__)), '..', 'labels/VisualAreasLabels_Wang2015',

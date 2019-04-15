@@ -8,7 +8,6 @@ import sys
 sys.path.append('../..')
 
 from torch_geometric.data import Data
-from functions.def_ROIs import roi
 from functions.labels import labels
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
@@ -24,15 +23,10 @@ transform=T.Cartesian()
 label_primary_visual_areas = ['V1d', 'V1v', 'V2d', 'V2v', 'V3d', 'V3v']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 
-
-faces_R = scipy.io.loadmat(osp.join(path,'tri_faces_R_102311_native.mat'))['tri_faces_R']
-faces_L = scipy.io.loadmat(osp.join(path, 'tri_faces_L_102311_native.mat'))['tri_faces_L']-1
-
-
 curv_L = torch.tensor(scipy.io.loadmat(osp.join(path,'cifti_curv_L_102311_native.mat'))['cifti_curv_L'].reshape((-1,1))[final_mask_L==1],dtype=torch.float)
 pos = torch.tensor((scipy.io.loadmat(osp.join(path,'mid_pos_L_102311_native.mat'))['mid_pos_L'].reshape((-1,3))[final_mask_L==1]),dtype=torch.float)
 
-faces_L=torch.tensor(labels(scipy.io.loadmat(osp.join(path, 'tri_faces_L_102311_native.mat'))['tri_faces_L'] - 1, index_L_mask).T,dtype=torch.long)
+faces_L=torch.tensor(labels(scipy.io.loadmat(osp.join(path, 'tri_faces_L_102311_native.mat'))['tri_faces_L']-1, index_L_mask).T,dtype=torch.long)
 
 
 

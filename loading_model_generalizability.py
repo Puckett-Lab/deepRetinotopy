@@ -6,10 +6,14 @@ import torch_geometric.transforms as T
 import sys
 sys.path.append('../..')
 
+
 from dataset.HCP_3sets_visual_nothr_rotated import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
+def normalize(feature):
+    norm=feature-torch.mean(feature)/torch.std(feature)
+    return norm
 
 
 path=osp.join(osp.dirname(osp.realpath(__file__)),'data')
@@ -35,10 +39,9 @@ class Net(torch.nn.Module):
         x=F.elu(self.conv5(x,edge_index,pseudo)).view(-1)
         return x
 
-
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_5000_nothresh_rotated_5layers_smoothL1loss_R2_myelinonly.pt',map_location='cpu'))
+model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_5layers_smoothL1lossR2_norm_visual_myelin.pt',map_location='cpu'))
 
 def test():
     MeanAbsError=0
@@ -55,4 +58,4 @@ def test():
     return output
 
 evaluation=test()
-torch.save({'Predicted_values':evaluation['Predicted_values'],'Measured_values':evaluation['Measured_values']},osp.join(osp.dirname(osp.realpath(__file__)),'testing_modelmyelin_curv.pt'))
+torch.save({'Predicted_values':evaluation['Predicted_values'],'Measured_values':evaluation['Measured_values']},osp.join(osp.dirname(osp.realpath(__file__)),'testing_modelmyelin_curv_normdata.pt'))

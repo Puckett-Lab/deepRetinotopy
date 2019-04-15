@@ -13,7 +13,7 @@ background=np.reshape(curv['x100610_curvature'][0][0][0:32492],(-1))
 
 threshold=1
 
-label_primary_visual_areas = ['V1d', 'V1v', 'V2d', 'V2v', 'V3d', 'V3v']
+label_primary_visual_areas = ['V1d', 'V1v', 'V2d', 'V2v', 'V3d', 'V3v','hV4','VO1','VO2','PHC1','PHC2','V3a','V3b','LO1','LO2','TO1','TO2']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 pred=np.zeros((32492,1))
 measured=np.zeros((32492,1))
