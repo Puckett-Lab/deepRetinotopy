@@ -12,7 +12,7 @@ from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
 def normalize(feature):
-    norm=feature-torch.mean(feature)/torch.std(feature)
+    norm=(feature-torch.mean(feature))/torch.std(feature)
     return norm
 
 
