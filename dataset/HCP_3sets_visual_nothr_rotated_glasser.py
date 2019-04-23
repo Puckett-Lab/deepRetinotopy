@@ -42,16 +42,16 @@ class Retinotopy(InMemoryDataset):
     def processed_file_names(self):
         if self.myelination==True:
             if self.prediction == 'eccentricity':
-                return ['training_ecc_visual_nothresh_rotated_myelincurv.pt', 'development_ecc_visual_nothresh_rotated_myelincurv.pt',
-                        'test_ecc_visual_nothresh_rotated_myelincurv.pt']
+                return ['training_ecc_visual_nothresh_rotated_myelincurv_glasser.pt', 'development_ecc_visual_nothresh_rotated_myelincurv_glasser.pt',
+                        'test_ecc_visual_nothresh_rotated_myelincurv_glasser.pt']
             else:
-                return ['training_PA_visual_nothresh_rotated_myelincurv.pt', 'development_PA_visual_nothresh_rotated_myelincurv.pt',
-                        'test_PA_visual_nothresh_rotated_myelincurv.pt']
+                return ['training_PA_visual_nothresh_rotated_myelincurv_glasser.pt', 'development_PA_visual_nothresh_rotated_myelincurv_glasser.pt',
+                        'test_PA_visual_nothresh_rotated_myelincurv_glasser.pt']
         else:
             if self.prediction=='eccentricity':
-                return ['training_ecc_visual_nothresh_rotated.pt','development_ecc_visual_nothresh_rotated.pt','test_ecc_visual_nothresh_rotated.pt']
+                return ['training_ecc_visual_nothresh_rotated_glasser.pt','development_ecc_visual_nothresh_rotated_glasser.pt','test_ecc_visual_nothresh_rotated_glasser.pt']
             else:
-                return ['training_PA_visual_nothresh_rotated.pt','development_PA_visual_nothresh_rotated.pt','test_PA_visual_nothresh_rotated.pt']
+                return ['training_PA_visual_nothresh_rotated_glasser.pt','development_PA_visual_nothresh_rotated_glasser.pt','test_PA_visual_nothresh_rotated_glasser.pt']
 
     def download(self):
         raise RuntimeError(
