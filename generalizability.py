@@ -62,28 +62,26 @@ no_curv=DataLoader(no_curv,batch_size=1)
 
 class Net(torch.nn.Module):
     def __init__(self):
-        super(Net, self).__init__()
-        self.conv1 = SplineConv(1, 8, dim=3, kernel_size=3, norm=False)
-        self.conv2 = SplineConv(8, 16, dim=3, kernel_size=3, norm=False)
-        self.conv3 = SplineConv(16, 32, dim=3, kernel_size=3, norm=False)
-        self.conv4 = SplineConv(32, 16, dim=3, kernel_size=3, norm=False)
-        self.conv5 = SplineConv(16, 8, dim=3, kernel_size=3, norm=False)
-        self.conv6 = SplineConv(8, 1, dim=3, kernel_size=3, norm=False)
-
+        super(Net,self).__init__()
+        self.conv1=SplineConv(1,8,dim=3,kernel_size=5,norm=False)
+        self.conv2=SplineConv(8,16,dim=3,kernel_size=5,norm=False)
+        self.conv3=SplineConv(16,16,dim=3,kernel_size=5,norm=False)
+        self.conv4=SplineConv(16,8,dim=3,kernel_size=5,norm=False)
+        self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
-        x, edge_index, pseudo = data.x, data.edge_index, data.edge_attr
-        x = F.elu(self.conv1(x, edge_index, pseudo))
+        x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
+        x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
         x = F.elu(self.conv4(x, edge_index, pseudo))
-        x = F.elu(self.conv5(x, edge_index, pseudo))
-        x = F.elu(self.conv6(x, edge_index, pseudo)).view(-1)
+        x=F.elu(self.conv5(x,edge_index,pseudo)).view(-1)
         return x
+
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_5000_nothresh_rotated_6layers_smoothL1_R2_3kernel_v2.pt',map_location='cpu'))
+model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_5layers_smoothL1lossR2_norm_visual_curv.pt',map_location='cpu'))
 
 def test():
     MeanAbsError=0
