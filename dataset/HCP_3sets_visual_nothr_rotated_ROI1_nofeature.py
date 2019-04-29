@@ -78,7 +78,7 @@ class Retinotopy(InMemoryDataset):
             data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R,prediction=self.prediction)
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
-            data.x=torch.zeros(data.y.shape)
+            data.x=torch.ones(data.y.shape)
             data_list.append(data)
 
         train = data_list[0:int(161)]
