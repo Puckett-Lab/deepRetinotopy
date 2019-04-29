@@ -11,9 +11,7 @@ from dataset.HCP_3sets_visual_nothr_rotated_ROI1_nofeature import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
-def normalize(feature):
-    norm=(feature-torch.mean(feature))/torch.std(feature)
-    return norm
+
 
 
 path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
@@ -33,7 +31,7 @@ class Net(torch.nn.Module):
         self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
-        x, edge_index, pseudo=normalize(data.x),data.edge_index,data.edge_attr
+        x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
