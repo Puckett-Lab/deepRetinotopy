@@ -25,7 +25,6 @@ train_loader=DataLoader(train_dataset,batch_size=1,shuffle=False)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
 
-
 curv=[]
 for data in train_loader:
     curv.append(np.array(data.x))
@@ -33,7 +32,7 @@ for data in train_loader:
 
 
 
-'''
+
 curv_transform=np.reshape(curv,(-1))
 curv_transform=np.sort(curv,axis=None)
 
@@ -56,7 +55,7 @@ def transform(input,range):
 
 curv=curv[0]
 
-curv_test=transform(curv,1)'''
+curv_test=transform(curv,1)
 
 
 
@@ -64,9 +63,9 @@ curv_test=transform(curv,1)'''
 
 
 
-curv_thr[final_mask_L==1]=np.reshape(curv[0]+1,(-1,1))
+curv_thr[final_mask_L==1]=np.reshape(curv_test+1,(-1,1))
 curv_thr=curv_thr+1
 
 
-view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(curv_thr[0:32492],(-1)),cmap='gray',black_bg=True,symmetric_cmap=False)
+view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(curv_thr[0:32492],(-1)),cmap='gray',black_bg=True,symmetric_cmap=True,vmax=3)
 view.open_in_browser()
