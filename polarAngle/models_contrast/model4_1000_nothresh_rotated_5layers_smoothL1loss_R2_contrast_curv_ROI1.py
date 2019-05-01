@@ -21,19 +21,8 @@ dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform
 train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
-
-curv=[]
-for data in train_loader:
-    curv.append(np.array(data.x))
-
-curv=np.reshape(curv,(-1))
-curv=np.sort(curv,axis=None)
-
-upper=0.975*len(curv)
-lower=0.025*len(curv)
-
-upper=curv[round(upper)]
-lower=curv[round(lower)]
+upper=-0.24383244
+lower=0.38608688
 
 
 def transform(input,range):
