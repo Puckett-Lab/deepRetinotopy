@@ -26,6 +26,31 @@ curv=[]
 for data in train_loader:
     curv.append(np.array(data.x))
 
+curv=np.reshape(curv,(-1))
+curv=np.sort(curv,axis=None)
+
+upper=0.975*len(curv)
+lower=0.025*len(curv)
+
+upper=curv[round(upper)]
+lower=curv[round(lower)]
+#curv=np.mean(curv,0)
+
+plt.hist(curv,bins=1000)
+plt.show()
+
+def transform(input,range):
+    transform=((input-lower)/(upper-lower))*(range-(-range))+(-range)
+    transform[transform>range]=range
+    transform[transform<-range]=-range
+    return transform
+
+curv=transform(curv,1)
+
+
+
+
+'''
 similarity=[]
 for i in range(len(curv)):
     for j in range(len(curv)):
@@ -33,4 +58,4 @@ for i in range(len(curv)):
 
 similarity=np.reshape(similarity,(-1))
 plt.boxplot(similarity)
-plt.show()
+plt.show()'''
