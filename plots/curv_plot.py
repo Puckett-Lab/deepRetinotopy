@@ -55,7 +55,7 @@ def transform(input,range):
 
 curv=curv[0]
 
-curv_test=transform(curv,1)
+curv_test=transform(curv,10)
 
 
 

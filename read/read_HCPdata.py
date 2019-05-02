@@ -81,9 +81,9 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
                 data = Data(x=curvature, y=eccentricity_values, pos=pos)
         else:
             if prediction=='polarAngle':
-                data=Data(x=torch.tensor(np.reshape([np.array(curvature),np.array(myelin_values)],(-1,2))),y=polarAngle_values,pos=pos)
+                data=Data(x=torch.tensor(np.array([np.array(curvature),np.array(myelin_values)]).T),y=polarAngle_values,pos=pos)
             else:
-                data = Data(x=torch.tensor(np.reshape([np.array(curvature),np.array(myelin_values)],(-1,2))), y=eccentricity_values, pos=pos)
+                data = Data(x=torch.tensor(np.array([np.array(curvature),np.array(myelin_values)]).T), y=eccentricity_values, pos=pos)
 
         data.face=faces
         data.R2 = R2_values
