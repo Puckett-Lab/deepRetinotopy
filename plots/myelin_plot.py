@@ -59,10 +59,10 @@ def transform(input,range):
     return transform
 
 #Histogram plots
-myelin=np.reshape(myelin,(-1))
+#myelin=np.reshape(myelin,(-1))
 
-plt.hist(myelin_transform,bins=1000)
-plt.show()
+#plt.hist(myelin_transform,bins=1000)
+#plt.show()
 
 myelin=myelin[0]
 
