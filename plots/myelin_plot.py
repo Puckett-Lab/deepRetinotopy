@@ -8,7 +8,7 @@ from functions.def_ROIs_ROI1 import roi
 import sys
 sys.path.append('../..')
 
-from dataset.HCP_3sets_visual_nothr_rotated_ROI1 import Retinotopy
+from dataset.test_HCP_3sets_visual_nothr_rotated_myelin import Retinotopy
 from torch_geometric.data import DataLoader
 
 label_primary_visual_areas = ['ROI1']
