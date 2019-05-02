@@ -23,8 +23,8 @@ dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 upper_curv=0.36853024
 lower_curv=-0.22703196
 
-upper_myelin=1.6169313
-lower_myelin=-0.2067822
+upper_myelin=1.648841
+lower_myelin=1.2585511
 
 
 def transform(input,range):
@@ -53,7 +53,7 @@ class Net(torch.nn.Module):
         self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
-        x, edge_index, pseudo=transform(data.x,1),data.edge_index,data.edge_attr
+        x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))

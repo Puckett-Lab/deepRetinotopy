@@ -1,6 +1,6 @@
 import os.path as osp
 import scipy.io
-from functions.def_ROIs import roi
+from functions.def_ROIs_ROI1 import roi
 import torch
 from torch_geometric.data import InMemoryDataset
 from read.test_read_HCPdata_visual_nothr_myelin_rotated import read_HCP
@@ -42,11 +42,11 @@ class Retinotopy(InMemoryDataset):
     def processed_file_names(self):
         if self.myelination==True:
             if self.prediction == 'eccentricity':
-                return ['training_ecc_visual_nothresh_rotated_myelinonly.pt', 'development_ecc_visual_nothresh_rotated_myelinonly.pt',
-                        'test_ecc_visual_nothresh_rotated_myelinonly.pt']
+                return ['training_ecc_visual_nothresh_rotated_myelinonly_ROI1.pt', 'development_ecc_visual_nothresh_rotated_myelinonly_ROI1.pt',
+                        'test_ecc_visual_nothresh_rotated_myelinonly_ROI1.pt']
             else:
-                return ['training_PA_visual_nothresh_rotated_myelinonly.pt', 'development_PA_visual_nothresh_rotated_myelinonly.pt',
-                        'test_PA_visual_nothresh_rotated_myelinonly.pt']
+                return ['training_PA_visual_nothresh_rotated_myelinonly_ROI1.pt', 'development_PA_visual_nothresh_rotated_myelinonly_ROI1.pt',
+                        'test_PA_visual_nothresh_rotated_myelinonly_ROI1.pt']
         else:
             if self.prediction=='eccentricity':
                 return ['training_ecc_visual_nothresh_rotated.pt','development_ecc_visual_nothresh_rotated.pt','test_ecc_visual_nothresh_rotated.pt']
@@ -64,7 +64,7 @@ class Retinotopy(InMemoryDataset):
         data_list=[]
 
         # Selecting only V1,V2 and V3
-        label_primary_visual_areas = ['V1d', 'V1v', 'V2d', 'V2v', 'V3d', 'V3v']
+        label_primary_visual_areas = ['ROI1']
         final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 
         faces_R = labels(scipy.io.loadmat(osp.join(path,'tri_faces_R.mat'))['tri_faces_R']-1, index_R_mask)
