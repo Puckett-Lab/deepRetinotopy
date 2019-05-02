@@ -3,6 +3,7 @@ import torch
 import torch.nn.functional as F
 import torch_geometric.transforms as T
 import sys
+import numpy as np
 
 sys.path.append('../..')
 
@@ -28,18 +29,18 @@ lower_myelin=1.2585511
 
 
 def transform(input,range):
-    transverse=torch.reshape(input,(2,-1))
+    transverse=np.array(input).T
 
     #Curvature
     transverse[0]=(((transverse[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range)))+(-range)
     transverse[0][transverse[0]>range]=range
     transverse[0][transverse[0]<-range]=-range
-    #Myelin
+    #Myelintr
     #transverse[1] = (((transverse[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range))) + (-range)
     #transverse[1][transverse[1] > range] = range
     #transverse[1][transverse[1] < -range] = -range
 
-    transform=torch.reshape(transverse,(-1,2))
+    transform=torch.tensor(transverse.T)
     return transform
 
 
