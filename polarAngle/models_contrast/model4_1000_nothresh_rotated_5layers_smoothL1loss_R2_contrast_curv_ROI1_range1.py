@@ -26,7 +26,7 @@ lower_curv=-0.22703196
 
 
 def transform(input,range):
-    transform=((input-lower)/(upper-lower))*(range-(-range))+(-range)
+    transform=((input-lower_curv)/(upper_curv-lower_curv))*(range-(-range))+(-range)
     transform[transform>range]=range
     transform[transform<-range]=-range
     return transform
