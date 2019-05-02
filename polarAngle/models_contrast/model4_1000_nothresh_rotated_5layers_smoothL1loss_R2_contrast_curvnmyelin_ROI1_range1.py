@@ -2,7 +2,6 @@ import os.path as osp
 import torch
 import torch.nn.functional as F
 import torch_geometric.transforms as T
-import numpy as np
 import sys
 
 sys.path.append('../..')
@@ -32,11 +31,11 @@ def transform(input,range):
     transverse=torch.reshape(input,(2,-1))
 
     #Curvature
-    transverse[0]=((transverse[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range))+(-range)
+    transverse[0]=(((transverse[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range)))+(-range)
     transverse[0][transverse[0]>range]=range
     transverse[0][transverse[0]<-range]=-range
     #Myelin
-    transverse[1] = ((transverse[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range)) + (-range)
+    transverse[1] = (((transverse[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range))) + (-range)
     transverse[1][transverse[1] > range] = range
     transverse[1][transverse[1] < -range] = -range
 
@@ -47,7 +46,7 @@ def transform(input,range):
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
-        self.conv1=SplineConv(1,8,dim=3,kernel_size=5,norm=False)
+        self.conv1=SplineConv(2,8,dim=3,kernel_size=5,norm=False)
         self.conv2=SplineConv(8,16,dim=3,kernel_size=5,norm=False)
         self.conv3=SplineConv(16,16,dim=3,kernel_size=5,norm=False)
         self.conv4=SplineConv(16,8,dim=3,kernel_size=5,norm=False)
