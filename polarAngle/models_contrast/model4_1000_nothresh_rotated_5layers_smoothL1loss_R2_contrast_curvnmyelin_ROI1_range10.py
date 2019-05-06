@@ -29,7 +29,7 @@ lower_myelin=1.2585511
 
 
 def transform(input,range):
-    transverse = input.transpose(0,1)
+    transverse = torch.reshape(input,(-1,2)).transpose(0,1)
 
     #Curvature
     transverse[0]=(((transverse[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range)))+(-range)
@@ -41,6 +41,7 @@ def transform(input,range):
     transverse[1][transverse[1] < -range] = -range
 
     transform = torch.reshape(transverse.transpose(0, 1),(-1,2))
+
     return transform
 
 
