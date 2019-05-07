@@ -37,15 +37,12 @@ def transform(input,range):
     transverse_0[input_T[0]>range]=range
     transverse_0[input_T[0]<-range]=-range
 
-    transform = ((input_T[0] - lower_curv) / (upper_curv - lower_curv)) * (range - (-range)) + (-range)
-    transform[transform > range] = range
-    transform[transform < -range] = -range
     #Myelin
     transverse_1 = ((input_T[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range)) + (-range)
     transverse_1[input_T[1] > range] = range
     transverse_1[input_T[1] < -range] = -range
 
-    transform = torch.reshape(transform,(-1,1))
+    transform = torch.reshape(transverse_1,(-1,1))
 
     return transform
 
@@ -136,12 +133,12 @@ for epoch in range(1, 1001):
     test_output = test()
     print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))
     if epoch%1000==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curvn_ROI1_range10_output_epoch'+str(epoch)+'.pt'))
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_myelinn_ROI1_range10_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curvn_ROI1_range10.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_myelinn_ROI1_range10.pt'))
 
 
