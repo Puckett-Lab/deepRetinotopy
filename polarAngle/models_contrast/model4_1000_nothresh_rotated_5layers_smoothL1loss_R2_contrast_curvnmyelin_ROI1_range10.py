@@ -31,17 +31,17 @@ lower_myelin=1.2585511
 
 def transform(input,range):
     input_T=torch.reshape(input,(-1,2)).transpose(0, 1)
-    transverse =torch.zeros((2,len(input_T[0])))
-    #Curvature
-    transverse[0]=((input_T[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range))+(-range)
-    transverse[0][input_T[0]>range]=range
-    transverse[0][input_T[0]<-range]=-range
-    #Myelin
-    transverse[1] = ((input_T[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range)) + (-range)
-    transverse[1][input_T[1] > range] = range
-    transverse[1][input_T[1] < -range] = -range
 
-    transverse = torch.reshape(transverse[0],(-1,1))
+    #Curvature
+    transverse_0=((input_T[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range))+(-range)
+    transverse_0[input_T[0]>range]=range
+    transverse_0[input_T[0]<-range]=-range
+    #Myelin
+    transverse_1 = ((input_T[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range)) + (-range)
+    transverse_1[input_T[1] > range] = range
+    transverse_1[input_T[1] < -range] = -range
+
+    transverse = transform = torch.tensor(np.array([np.array(transverse_0)]).T)
 
     return transverse
 
