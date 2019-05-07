@@ -8,7 +8,7 @@ import numpy as np
 sys.path.append('../..')
 
 
-from dataset.HCP_3sets_visual_nothr_rotated_ROI1 import Retinotopy
+from dataset.HCP_3sets_visual_nothr_rotated import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
