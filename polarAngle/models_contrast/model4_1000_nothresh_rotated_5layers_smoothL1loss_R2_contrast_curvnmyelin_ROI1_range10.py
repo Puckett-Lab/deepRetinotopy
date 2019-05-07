@@ -40,7 +40,7 @@ def transform(input,range):
     transverse[1][transverse[1] > range] = range
     transverse[1][transverse[1] < -range] = -range
 
-    transform = torch.reshape(transverse[1],(-1,2))
+    transform = torch.reshape(transverse,(-1,2))
 
     return transform
 
