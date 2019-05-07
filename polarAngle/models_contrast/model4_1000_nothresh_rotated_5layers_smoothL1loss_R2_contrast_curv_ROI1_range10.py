@@ -42,7 +42,7 @@ class Net(torch.nn.Module):
         self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
-        x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr)
+        x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
