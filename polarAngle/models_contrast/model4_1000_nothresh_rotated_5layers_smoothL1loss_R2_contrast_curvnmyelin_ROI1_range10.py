@@ -3,6 +3,7 @@ import torch
 import torch.nn.functional as F
 import torch_geometric.transforms as T
 import sys
+import copy
 import numpy as np
 
 sys.path.append('../..')
@@ -18,7 +19,7 @@ path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
 pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
-train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
+train_loader=DataLoader(train_dataset,batch_size=16,shuffle=False)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
 upper_curv=0.36853024
@@ -29,20 +30,22 @@ lower_myelin=1.2585511
 
 
 def transform(input,range):
-    transverse = torch.reshape(input,(-1,2)).transpose(0,1)
+    input_T=copy.deepcopy(input)
+    input_T=torch.reshape(input_T,(-1,2))
+    transverse = input_T.transpose(0,1)
 
     #Curvature
-    transverse[0]=(((transverse[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range)))+(-range)
+    transverse[0]=((transverse[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range))+(-range)
     transverse[0][transverse[0]>range]=range
     transverse[0][transverse[0]<-range]=-range
     #Myelin
-    transverse[1] = (((transverse[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range))) + (-range)
+    transverse[1] = ((transverse[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range)) + (-range)
     transverse[1][transverse[1] > range] = range
     transverse[1][transverse[1] < -range] = -range
 
-    transform = torch.reshape(transverse[0],(-1,1))
+    transverse = torch.reshape(transverse[0],(-1,1))
 
-    return transform
+    return transverse
 
 
 class Net(torch.nn.Module):
@@ -56,6 +59,7 @@ class Net(torch.nn.Module):
 
     def forward(self, data):
         x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr
+        print(x)
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
