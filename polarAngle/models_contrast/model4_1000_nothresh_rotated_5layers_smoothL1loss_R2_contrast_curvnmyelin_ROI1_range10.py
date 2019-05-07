@@ -36,14 +36,18 @@ def transform(input,range):
     transverse_0=((input_T[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range))+(-range)
     transverse_0[input_T[0]>range]=range
     transverse_0[input_T[0]<-range]=-range
+
+    transform = ((input_T[0] - lower_curv) / (upper_curv - lower_curv)) * (range - (-range)) + (-range)
+    transform[transform > range] = range
+    transform[transform < -range] = -range
     #Myelin
     transverse_1 = ((input_T[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range)) + (-range)
     transverse_1[input_T[1] > range] = range
     transverse_1[input_T[1] < -range] = -range
 
-    transverse = torch.reshape(transverse_1,(-1,1))
+    transform = torch.reshape(transform,(-1,1))
 
-    return transverse
+    return transform
 
 
 
