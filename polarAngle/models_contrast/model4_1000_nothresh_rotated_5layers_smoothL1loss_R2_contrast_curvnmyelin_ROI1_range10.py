@@ -46,6 +46,8 @@ def transform(input,range):
     return transverse
 
 
+
+
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
@@ -138,3 +140,5 @@ for epoch in range(1, 1001):
 
 #Saving the model's learned parameter and predicted/y values
 torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curvn_ROI1_range10.pt'))
+
+
