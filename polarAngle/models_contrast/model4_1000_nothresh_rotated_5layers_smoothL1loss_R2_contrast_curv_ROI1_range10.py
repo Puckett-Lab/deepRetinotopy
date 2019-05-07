@@ -18,7 +18,7 @@ path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
 pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=False)
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=False)
-train_loader=DataLoader(train_dataset,batch_size=16,shuffle=False)
+train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
 upper_curv=0.36853024
@@ -42,8 +42,7 @@ class Net(torch.nn.Module):
         self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
-        x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr
-        print(x)
+        x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr)
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
