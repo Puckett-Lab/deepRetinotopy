@@ -19,7 +19,7 @@ path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
 pre_transform=T.Compose([T.FaceToEdge()])
 train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
 dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
-train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
+train_loader=DataLoader(train_dataset,batch_size=16,shuffle=False)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
 upper_curv=0.36853024
