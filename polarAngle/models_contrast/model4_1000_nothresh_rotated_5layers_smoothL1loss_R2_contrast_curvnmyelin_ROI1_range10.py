@@ -40,7 +40,7 @@ def transform(input,range):
     transverse[1][transverse[1] > range] = range
     transverse[1][transverse[1] < -range] = -range
 
-    transform = torch.reshape(transverse.transpose(0, 1),(-1,2))
+    transform = torch.reshape(transverse[1],(-1,1))
 
     return transform
 
@@ -48,7 +48,7 @@ def transform(input,range):
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
-        self.conv1=SplineConv(2,8,dim=3,kernel_size=5,norm=False)
+        self.conv1=SplineConv(1,8,dim=3,kernel_size=5,norm=False)
         self.conv2=SplineConv(8,16,dim=3,kernel_size=5,norm=False)
         self.conv3=SplineConv(16,16,dim=3,kernel_size=5,norm=False)
         self.conv4=SplineConv(16,8,dim=3,kernel_size=5,norm=False)
@@ -56,7 +56,6 @@ class Net(torch.nn.Module):
 
     def forward(self, data):
         x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr
-        print(x)
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
