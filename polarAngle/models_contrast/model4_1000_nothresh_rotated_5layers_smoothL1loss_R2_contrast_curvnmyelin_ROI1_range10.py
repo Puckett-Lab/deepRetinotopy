@@ -40,8 +40,8 @@ def transform(input,range):
     transverse_1 = ((input_T[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range)) + (-range)
     transverse_1[input_T[1] > range] = range
     transverse_1[input_T[1] < -range] = -range
-
-    transverse = transform = torch.tensor(np.array([np.array(transverse_0)]).T)
+    print(transverse_0.shape)
+    transverse = torch.reshape(transverse_0,(-1,1))
 
     return transverse
 
