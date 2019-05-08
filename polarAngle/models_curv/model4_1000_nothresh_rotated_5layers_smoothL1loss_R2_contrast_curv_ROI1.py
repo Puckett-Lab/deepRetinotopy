@@ -2,8 +2,8 @@ import os.path as osp
 import torch
 import torch.nn.functional as F
 import torch_geometric.transforms as T
-import sys
 import numpy as np
+import sys
 
 sys.path.append('../..')
 
@@ -16,45 +16,24 @@ from torch_geometric.nn import SplineConv
 
 path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
 pre_transform=T.Compose([T.FaceToEdge()])
-train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
-dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
+train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=False)
+dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=False)
 train_loader=DataLoader(train_dataset,batch_size=16,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
-upper_curv=0.36853024
-lower_curv=-0.22703196
-
-upper_myelin=1.648841
-lower_myelin=1.2585511
-
-
-def transform(input,range):
-    transverse = torch.reshape(input, (-1, 2)).transpose(0, 1)
-
-    #Curvature
-    transverse[0]=(((transverse[0]-lower_curv)/(upper_curv-lower_curv))*(range-(-range)))+(-range)
-    transverse[0][transverse[0]>range]=range
-    transverse[0][transverse[0]<-range]=-range
-    #Myelintr
-    #transverse[1] = (((transverse[1] - lower_myelin) / (upper_myelin - lower_myelin)) * (range - (-range))) + (-range)
-    #transverse[1][transverse[1] > range] = range
-    #transverse[1][transverse[1] < -range] = -range
-
-    transform = torch.reshape(transverse.transpose(0, 1),(-1,2))
-    return transform
 
 
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
-        self.conv1=SplineConv(2,8,dim=3,kernel_size=5,norm=False)
+        self.conv1=SplineConv(1,8,dim=3,kernel_size=5,norm=False)
         self.conv2=SplineConv(8,16,dim=3,kernel_size=5,norm=False)
         self.conv3=SplineConv(16,16,dim=3,kernel_size=5,norm=False)
         self.conv4=SplineConv(16,8,dim=3,kernel_size=5,norm=False)
         self.conv5 = SplineConv(8, 1, dim=3, kernel_size=5, norm=False)
 
     def forward(self, data):
-        x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr
+        x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
@@ -128,10 +107,10 @@ for epoch in range(1, 1001):
     test_output = test()
     print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))
     if epoch%1000==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curvnmyelin_ROI1_range10curv_output_epoch'+str(epoch)+'.pt'))
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curv_ROI1_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curvnmyelin_ROI1_range10curv.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curv_ROI1.pt'))
