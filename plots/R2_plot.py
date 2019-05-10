@@ -2,7 +2,7 @@ import os.path as osp
 from nilearn import plotting
 import torch_geometric.transforms as T
 import numpy as np
-from functions.def_ROIs import roi
+from functions.def_ROIs_ROI1 import roi
 
 import sys
 sys.path.append('../..')
@@ -11,7 +11,7 @@ from dataset.HCP_3sets_visual_nothr import Retinotopy
 from torch_geometric.data import DataLoader
 
 
-label_primary_visual_areas = ['V1d', 'V1v', 'V2d', 'V2v', 'V3d', 'V3v']
+label_primary_visual_areas = ['ROI1']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 R2_thr=np.zeros((32492,1))
 
