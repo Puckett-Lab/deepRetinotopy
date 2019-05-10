@@ -7,7 +7,7 @@ from functions.def_ROIs_ROI1 import roi
 import sys
 sys.path.append('../..')
 
-from dataset.HCP_3sets_visual_nothr import Retinotopy
+from dataset.HCP_3sets_visual_nothr_rotated_ROI1 import Retinotopy
 from torch_geometric.data import DataLoader
 
 
