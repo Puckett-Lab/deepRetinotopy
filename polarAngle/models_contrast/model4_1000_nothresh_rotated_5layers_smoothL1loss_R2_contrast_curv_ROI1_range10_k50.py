@@ -35,11 +35,11 @@ def transform(input,range):
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
-        self.conv1=SplineConv(1,8,dim=3,kernel_size=25,norm=False)
-        self.conv2=SplineConv(8,16,dim=3,kernel_size=25,norm=False)
-        self.conv3=SplineConv(16,16,dim=3,kernel_size=25,norm=False)
-        self.conv4=SplineConv(16,8,dim=3,kernel_size=25,norm=False)
-        self.conv5 = SplineConv(8, 1, dim=3, kernel_size=25, norm=False)
+        self.conv1=SplineConv(1,8,dim=3,kernel_size=50,norm=False)
+        self.conv2=SplineConv(8,16,dim=3,kernel_size=50,norm=False)
+        self.conv3=SplineConv(16,16,dim=3,kernel_size=50,norm=False)
+        self.conv4=SplineConv(16,8,dim=3,kernel_size=50,norm=False)
+        self.conv5 = SplineConv(8, 1, dim=3, kernel_size=50, norm=False)
 
     def forward(self, data):
         x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr
@@ -122,4 +122,4 @@ for epoch in range(1, 1001):
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curv_ROI1_range10_k05.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curv_ROI1_range10_k50.pt'))
