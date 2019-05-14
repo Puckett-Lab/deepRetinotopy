@@ -60,7 +60,7 @@ def train(epoch):
 
     if epoch == 500:
         for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.005
+            param_group['lr'] = 0.001
 
     if epoch == 2000:
         for param_group in optimizer.param_groups:
