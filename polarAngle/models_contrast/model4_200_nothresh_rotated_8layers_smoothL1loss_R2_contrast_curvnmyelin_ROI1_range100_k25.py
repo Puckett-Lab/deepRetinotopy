@@ -47,25 +47,31 @@ def transform(input,range):
     return transform
 
 
+
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
         self.conv1=SplineConv(2,8,dim=3,kernel_size=25,norm=False)
         self.conv2=SplineConv(8,16,dim=3,kernel_size=25,norm=False)
-        self.conv3=SplineConv(16,16,dim=3,kernel_size=25,norm=False)
-        self.conv4 = SplineConv(16, 16, dim=3, kernel_size=25, norm=False)
-        self.conv5=SplineConv(16,8,dim=3,kernel_size=25,norm=False)
-        self.conv6 = SplineConv(8, 1, dim=3, kernel_size=25, norm=False)
+        self.conv3=SplineConv(16,32,dim=3,kernel_size=25,norm=False)
+        self.conv4 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
+        self.conv5 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
+        self.conv6 = SplineConv(32, 16, dim=3, kernel_size=25, norm=False)
+        self.conv7=SplineConv(16,8,dim=3,kernel_size=25,norm=False)
+        self.conv8 = SplineConv(8, 1, dim=3, kernel_size=25, norm=False)
 
     def forward(self, data):
-        x, edge_index, pseudo=transform(data.x,100),data.edge_index,data.edge_attr
+        x, edge_index, pseudo=transform(data.x,10),data.edge_index,data.edge_attr
         x=F.elu(self.conv1(x,edge_index,pseudo))
         x = F.elu(self.conv2(x, edge_index, pseudo))
         x = F.elu(self.conv3(x, edge_index, pseudo))
         x = F.elu(self.conv4(x, edge_index, pseudo))
         x = F.elu(self.conv5(x, edge_index, pseudo))
-        x=F.elu(self.conv6(x,edge_index,pseudo)).view(-1)
+        x = F.elu(self.conv6(x, edge_index, pseudo))
+        x = F.elu(self.conv7(x, edge_index, pseudo))
+        x=F.elu(self.conv8(x,edge_index,pseudo)).view(-1)
         return x
+
 
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
