@@ -20,7 +20,7 @@ measured=np.zeros((32492,1))
 R2_thr=np.zeros((32492,1))
 
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_6layers_smoothL1lossR2_contrast_curv_ROI1_range10_featmap_output_epoch1000.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_6layers_smoothL1lossR2_contrast_curvnmyelin_ROI1_range10_k25_output_epoch200.pt',map_location='cpu')
 pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][3]),(-1,1))
 
 
@@ -34,7 +34,8 @@ minus=pred>180
 sum=pred<180
 pred[minus]=pred[minus]-180
 pred[sum]=pred[sum]+180
-pred=pred
+pred=np.array(pred)
+#pred[final_mask_L!=1]=-2
 #pred[R2_thr]=0
 
 measured=np.array(measured)
@@ -43,6 +44,7 @@ sum=measured<180
 measured[minus]=measured[minus]-180
 measured[sum]=measured[sum]+180
 measured=np.array(measured)
+#measured[final_mask_L!=1]=-2
 #measured[R2_thr]=0
 
 
