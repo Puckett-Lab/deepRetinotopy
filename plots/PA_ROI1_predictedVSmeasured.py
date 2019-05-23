@@ -21,7 +21,7 @@ measured=np.zeros((32492,1))
 R2_thr=np.zeros((32492,1))
 
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_6layers_smoothL1lossR2_contrast_curvnmyelin_ROI1_range10_k25_output_epoch1000.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curvnmyelin_ROI1_range10_k25_output_epoch1000.pt',map_location='cpu')
 pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][7]),(-1,1))
 
 
@@ -51,9 +51,13 @@ measured=np.array(measured)
 #plus=difference>180
 #thr=minus+plus
 
+R2_thr[final_mask_L==1]=np.reshape(np.array(a['R2'][7]),(-1,1))
+R2=R2_thr[final_mask_L==1]
 
+plt.scatter(np.sin(measured[final_mask_L==1][R2>2.2][np.cos(measured[final_mask_L==1][R2>2.2]/180*np.pi) > 0] /180*np.pi),np.sin(pred[final_mask_L==1][R2>2.2][np.cos(measured[final_mask_L==1][R2>2.2]/180*np.pi) > 0]/180*np.pi),marker='.')
+plt.show()
 
-plt.scatter(np.sin(measured[final_mask_L==1][np.cos(measured[final_mask_L==1]/180*np.pi) > 0] /180*np.pi),np.sin(pred[final_mask_L==1][np.cos(measured[final_mask_L==1]/180*np.pi) > 0]/180*np.pi),)
+plt.scatter(np.sin(measured[final_mask_L==1][np.cos(measured[final_mask_L==1]/180*np.pi) > 0] /180*np.pi),np.sin(pred[final_mask_L==1][np.cos(measured[final_mask_L==1]/180*np.pi) > 0]/180*np.pi),marker='.')
 plt.show()
 '''view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(pred[0:32492],(-1)),bg_map=background,cmap='gist_rainbow_r',black_bg=True,symmetric_cmap=False,vmax=360)
 view.open_in_browser()'''
