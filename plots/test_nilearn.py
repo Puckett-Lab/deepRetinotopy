@@ -15,7 +15,11 @@ from matplotlib.colors import Normalize, LinearSegmentedColormap
 from nilearn.surface import load_surf_data, load_surf_mesh
 from nilearn._utils.compat import _basestring
 from nilearn.plotting.img_plotting import _get_colorbar_and_data_ranges, _crop_colorbar, show
-from nilearn.plotting.html_surface import view_surf
+
+import sys
+sys.path.append('../..')
+
+from plots.nilearn_modified.html_surface import view_surf
 
 
 def plot_surf(surf_mesh, surf_map=None, bg_map=None,
