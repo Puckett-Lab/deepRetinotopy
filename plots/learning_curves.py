@@ -19,8 +19,9 @@ for i in range(len(MSE_train)):
     MSE_train[i]=float(MSE_train[i])
     MSE_test[i]=float(MSE_test[i])
 
-
-plt.scatter(np.arange(1000),MSE_test[0:1000])
+plt.figure()
+plt.scatter(np.arange(1000),MSE_test[0:1000],marker='.')
+plt.scatter(np.arange(1000),MSE_train[0:1000],color='r',marker='.')
 plt.xlim(0,  1000)
 plt.ylim(20, 100)
 plt.show()
