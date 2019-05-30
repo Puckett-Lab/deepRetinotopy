@@ -3,22 +3,24 @@ import numpy as np
 import os.path as osp
 
 
-text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/output/test_out_model4_1000_nothresh_6layers.txt')
+text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_models5l_batchnorm.txt')
 lines=text_file.readlines()
 epochs=[]
-MSE=[]
-MAE=[]
+MSE_train=[]
+MSE_test=[]
 
 for x in lines:
     epochs.append(x.split(',')[0][7:])
-    MSE.append(x.split(',')[1][8:])
-    MAE.append(x.split(',')[2][7:][:-1])
+    MSE_train.append(x.split(',')[2][12:])
+    MSE_test.append(x.split(',')[3][11:][:-1])
 text_file.close()
 
-for i in range(len(MSE)):
-    MSE[i]=float(MSE[i])
-    MAE[i]=float(MAE[i])
+for i in range(len(MSE_train)):
+    MSE_train[i]=float(MSE_train[i])
+    MSE_test[i]=float(MSE_test[i])
 
 
-plt.scatter(np.arange(1000),MAE[0:1000])
+plt.scatter(np.arange(1000),MSE_test[0:1000])
+plt.xlim(0,  1000)
+plt.ylim(20, 100)
 plt.show()
