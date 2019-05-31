@@ -42,34 +42,34 @@ class Net(torch.nn.Module):
         self.bn5 = torch.nn.BatchNorm1d(32)
 
         self.conv6 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn4 = torch.nn.BatchNorm1d(32)
+        self.bn6 = torch.nn.BatchNorm1d(32)
 
         self.conv7 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn5 = torch.nn.BatchNorm1d(32)
+        self.bn7 = torch.nn.BatchNorm1d(32)
 
         self.conv8 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn4 = torch.nn.BatchNorm1d(32)
+        self.bn8 = torch.nn.BatchNorm1d(32)
 
         self.conv9 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn5 = torch.nn.BatchNorm1d(32)
+        self.bn9 = torch.nn.BatchNorm1d(32)
 
         self.conv10 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn4 = torch.nn.BatchNorm1d(32)
+        self.bn10 = torch.nn.BatchNorm1d(32)
 
         self.conv11 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn5 = torch.nn.BatchNorm1d(32)
+        self.bn11 = torch.nn.BatchNorm1d(32)
 
         self.conv12 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn4 = torch.nn.BatchNorm1d(32)
+        self.bn12 = torch.nn.BatchNorm1d(32)
 
         self.conv13 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn5 = torch.nn.BatchNorm1d(32)
+        self.bn13 = torch.nn.BatchNorm1d(32)
 
         self.conv14 = SplineConv(32, 16, dim=3, kernel_size=25, norm=False)
-        self.bn6 = torch.nn.BatchNorm1d(16)
+        self.bn14 = torch.nn.BatchNorm1d(16)
 
         self.conv15 =SplineConv(16,8,dim=3,kernel_size=25,norm=False)
-        self.bn7 = torch.nn.BatchNorm1d(8)
+        self.bn15 = torch.nn.BatchNorm1d(8)
 
         self.conv16 = SplineConv(8, 1, dim=3, kernel_size=25, norm=False)
 
@@ -97,28 +97,28 @@ class Net(torch.nn.Module):
         x = self.bn7(x)
 
         x = F.elu(self.conv8(x, edge_index, pseudo))
-        x = self.bn2(x)
+        x = self.bn8(x)
 
         x = F.elu(self.conv9(x, edge_index, pseudo))
-        x = self.bn3(x)
+        x = self.bn9(x)
 
         x = F.elu(self.conv10(x, edge_index, pseudo))
-        x = self.bn4(x)
+        x = self.bn10(x)
 
         x = F.elu(self.conv11(x, edge_index, pseudo))
-        x = self.bn5(x)
+        x = self.bn11(x)
 
         x = F.elu(self.conv12(x, edge_index, pseudo))
-        x = self.bn6(x)
+        x = self.bn12(x)
 
         x = F.elu(self.conv13(x, edge_index, pseudo))
-        x = self.bn7(x)
+        x = self.bn13(x)
 
         x = F.elu(self.conv14(x, edge_index, pseudo))
-        x = self.bn6(x)
+        x = self.bn14(x)
 
         x = F.elu(self.conv15(x, edge_index, pseudo))
-        x = self.bn7(x)
+        x = self.bn15(x)
 
         x=F.elu(self.conv16(x,edge_index,pseudo)).view(-1)
         return x
