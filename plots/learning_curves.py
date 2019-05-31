@@ -3,7 +3,7 @@ import numpy as np
 import os.path as osp
 
 
-text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_models5l_batchnorm.txt')
+text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_8l_batch_models.txt')
 lines=text_file.readlines()
 epochs=[]
 MSE_train=[]
@@ -20,8 +20,8 @@ for i in range(len(MSE_train)):
     MSE_test[i]=float(MSE_test[i])
 
 plt.figure()
-plt.scatter(np.arange(1000),MSE_test[0:1000],marker='.')
-plt.scatter(np.arange(1000),MSE_train[0:1000],color='r',marker='.')
+plt.scatter(np.arange(150),MSE_test[450:],marker='.')
+#plt.scatter(np.arange(150),MSE_train[450:],color='r',marker='.')
 plt.xlim(0,  1000)
 plt.ylim(20, 100)
 plt.show()
