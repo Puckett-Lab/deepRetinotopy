@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch_geometric.transforms as T
 import numpy as np
 import sys
+import time
 
 sys.path.append('../..')
 
@@ -53,13 +54,25 @@ class Net(torch.nn.Module):
         self.conv9 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
         self.bn9 = torch.nn.BatchNorm1d(32)
 
-        self.conv10 = SplineConv(32, 16, dim=3, kernel_size=25, norm=False)
-        self.bn10 = torch.nn.BatchNorm1d(16)
+        self.conv10 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
+        self.bn10 = torch.nn.BatchNorm1d(32)
 
-        self.conv11 = SplineConv(16, 8, dim=3, kernel_size=25, norm=False)
-        self.bn11 = torch.nn.BatchNorm1d(8)
+        self.conv11 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
+        self.bn11 = torch.nn.BatchNorm1d(32)
 
-        self.conv12 = SplineConv(8, 1, dim=3, kernel_size=25, norm=False)
+        self.conv12 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
+        self.bn12 = torch.nn.BatchNorm1d(32)
+
+        self.conv13 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
+        self.bn13 = torch.nn.BatchNorm1d(32)
+
+        self.conv14 = SplineConv(32, 16, dim=3, kernel_size=25, norm=False)
+        self.bn14 = torch.nn.BatchNorm1d(16)
+
+        self.conv15 = SplineConv(16, 8, dim=3, kernel_size=25, norm=False)
+        self.bn15 = torch.nn.BatchNorm1d(8)
+
+        self.conv16 = SplineConv(8, 1, dim=3, kernel_size=25, norm=False)
 
     def forward(self, data):
         x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
@@ -107,7 +120,23 @@ class Net(torch.nn.Module):
         x = self.bn11(x)
         x = F.dropout(x,p=.10, training=self.training)
 
-        x=F.elu(self.conv12(x,edge_index,pseudo)).view(-1)
+        x = F.elu(self.conv12(x, edge_index, pseudo))
+        x = self.bn12(x)
+        x = F.dropout(x,p=.10, training=self.training)
+
+        x = F.elu(self.conv13(x, edge_index, pseudo))
+        x = self.bn13(x)
+        x = F.dropout(x,p=.10, training=self.training)
+
+        x = F.elu(self.conv14(x, edge_index, pseudo))
+        x = self.bn14(x)
+        x = F.dropout(x,p=.10, training=self.training)
+
+        x = F.elu(self.conv15(x, edge_index, pseudo))
+        x = self.bn15(x)
+        x = F.dropout(x,p=.10, training=self.training)
+
+        x=F.elu(self.conv16(x,edge_index,pseudo)).view(-1)
         return x
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -169,17 +198,22 @@ def test():
     return output
 
 
+init=time.time()
 
-
-for epoch in range(1, 201):
+for epoch in range(1, 1001):
     loss,MAE=train(epoch)
     test_output = test()
     print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))
-    if epoch%50==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_12layers_smoothL1lossR2_lr005_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch'+str(epoch)+'.pt'))
+    if epoch%100==0:
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_16layers_smoothL1lossR2_lr005_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_12layers_smoothL1lossR2_lr005_curvnmyelin_ROI1_k25_batchnorm_dropout010.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_16layers_smoothL1lossR2_lr005_curvnmyelin_ROI1_k25_batchnorm_dropout010.pt'))
+
+
+end=time.time()
+time=(end-init)/360
+print(str(time)+' minutes')
