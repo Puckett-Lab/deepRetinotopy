@@ -118,11 +118,11 @@ optimizer=torch.optim.Adam(model.parameters(),lr=0.005)
 
 def train(epoch):
     model.train()
-    '''
+
     if epoch == 100:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.001
-
+    '''
     if epoch == 2000:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.001
@@ -187,5 +187,5 @@ torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..',
 
 
 end=time.time()
-time=(end-init)/360
+time=(end-init)/60
 print(str(time)+' minutes')
