@@ -3,7 +3,7 @@ import numpy as np
 import os.path as osp
 
 
-text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output4_lr_models.txt')
+text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_models.txt')
 #text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_3105-2_2_model16noDO.txt')
 lines=text_file.readlines()
 epochs=[]
@@ -21,10 +21,10 @@ for i in range(len(MAE_train)):
     MAE_test[i]=float(MAE_test[i])
 
 plt.figure()
-#plt.scatter(np.arange(1000),MAE_train[1000:2000],marker='.')
-plt.scatter(np.arange(1000),MAE_train[0:1000],marker='.')
-#plt.scatter(np.arange(1000),MAE_test[1000:2000],marker='.')
-plt.scatter(np.arange(1000),MAE_test[0:1000],marker='.')
+plt.scatter(np.arange(1000),MAE_train[2000:3000],marker='.')
+#plt.scatter(np.arange(1000),MAE_train[0:1000],marker='.')
+plt.scatter(np.arange(1000),MAE_test[2000:3000],marker='.')
+#plt.scatter(np.arange(1000),MAE_test[0:1000],marker='.')
 
 
 
