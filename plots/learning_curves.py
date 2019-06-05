@@ -21,10 +21,10 @@ for i in range(len(MAE_train)):
     MAE_test[i]=float(MAE_test[i])
 
 plt.figure()
-plt.scatter(np.arange(1000),MAE_train[2000:3000],marker='.')
-#plt.scatter(np.arange(1000),MAE_train[0:1000],marker='.')
-plt.scatter(np.arange(1000),MAE_test[2000:3000],marker='.')
-#plt.scatter(np.arange(1000),MAE_test[0:1000],marker='.')
+#plt.scatter(np.arange(200),MAE_train[400:600],marker='.')
+plt.scatter(np.arange(200),MAE_train[0:200],marker='.')
+#plt.scatter(np.arange(200),MAE_test[400:600],marker='.')
+plt.scatter(np.arange(200),MAE_test[0:200],marker='.')
 
 
 
@@ -32,7 +32,7 @@ plt.scatter(np.arange(1000),MAE_test[2000:3000],marker='.')
 #plt.scatter(np.arange(1000),MAE_train[0:1000],marker='.')
 #plt.scatter(np.arange(1000),MAE_test[0:1000],color='red',marker='.')
 
-plt.xlim(0,  1000)
+plt.xlim(0,  200)
 plt.ylim(0, 100)
 plt.axhline(y=28, color='r', linestyle='-')
 plt.show()
