@@ -168,12 +168,14 @@ def test():
         threshold = R2.view(-1) > 2.2
 
         test_arccos=arcccos(pred,data.to(device).y.view(-1)).item()
+        t_arccos += test_arccos
         print(test_arccos)
 
         MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold==1]-pred[threshold==1])).item()
         MeanAbsError += MAE
 
     test_MAE=MeanAbsError/len(dev_loader)
+    test_arccos=t_arccos/len(dev_loader)
     output={'Predicted_values':y_hat,'Measured_values':y,'R2':R2_plot,'MAE':test_MAE,'arcos':test_arccos}
     return output
 
