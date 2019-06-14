@@ -9,6 +9,7 @@ theta_acrosssubj=[]
 
 #Compute angle between predicted and empirical predictions across subj
 for j in range(len(a['Predicted_values'])):
+    theta_across_temp=[]
     for i in range(len(a['Predicted_values'])):
         # Compute angle between predicted and empical predictions within subj
         if i==j:
@@ -31,7 +32,7 @@ for j in range(len(a['Predicted_values'])):
             measured=np.array(measured)*(np.pi/180)
 
             #Computing delta theta, angle between vector defined predicted value and empirical value
-            theta=np.arccos(np.cos(pred)*np.cos(measured)-np.sin(pred)*np.sin(measured))
+            theta=np.arccos(np.cos(pred)*np.cos(measured)+np.sin(pred)*np.sin(measured))
             theta=theta*(180/np.pi)
             theta_withinsubj.append(theta)
 
@@ -55,12 +56,21 @@ for j in range(len(a['Predicted_values'])):
             measured = np.array(measured) * (np.pi / 180)
 
             # Computing delta theta, angle between vector defined predicted value and empirical value
-            theta = np.arccos(np.cos(pred) * np.cos(measured) - np.sin(pred) * np.sin(measured))
+            theta = np.arccos(np.cos(pred) * np.cos(measured) + np.sin(pred) * np.sin(measured))
             theta = theta * (180 / np.pi)
-            theta_acrosssubj.append(theta)
+            theta_across_temp.append(theta)
+
+    theta_acrosssubj.append(np.mean(theta_across_temp,axis=0))
+
+
+
+
 
 mean_theta_acrosssubj=np.mean(np.array(theta_acrosssubj),axis=0)
 mean_theta_withinsubj=np.mean(np.array(theta_withinsubj),axis=0)
+
+theta_withinsubj=np.reshape(theta_withinsubj,(-1))
+theta_acrosssubj=np.reshape(theta_acrosssubj,(-1))
 plt.hist(mean_theta_acrosssubj,bins=100)
 plt.xlim(0, 180)
 plt.show()

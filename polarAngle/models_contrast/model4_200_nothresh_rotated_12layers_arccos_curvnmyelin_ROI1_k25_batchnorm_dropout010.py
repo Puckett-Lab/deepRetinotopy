@@ -25,7 +25,7 @@ dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 def arcccos(theta1,theta2):
     theta1=theta1*(np.pi/180)
     theta2 = theta2 * (np.pi / 180)
-    theta = torch.acos(torch.cos(theta1) * torch.cos(theta2) - torch.sin(theta1) * torch.sin(theta2))
+    theta = torch.acos(torch.cos(theta1) * torch.cos(theta2) + torch.sin(theta1) * torch.sin(theta2))
     return torch.mean(theta*(180/np.pi))
 
 
