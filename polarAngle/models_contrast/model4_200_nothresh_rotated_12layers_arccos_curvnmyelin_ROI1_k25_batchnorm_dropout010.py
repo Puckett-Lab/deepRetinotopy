@@ -26,7 +26,7 @@ def arcccos(theta1,theta2):
     theta1=theta1*(np.pi/180)
     theta2 = theta2 * (np.pi / 180)
     theta = torch.acos(torch.cos(theta1) * torch.cos(theta2) - torch.sin(theta1) * torch.sin(theta2))
-    return torch.mean(theta)
+    return torch.mean(theta*(180/np.pi))
 
 
 class Net(torch.nn.Module):
@@ -168,7 +168,7 @@ def test():
         threshold = R2.view(-1) > 2.2
 
         test_arccos=arcccos(pred,data.to(device).y.view(-1)).item()
-        t_arccos += test_arccos
+        t_arccos += (test_arccos)
         print(test_arccos)
 
         MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold==1]-pred[threshold==1])).item()
