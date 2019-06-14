@@ -151,6 +151,7 @@ def train(epoch):
 def test():
     model.eval()
     MeanAbsError =0
+    MeanAbsError_thr = 0
     y=[]
     y_hat=[]
     R2_plot=[]
@@ -160,13 +161,18 @@ def test():
         y.append(data.to(device).y.view(-1))
 
         R2 = data.R2.view(-1)
+        R2_plot.append(R2)
         threshold = R2.view(-1) > 2.2
+        threshold2 = R2.view(-1) > 17
 
         MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold==1]-pred[threshold==1])).item()
+        MAE_thr = torch.mean(abs(data.to(device).y.view(-1)[threshold2 == 1] - pred[threshold2 == 1])).item()
+        MeanAbsError_thr += MAE_thr
         MeanAbsError += MAE
 
     test_MAE=MeanAbsError/len(dev_loader)
-    output={'Predicted_values':y_hat,'Measured_values':y,'R2':R2_plot,'MAE':test_MAE}
+    test_MAE_thr = MeanAbsError_thr / len(dev_loader)
+    output={'Predicted_values':y_hat,'Measured_values':y,'R2':R2_plot,'MAE':test_MAE,'MAE_thr':test_MAE_thr}
     return output
 
 init=time.time()
@@ -175,7 +181,7 @@ init=time.time()
 for epoch in range(1, 201):
     loss,MAE=train(epoch)
     test_output = test()
-    print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}'.format(epoch, loss, MAE,test_output['MAE']))
+    print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}, Test_MAE_thr: {:.4f}'.format(epoch, loss, MAE,test_output['MAE'],test_output['MAE_thr']))
     if epoch%25==0:
         torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_4_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
