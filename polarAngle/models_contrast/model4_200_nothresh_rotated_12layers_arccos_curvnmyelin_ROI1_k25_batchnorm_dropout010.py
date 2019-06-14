@@ -167,7 +167,8 @@ def test():
         R2 = data.R2.view(-1)
         threshold = R2.view(-1) > 2.2
 
-        test_arccos=arcccos(pred,data.to(device).y.view(-1))
+        test_arccos=arcccos(pred,data.to(device).y.view(-1)).item()
+        print(test_arccos)
 
         MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold==1]-pred[threshold==1])).item()
         MeanAbsError += MAE

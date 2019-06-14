@@ -64,3 +64,7 @@ mean_theta_withinsubj=np.mean(np.array(theta_withinsubj),axis=0)
 plt.hist(mean_theta_acrosssubj,bins=100)
 plt.xlim(0, 180)
 plt.show()
+
+
+plt.boxplot([np.reshape(mean_theta_withinsubj,(-1)),np.reshape(mean_theta_acrosssubj,(-1))],[1,2],labels=['Within','Between'])
+plt.show()
