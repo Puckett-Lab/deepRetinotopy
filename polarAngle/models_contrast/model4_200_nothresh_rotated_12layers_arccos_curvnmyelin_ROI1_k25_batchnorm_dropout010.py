@@ -170,6 +170,7 @@ def test():
         y.append(data.to(device).y.view(-1))
 
         R2 = data.R2.view(-1)
+        R2_plot.append(R2)
         threshold = R2.view(-1) > 17
         threshold2= R2.view(-1) > 17
 
