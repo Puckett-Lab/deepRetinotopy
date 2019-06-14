@@ -168,9 +168,9 @@ def test():
         R2 = data.R2.view(-1)
         threshold = R2.view(-1) > 2.2
 
-        test_arccos=arcccos(pred,data.to(device).y.view(-1)).item()
-        t_arccos += (test_arccos)
-        print(test_arccos)
+        test_arccos=arcccos(pred[threshold==1],data.to(device).y.view(-1)[threshold==1]).item()
+        t_arccos += test_arccos
+
 
         MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold==1]-pred[threshold==1])).item()
         MeanAbsError += MAE
@@ -186,7 +186,7 @@ init=time.time()
 for epoch in range(1, 201):
     loss,MAE=train(epoch)
     test_output = test()
-    print('Epoch: {:02d}, Arccos_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f},Test_arccos'.format(epoch, loss, MAE,test_output['MAE'],test_output['arcos']))
+    print('Epoch: {:02d}, Arccos_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f},Test_arccos: {:.4f}'.format(epoch, loss, MAE,test_output['MAE'],test_output['arcos']))
     if epoch%25==0:
         torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_12layers_arccos_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
