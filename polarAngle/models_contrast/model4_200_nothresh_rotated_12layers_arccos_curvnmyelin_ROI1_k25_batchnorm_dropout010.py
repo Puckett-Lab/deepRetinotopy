@@ -170,8 +170,8 @@ def test():
         y.append(data.to(device).y.view(-1))
 
         R2 = data.R2.view(-1)
-        threshold = R2.view(-1) > 2.2
-        threshold2= R2.view(-1) > 20
+        threshold = R2.view(-1) > 17
+        threshold2= R2.view(-1) > 17
 
         test_arccos=arcccos(pred[threshold2==1],data.to(device).y.view(-1)[threshold2==1]).item()
         t_arccos += test_arccos
