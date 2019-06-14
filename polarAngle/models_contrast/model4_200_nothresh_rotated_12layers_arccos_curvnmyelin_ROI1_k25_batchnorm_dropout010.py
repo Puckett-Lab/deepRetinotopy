@@ -156,6 +156,7 @@ def train(epoch):
 def test():
     model.eval()
     MeanAbsError =0
+    t_arccos = 0
     y=[]
     y_hat=[]
     R2_plot=[]
