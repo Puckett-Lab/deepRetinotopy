@@ -123,7 +123,8 @@ optimizer=torch.optim.Adam(model.parameters(),lr=0.01)
 
 def train(epoch):
     model.train()
-
+    MAE=0
+    train_arccos = 0
     if epoch == 100:
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.005
@@ -143,14 +144,17 @@ def train(epoch):
         R2 = data.R2.view(-1)
         threshold = R2.view(-1) > 2.2
 
+        t_arccos = arcccos(model(data)[threshold == 1], data.y.view(-1)[threshold == 1]).item()
+        train_arccos += t_arccos
+
         loss = torch.nn.SmoothL1Loss()
         output_loss = loss(R2 * model(data), R2 * data.y.view(-1))
         output_loss.backward()
 
-        MAE = torch.mean(abs(data.to(device).y.view(-1)[threshold==1] - model(data)[threshold==1])).item()
+        MAE += torch.mean(abs(data.to(device).y.view(-1)[threshold==1] - model(data)[threshold==1])).item()
 
         optimizer.step()
-    return output_loss.detach(), MAE
+    return output_loss.detach(), MAE/len(train_loader),train_arccos/len(train_loader)
 
 
 def test():
@@ -166,7 +170,7 @@ def test():
         y.append(data.to(device).y.view(-1))
 
         R2 = data.R2.view(-1)
-        threshold = R2.view(-1) > 10
+        threshold = R2.view(-1) > 2.2
 
         test_arccos=arcccos(pred[threshold==1],data.to(device).y.view(-1)[threshold==1]).item()
         t_arccos += test_arccos
@@ -184,9 +188,9 @@ init=time.time()
 
 
 for epoch in range(1, 201):
-    loss,MAE=train(epoch)
+    loss,MAE,arccos=train(epoch)
     test_output = test()
-    print('Epoch: {:02d}, Arccos_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f},Test_arccos: {:.4f}'.format(epoch, loss, MAE,test_output['MAE'],test_output['arcos']))
+    print('Epoch: {:02d}, Loss: {:.4f},Train_arccos: {:.4f},, Train_MAE: {:.4f}, Test_MAE: {:.4f},Test_arccos: {:.4f}'.format(epoch, loss,arccos, MAE,test_output['MAE'],test_output['arcos']))
     if epoch%25==0:
         torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_12layers_arccos_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
