@@ -5,7 +5,7 @@ import seaborn as sns
 from functions.def_ROIs import roi as roi2
 from functions.def_ROIs_ROI1 import roi
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch50.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_5_output_epoch100.pt',map_location='cpu')
 
 theta_withinsubj=[]
 theta_acrosssubj=[]
@@ -147,7 +147,9 @@ mean_theta_withinsubj=np.mean(np.array(theta_withinsubj),axis=0)
 mean_theta_acrosssubj_emp=np.mean(np.array(theta_acrosssubj_emp),axis=0)
 mean_theta_acrosssubj_pred=np.mean(np.array(theta_acrosssubj_pred),axis=0)
 
-sns.violinplot(data=[np.reshape(mean_theta_withinsubj[R2_thr>0],(-1)),np.reshape(mean_theta_acrosssubj[R2_thr>0],(-1)),np.reshape(mean_theta_acrosssubj_pred[R2_thr>0],(-1)),np.reshape(mean_theta_acrosssubj_emp[R2_thr>0],(-1))])
+ratio=mean_theta_acrosssubj_pred/(1+mean_theta_acrosssubj_emp)
+
+sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==2],(-1)),np.reshape(mean_theta_acrosssubj[mask==2],(-1)),np.reshape(mean_theta_acrosssubj_pred[mask==2],(-1)),np.reshape(mean_theta_acrosssubj_emp[mask==2],(-1))])
 plt.ylim(0,180)
 plt.show()
 
@@ -158,3 +160,30 @@ plt.show()
 sns.violinplot(data=[np.reshape(mean_theta_acrosssubj_pred[R2_thr>0],(-1))])
 plt.ylim(0,180)
 plt.show()
+
+
+
+import scipy.io
+import os.path as osp
+
+
+from nilearn import plotting
+
+path='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
+curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
+
+
+label_primary_visual_areas = ['ROI1']
+final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
+ROI1=np.zeros((32492,1))
+ROI1[final_mask_L==1]=ratio*R2_thr
+
+
+
+background=np.reshape(curv['x100610_curvature'][0][0][0:32492],(-1))
+nocurv=np.isnan(background)
+background[nocurv==1] = 0
+
+
+view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(ROI1[0:32492],(-1)),bg_map=background,cmap='brg',black_bg=True,symmetric_cmap=False)
+view.open_in_browser()
