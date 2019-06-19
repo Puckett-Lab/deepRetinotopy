@@ -22,11 +22,16 @@ dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform
 train_loader=DataLoader(train_dataset,batch_size=1,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
-def arcccos(theta1,theta2):
-    theta1=theta1*(np.pi/180)
-    theta2 = theta2 * (np.pi / 180)
-    theta = torch.acos(torch.cos(theta1) * torch.cos(theta2) + torch.sin(theta1) * torch.sin(theta2))
-    return torch.mean(theta*(180/np.pi))
+def smallest_angle(x,y):
+    x=x*np.pi/180
+    y=y*np.pi/180
+    difference=[]
+    dif_1=np.abs(y-x)
+    dif_2=np.abs(y-x+2*np.pi)
+    dif_3=np.abs(y-x-2*np.pi)
+    for i in range(len(x)):
+        difference.append(min(dif_1[i],dif_2[i],dif_3[i]))
+    return torch.mean(torch.tensor(difference)*180/np.pi)
 
 
 class Net(torch.nn.Module):
@@ -144,7 +149,7 @@ def train(epoch):
         R2 = data.R2.view(-1)
         threshold = R2.view(-1) > 2.2
 
-        t_arccos = arcccos(model(data)[threshold == 1], data.y.view(-1)[threshold == 1]).item()
+        t_arccos = smallest_angle(model(data)[threshold == 1], data.y.view(-1)[threshold == 1]).item()
         train_arccos += t_arccos
 
         loss = torch.nn.SmoothL1Loss()
@@ -174,8 +179,8 @@ def test():
         threshold = R2.view(-1) > 17
         threshold2= R2.view(-1) > 17
 
-        test_arccos=arcccos(pred[threshold2==1],data.to(device).y.view(-1)[threshold2==1]).item()
-        t_arccos += test_arccos
+        test_angle=smallest_angle(pred[threshold2==1],data.to(device).y.view(-1)[threshold2==1]).item()
+        t_arccos += test_angle
 
 
         MAE=torch.mean(abs(data.to(device).y.view(-1)[threshold==1]-pred[threshold==1])).item()
