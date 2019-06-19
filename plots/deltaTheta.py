@@ -2,18 +2,51 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch
 import seaborn as sns
+from functions.def_ROIs import roi as roi2
+from functions.def_ROIs_ROI1 import roi
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_12layers_arccos_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch100.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch50.pt',map_location='cpu')
 
 theta_withinsubj=[]
 theta_acrosssubj=[]
+theta_acrosssubj_pred=[]
 theta_acrosssubj_emp=[]
 
 R2_thr=[]
 
+
+
+
+
+
+label_primary_visual_areas = ['ROI1']
+final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
+ROI1=np.zeros((32492,1))
+ROI1[final_mask_L==1]=1
+
+visual_areas = ['V1d', 'V1v', 'V2d', 'V2v', 'V3d', 'V3v']
+final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi2(visual_areas)
+primary_visual_areas=np.zeros((32492,1))
+primary_visual_areas[final_mask_L==1]=1
+
+mask=ROI1+primary_visual_areas
+mask=mask[ROI1==1]
+
+
+def smallest_angle(x,y):
+    difference=[]
+    dif_1=np.abs(y-x)
+    dif_2=np.abs(y-x+2*np.pi)
+    dif_3=np.abs(y-x-2*np.pi)
+    for i in range(len(x)):
+        difference.append(min(dif_1[i],dif_2[i],dif_3[i]))
+    return np.array(difference)*180/np.pi
+
+
 #Compute angle between predicted and empirical predictions across subj
 for j in range(len(a['Predicted_values'])):
     theta_across_temp=[]
+    theta_pred_across_temp = []
     theta_emp_across_temp=[]
     R2_thr.append(np.reshape(np.array(a['R2'][j]), (-1)))
 
@@ -42,7 +75,9 @@ for j in range(len(a['Predicted_values'])):
             measured[sum]=measured[sum]+180
             measured=np.array(measured)*(np.pi/180)
 
-            #Computing delta theta, angle between vector defined predicted value and empirical value
+
+
+            #Computing delta theta, angle between vector defined predicted value and empirical value same subj
             theta=np.arccos(np.cos(pred)*np.cos(measured)+np.sin(pred)*np.sin(measured))
             theta=theta*(180/np.pi)
             theta_withinsubj.append(theta)
@@ -54,6 +89,7 @@ for j in range(len(a['Predicted_values'])):
             pred = np.reshape(np.array(a['Predicted_values'][i]), (-1, 1))
             pred2= np.reshape(np.array(a['Predicted_values'][j]), (-1, 1))
             measured = np.reshape(np.array(a['Measured_values'][j]), (-1, 1))
+            measured2 = np.reshape(np.array(a['Measured_values'][i]), (-1, 1))
 
             # Rescaling polar angles to match the right visual field (left hemisphere)
             minus = pred > 180
@@ -62,24 +98,45 @@ for j in range(len(a['Predicted_values'])):
             pred[sum] = pred[sum] + 180
             pred = np.array(pred) * (np.pi / 180)
 
+
+            minus = pred2 > 180
+            sum = pred2 < 180
+            pred2[minus] = pred2[minus] - 180
+            pred2[sum] = pred2[sum] + 180
+            pred2 = np.array(pred2) * (np.pi / 180)
+
+
             minus = measured > 180
             sum = measured < 180
             measured[minus] = measured[minus] - 180
             measured[sum] = measured[sum] + 180
             measured = np.array(measured) * (np.pi / 180)
 
-            # Computing delta theta, angle between vector defined predicted value and empirical value
-            theta = np.arccos(np.cos(pred) * np.cos(measured) + np.sin(pred) * np.sin(measured))
-            theta = theta * (180 / np.pi)
+
+            minus = measured2 > 180
+            sum = measured2 < 180
+            measured2[minus] = measured2[minus] - 180
+            measured2[sum] = measured2[sum] + 180
+            measured2 = np.array(measured2) * (np.pi / 180)
+
+
+
+            # Computing delta theta, angle between vector defined predicted i and empirical j map
+            theta = smallest_angle(pred,measured)
             theta_across_temp.append(theta)
 
-            # Computing delta theta, angle between vector defined predicted value and empirical value
-            theta_emp = np.arccos(np.cos(pred) * np.cos(pred2) + np.sin(pred) * np.sin(pred2))
-            theta_emp = theta_emp * (180 / np.pi)
+            # Computing delta theta, angle between vector defined measured i versus measured j
+            theta_emp = smallest_angle(measured,measured2)
             theta_emp_across_temp.append(theta_emp)
+
+            # Computing delta theta, angle between vector defined pred i versus pred j
+            theta_pred = smallest_angle(pred,pred2)
+            theta_pred_across_temp.append(theta_pred)
+
 
     theta_acrosssubj.append(np.mean(theta_across_temp,axis=0))
     theta_acrosssubj_emp.append(np.mean(theta_emp_across_temp, axis=0))
+    theta_acrosssubj_pred.append(np.mean(theta_pred_across_temp, axis=0))
 
 
 
@@ -88,9 +145,16 @@ R2_thr=np.mean(R2_thr,axis=0)
 mean_theta_acrosssubj=np.mean(np.array(theta_acrosssubj),axis=0)
 mean_theta_withinsubj=np.mean(np.array(theta_withinsubj),axis=0)
 mean_theta_acrosssubj_emp=np.mean(np.array(theta_acrosssubj_emp),axis=0)
+mean_theta_acrosssubj_pred=np.mean(np.array(theta_acrosssubj_pred),axis=0)
 
-sns.violinplot(data=[np.reshape(mean_theta_withinsubj[R2_thr>40],(-1)),np.reshape(mean_theta_acrosssubj[R2_thr>40],(-1)),np.reshape(mean_theta_acrosssubj_emp[R2_thr>40],(-1))])
+sns.violinplot(data=[np.reshape(mean_theta_withinsubj[R2_thr>0],(-1)),np.reshape(mean_theta_acrosssubj[R2_thr>0],(-1)),np.reshape(mean_theta_acrosssubj_pred[R2_thr>0],(-1)),np.reshape(mean_theta_acrosssubj_emp[R2_thr>0],(-1))])
+plt.ylim(0,180)
 plt.show()
 
-sns.violinplot(data=[np.reshape(mean_theta_withinsubj[R2_thr>40],(-1)),np.reshape(mean_theta_acrosssubj[R2_thr>40],(-1))])
+sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==2],(-1)),np.reshape(mean_theta_acrosssubj[mask==2],(-1))])
+plt.ylim(0,180)
+plt.show()
+
+sns.violinplot(data=[np.reshape(mean_theta_acrosssubj_pred[R2_thr>0],(-1))])
+plt.ylim(0,180)
 plt.show()
