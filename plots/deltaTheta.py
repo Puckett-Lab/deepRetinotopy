@@ -78,8 +78,7 @@ for j in range(len(a['Predicted_values'])):
 
 
             #Computing delta theta, angle between vector defined predicted value and empirical value same subj
-            theta=np.arccos(np.cos(pred)*np.cos(measured)+np.sin(pred)*np.sin(measured))
-            theta=theta*(180/np.pi)
+            theta = smallest_angle(pred,measured)
             theta_withinsubj.append(theta)
 
 
@@ -149,19 +148,21 @@ mean_theta_acrosssubj_pred=np.mean(np.array(theta_acrosssubj_pred),axis=0)
 
 ratio=mean_theta_acrosssubj_pred/(1+mean_theta_acrosssubj_emp)
 
-sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==2],(-1)),np.reshape(mean_theta_acrosssubj[mask==2],(-1)),np.reshape(mean_theta_acrosssubj_pred[mask==2],(-1)),np.reshape(mean_theta_acrosssubj_emp[mask==2],(-1))])
+fig=sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_pred[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_emp[mask==1],(-1))])
+fig.set_xticklabels(['Pred i vs GT i','Pred i vs GT j','Pred i vs Pred j','GT i vs GT j'])
 plt.ylim(0,180)
+plt.ylabel(r'Mean $\Delta$$\theta$ per node')
 plt.show()
 
-sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==2],(-1)),np.reshape(mean_theta_acrosssubj[mask==2],(-1))])
-plt.ylim(0,180)
-plt.show()
+# sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==2],(-1)),np.reshape(mean_theta_acrosssubj[mask==2],(-1))])
+# plt.ylim(0,180)
+# plt.show()
+#
+# sns.violinplot(data=[np.reshape(mean_theta_acrosssubj_pred[R2_thr>0],(-1))])
+# plt.ylim(0,180)
+# plt.show()
 
-sns.violinplot(data=[np.reshape(mean_theta_acrosssubj_pred[R2_thr>0],(-1))])
-plt.ylim(0,180)
-plt.show()
-
-
+'''
 
 import scipy.io
 import os.path as osp
@@ -186,4 +187,4 @@ background[nocurv==1] = 0
 
 
 view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(ROI1[0:32492],(-1)),bg_map=background,cmap='brg',black_bg=True,symmetric_cmap=False)
-view.open_in_browser()
+view.open_in_browser() '''
