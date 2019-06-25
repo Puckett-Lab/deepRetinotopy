@@ -39,28 +39,13 @@ class Net(torch.nn.Module):
         self.conv4 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
         self.bn4 = torch.nn.BatchNorm1d(32)
 
-        self.conv5 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn5 = torch.nn.BatchNorm1d(32)
+        self.conv5 = SplineConv(32, 16, dim=3, kernel_size=25, norm=False)
+        self.bn5 = torch.nn.BatchNorm1d(16)
 
-        self.conv6 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn6 = torch.nn.BatchNorm1d(32)
+        self.conv6 = SplineConv(16, 8, dim=3, kernel_size=25, norm=False)
+        self.bn6 = torch.nn.BatchNorm1d(8)
 
-        self.conv7 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn7 = torch.nn.BatchNorm1d(32)
-
-        self.conv8 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn8 = torch.nn.BatchNorm1d(32)
-
-        self.conv9 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
-        self.bn9 = torch.nn.BatchNorm1d(32)
-
-        self.conv10 = SplineConv(32, 16, dim=3, kernel_size=25, norm=False)
-        self.bn10 = torch.nn.BatchNorm1d(16)
-
-        self.conv11 = SplineConv(16, 8, dim=3, kernel_size=25, norm=False)
-        self.bn11 = torch.nn.BatchNorm1d(8)
-
-        self.conv12 = SplineConv(8, 1, dim=3, kernel_size=25, norm=False)
+        self.conv7 = SplineConv(8, 1, dim=3, kernel_size=25, norm=False)
 
     def forward(self, data):
         x, edge_index, pseudo=data.x,data.edge_index,data.edge_attr
@@ -88,27 +73,7 @@ class Net(torch.nn.Module):
         x = self.bn6(x)
         x = F.dropout(x,p=.10, training=self.training)
 
-        x = F.elu(self.conv7(x, edge_index, pseudo))
-        x = self.bn7(x)
-        x = F.dropout(x,p=.10, training=self.training)
-
-        x = F.elu(self.conv8(x, edge_index, pseudo))
-        x = self.bn8(x)
-        x = F.dropout(x,p=.10, training=self.training)
-
-        x = F.elu(self.conv9(x, edge_index, pseudo))
-        x = self.bn9(x)
-        x = F.dropout(x,p=.10, training=self.training)
-
-        x = F.elu(self.conv10(x, edge_index, pseudo))
-        x = self.bn10(x)
-        x = F.dropout(x,p=.10, training=self.training)
-
-        x = F.elu(self.conv11(x, edge_index, pseudo))
-        x = self.bn11(x)
-        x = F.dropout(x,p=.10, training=self.training)
-
-        x=F.elu(self.conv12(x,edge_index,pseudo)).view(-1)
+        x=F.elu(self.conv7(x,edge_index,pseudo)).view(-1)
         return x
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -139,7 +104,7 @@ def train(epoch):
         threshold = R2.view(-1) > 2.2
 
         loss=torch.nn.SmoothL1Loss()
-        output_loss=loss(model(data),data.y.view(-1))
+        output_loss=loss(R2*model(data),R2*data.y.view(-1))
         output_loss.backward()
 
         MAE = torch.mean(abs(data.to(device).y.view(-1)[threshold==1] - model(data)[threshold==1])).item()
@@ -183,13 +148,13 @@ for epoch in range(1, 201):
     test_output = test()
     print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}, Test_MAE_thr: {:.4f}'.format(epoch, loss, MAE,test_output['MAE'],test_output['MAE_thr']))
     if epoch%25==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_12layers_smoothL1loss_curvnmyelin_ROI1_k25_batchnorm_dropout010_3_output_epoch'+str(epoch)+'.pt'))
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_7layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_5_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=10.94: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_12layers_smoothL1loss_curvnmyelin_ROI1_k25_batchnorm_dropout010_3.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_rotated_7layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_5.pt'))
 
 end=time.time()
 time=(end-init)/60
