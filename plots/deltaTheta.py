@@ -5,9 +5,11 @@ import seaborn as sns
 from functions.def_ROIs import roi as roi2
 from functions.def_ROIs_ROI1 import roi
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_5_output_epoch100.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch200.pt',map_location='cpu')
+b=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testing_shuffled-myelin.pt',map_location='cpu')
 
 theta_withinsubj=[]
+theta_withinsubj_shuffled=[]
 theta_acrosssubj=[]
 theta_acrosssubj_pred=[]
 theta_acrosssubj_emp=[]
@@ -59,6 +61,8 @@ for j in range(len(a['Predicted_values'])):
 
             #Loading predicted values
             pred=np.reshape(np.array(a['Predicted_values'][i]),(-1,1))
+            pred_shuffled = np.reshape(np.array(b['Predicted_values'][i]), (-1, 1))
+
             measured=np.reshape(np.array(a['Measured_values'][j]),(-1,1))
 
             #Rescaling polar angles to match the right visual field (left hemisphere)
@@ -67,6 +71,13 @@ for j in range(len(a['Predicted_values'])):
             pred[minus]=pred[minus]-180
             pred[sum]=pred[sum]+180
             pred=np.array(pred)*(np.pi/180)
+
+            # Rescaling polar angles to match the right visual field (left hemisphere)
+            minus = pred_shuffled > 180
+            sum = pred_shuffled < 180
+            pred_shuffled[minus] = pred_shuffled[minus] - 180
+            pred_shuffled[sum] = pred_shuffled[sum] + 180
+            pred_shuffled = np.array(pred_shuffled) * (np.pi / 180)
 
 
             minus=measured>180
@@ -80,6 +91,9 @@ for j in range(len(a['Predicted_values'])):
             #Computing delta theta, angle between vector defined predicted value and empirical value same subj
             theta = smallest_angle(pred,measured)
             theta_withinsubj.append(theta)
+
+            theta_shuffled = smallest_angle(pred_shuffled, measured)
+            theta_withinsubj_shuffled.append(theta_shuffled)
 
 
         if i != j:
@@ -143,6 +157,7 @@ R2_thr=np.mean(R2_thr,axis=0)
 
 mean_theta_acrosssubj=np.mean(np.array(theta_acrosssubj),axis=0)
 mean_theta_withinsubj=np.mean(np.array(theta_withinsubj),axis=0)
+mean_theta_withinsubj_shuffled=np.mean(np.array(theta_withinsubj_shuffled),axis=0)
 mean_theta_acrosssubj_emp=np.mean(np.array(theta_acrosssubj_emp),axis=0)
 mean_theta_acrosssubj_pred=np.mean(np.array(theta_acrosssubj_pred),axis=0)
 
@@ -154,13 +169,15 @@ plt.ylim(0,180)
 plt.ylabel(r'Mean $\Delta$$\theta$ per node')
 plt.show()
 
-# sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==2],(-1)),np.reshape(mean_theta_acrosssubj[mask==2],(-1))])
-# plt.ylim(0,180)
-# plt.show()
-#
+
+sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==1],(-1)),np.reshape(mean_theta_withinsubj_shuffled[mask==1],(-1))])
+plt.ylim(0,180)
+plt.show()
+
 # sns.violinplot(data=[np.reshape(mean_theta_acrosssubj_pred[R2_thr>0],(-1))])
 # plt.ylim(0,180)
 # plt.show()
+
 
 '''
 

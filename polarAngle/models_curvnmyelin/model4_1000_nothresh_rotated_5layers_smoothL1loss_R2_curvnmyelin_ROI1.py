@@ -84,7 +84,9 @@ def train(epoch):
             param_group['lr'] = 0.0005
 
     for data in train_loader:
+        print(data.x.shape)
         data=data.to(device)
+
         optimizer.zero_grad()
 
         R2 = data.R2.view(-1)
@@ -107,6 +109,7 @@ def test():
     y_hat=[]
     R2_plot=[]
     for data in dev_loader:
+        print(data.x)
         pred = model(data.to(device)).detach()
         y_hat.append(pred)
         y.append(data.to(device).y.view(-1))
