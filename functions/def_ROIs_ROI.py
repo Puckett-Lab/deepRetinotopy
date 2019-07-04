@@ -11,7 +11,7 @@ def roi(list_of_labels):
     list_primary_visual_areas = np.zeros([len(list_of_labels),64984])
     for i in range(len(list_of_labels)):
         list_primary_visual_areas[i] = np.reshape(scipy.io.loadmat(
-            osp.join(osp.dirname(osp.realpath(__file__)), '..', 'labels/ROI1_WangPlusFovea',
+            osp.join(osp.dirname(osp.realpath(__file__)), '..', 'labels/ROI_WangPlusFovea',
                      list_of_labels[i] + '.mat'))[list_of_labels[i]][0:64984],(-1))
 
 
