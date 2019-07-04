@@ -64,7 +64,7 @@ class Retinotopy(InMemoryDataset):
         data_list=[]
 
         # Selecting all visual areas (Wang2015) plus V1-3 fovea
-        label_primary_visual_areas = ['ROI']
+        label_primary_visual_areas = ['ROI1']
         final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 
         faces_R = labels(scipy.io.loadmat(osp.join(path,'tri_faces_R.mat'))['tri_faces_R']-1, index_R_mask)

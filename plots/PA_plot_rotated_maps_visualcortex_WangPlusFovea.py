@@ -64,11 +64,6 @@ visual_areas_L[V3_L==3]=3
 visual_areas_L[V2_L==2]=2
 visual_areas_L[V1_L==1]=1
 
-visual_areas_L[visual_areas_L==21]=0
-visual_areas_L[visual_areas_L==20]=0
-visual_areas_L[visual_areas_L==19]=0
-visual_areas_L[visual_areas_L==18]=0
-visual_areas_L[visual_areas_L==17]=0
 
 visual_areas_R=np.concatenate((np.reshape(V1_R,(-1,1)),np.reshape(V2_R,(-1,1)),np.reshape(V3_R,(-1,1)),visual_cortex_R[:,9:]),axis=1)
 visual_areas_R=np.sum(visual_areas_R,axis=1)
@@ -76,11 +71,7 @@ visual_areas_R[V3_R==3]=3
 visual_areas_R[V2_R==2]=2
 visual_areas_R[V1_R==1]=1
 
-visual_areas_R[visual_areas_R==21]=0
-visual_areas_R[visual_areas_R==20]=0
-visual_areas_R[visual_areas_R==19]=0
-visual_areas_R[visual_areas_R==18]=0
-visual_areas_R[visual_areas_R==17]=0
+
 
 #Color map
 top=cm.get_cmap('tab20b',21)
