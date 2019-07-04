@@ -1,6 +1,6 @@
 import os.path as osp
 import scipy.io
-from functions.def_ROIs import roi
+from functions.def_ROIs_ROI import roi
 import torch
 from torch_geometric.data import InMemoryDataset
 from read.read_HCPdata_visual_nothr_rotated import read_HCP
@@ -63,8 +63,8 @@ class Retinotopy(InMemoryDataset):
         path=osp.join(self.raw_dir, 'converted')
         data_list=[]
 
-        # Selecting only V1,V2 and V3
-        label_primary_visual_areas = ['V1d', 'V1v', 'V2d', 'V2v', 'V3d', 'V3v','hV4','VO1','VO2','PHC1','PHC2','V3a','V3b','LO1','LO2','TO1','TO2','IPS0','IPS1','IPS2','IPS3','IPS4','IPS5','SPL1','fovea_V1','fovea_V2','fovea_V3']
+        # Selecting all visual areas (Wang2015) plus V1-3 fovea
+        label_primary_visual_areas = ['ROI']
         final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 
         faces_R = labels(scipy.io.loadmat(osp.join(path,'tri_faces_R.mat'))['tri_faces_R']-1, index_R_mask)

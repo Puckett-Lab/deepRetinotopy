@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import torch
 import seaborn as sns
 from functions.def_ROIs import roi as roi2
-from functions.def_ROIs_ROI1 import roi
+from functions.def_ROIs_ROI import roi
 
 a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch200.pt',map_location='cpu')
 b=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testing_shuffled-myelin.pt',map_location='cpu')

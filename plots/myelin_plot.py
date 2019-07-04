@@ -3,7 +3,7 @@ from nilearn import plotting
 import torch_geometric.transforms as T
 import numpy as np
 import matplotlib.pyplot as plt
-from functions.def_ROIs_ROI1 import roi
+from functions.def_ROIs_ROI import roi
 
 import sys
 sys.path.append('../..')
