@@ -11,13 +11,13 @@ background=np.reshape(curv['x100610_curvature'][0][0][0:32492],(-1))
 
 threshold=1
 
-label_primary_visual_areas = ['ROI1']
+label_primary_visual_areas = ['ROI']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 pred=np.zeros((32492,1))
 measured=np.zeros((32492,1))
 R2_thr=np.zeros((32492,1))
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_5layers_smoothL1lossR2_contrast_curvnmyelin_ROI1_range10_k25_featmap_output_epoch1000.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_9layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch200.pt',map_location='cpu')
 pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][7]),(-1,1))
 
 
@@ -45,7 +45,7 @@ measured=np.array(measured)
 
 
 from functions.def_ROIs import roi
-V1 = ['V1d','V1v','V2d','V2v','V3d','V3v']
+V1 = ['hV4','VO1','VO2','PHC1','PHC2','V3a','V3b','LO1','LO2','TO1','TO2','IPS0','IPS1','IPS2','IPS3','IPS4','IPS5','SPL1']
 final_mask_L_v1, final_mask_R_v1, index_L_mask_v1, index_R_mask_v1= roi(V1)
 
 final_mask_L_v1=final_mask_L_v1[final_mask_L==1][np.reshape(np.cos(measured[final_mask_L==1]/180*np.pi) > 0,(-1))]

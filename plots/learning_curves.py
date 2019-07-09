@@ -3,7 +3,7 @@ import numpy as np
 import os.path as osp
 
 
-text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_l5_models.txt')
+text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_l12_models.txt')
 #text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_3105-2_2_model16noDO.txt')
 lines=text_file.readlines()
 epochs=[]
