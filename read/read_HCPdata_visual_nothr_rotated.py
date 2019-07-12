@@ -81,11 +81,11 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         #polarAngle_values[condition==1] = -1
         polarAngle_values[condition3 == 1] = -1
 
-        #translating polar angle values
-        sum=polarAngle_values<180
-        minus=polarAngle_values>180
-        polarAngle_values[sum]=polarAngle_values[sum]+180
-        polarAngle_values[minus]=polarAngle_values[minus]-180
+        # #translating polar angle values
+        # sum=polarAngle_values<180
+        # minus=polarAngle_values>180
+        # polarAngle_values[sum]=polarAngle_values[sum]+180
+        # polarAngle_values[minus]=polarAngle_values[minus]-180
 
 
         if myelination==False:

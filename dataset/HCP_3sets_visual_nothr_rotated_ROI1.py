@@ -19,10 +19,12 @@ class Retinotopy(InMemoryDataset):
                  pre_filter=None,
                  n_examples=None,
                  myelination=None,
-                 prediction=None):
+                 prediction=None,
+                 hemisphere=None):
         self.myelination=myelination
         self.prediction=prediction
         self.n_examples = int(n_examples)
+        self.hemisphere=hemisphere
         super(Retinotopy, self).__init__(root, transform, pre_transform, pre_filter)
         self.set=set
         if self.set=='Train':
@@ -40,18 +42,37 @@ class Retinotopy(InMemoryDataset):
 
     @property
     def processed_file_names(self):
-        if self.myelination==True:
-            if self.prediction == 'eccentricity':
-                return ['training_ecc_visual_nothresh_rotated_myelincurv_ROI1.pt', 'development_ecc_visual_nothresh_rotated_myelincurv_ROI1.pt',
-                        'test_ecc_visual_nothresh_rotated_myelincurv_ROI1.pt']
+        if self.hemisphere=='Left':
+            if self.myelination==True:
+                if self.prediction == 'eccentricity':
+                    return ['training_ecc_visual_nothresh_rotated_LH_myelincurv_ROI1.pt', 'development_ecc_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
+                            'test_ecc_visual_nothresh_rotated_LH_myelincurv_ROI1.pt']
+                else:
+                    return ['training_PA_visual_nothresh_rotated_LH_myelincurv_ROI1.pt', 'development_PA_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
+                            'test_PA_visual_nothresh_rotated_LH_myelincurv_ROI1.pt']
             else:
-                return ['training_PA_visual_nothresh_rotated_myelincurv_ROI1.pt', 'development_PA_visual_nothresh_rotated_myelincurv_ROI1.pt',
-                        'test_PA_visual_nothresh_rotated_myelincurv_ROI1.pt']
+                if self.prediction=='eccentricity':
+                    return ['training_ecc_visual_nothresh_rotated_LH_ROI1.pt','development_ecc_visual_nothresh_rotated_LH_ROI1.pt','test_ecc_visual_nothresh_rotated_LH_ROI1.pt']
+                else:
+                    return ['training_PA_visual_nothresh_rotated_LH_ROI1.pt','development_PA_visual_nothresh_rotated_LH_ROI1.pt','test_PA_visual_nothresh_rotated_LH_ROI1.pt']
         else:
-            if self.prediction=='eccentricity':
-                return ['training_ecc_visual_nothresh_rotated_ROI1.pt','development_ecc_visual_nothresh_rotated_ROI1.pt','test_ecc_visual_nothresh_rotated_ROI1.pt']
+            if self.myelination == True:
+                if self.prediction == 'eccentricity':
+                    return ['training_ecc_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
+                            'development_ecc_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
+                            'test_ecc_visual_nothresh_rotated_RH_myelincurv_ROI1.pt']
+                else:
+                    return ['training_PA_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
+                            'development_PA_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
+                            'test_PA_visual_nothresh_rotated_RH_myelincurv_ROI1.pt']
             else:
-                return ['training_PA_visual_nothresh_rotated_ROI1.pt','development_PA_visual_nothresh_rotated_ROI1.pt','test_PA_visual_nothresh_rotated_ROI1.pt']
+                if self.prediction == 'eccentricity':
+                    return ['training_ecc_visual_nothresh_rotated_RH_ROI1.pt',
+                            'development_ecc_visual_nothresh_rotated_RH_ROI1.pt',
+                            'test_ecc_visual_nothresh_rotated_RH_ROI1.pt']
+                else:
+                    return ['training_PA_visual_nothresh_rotated_RH_ROI1.pt',
+                            'development_PA_visual_nothresh_rotated_RH_ROI1.pt', 'test_PA_visual_nothresh_rotated_RH_ROI1.pt']
 
     def download(self):
         raise RuntimeError(
@@ -73,7 +94,7 @@ class Retinotopy(InMemoryDataset):
 
 
         for i in range(0,self.n_examples):
-            data=read_HCP(path,Hemisphere='Left',index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R,myelination=self.myelination,prediction=self.prediction)
+            data=read_HCP(path,Hemisphere=self.hemisphere,index=i,surface='mid',visual_mask_L=final_mask_L,visual_mask_R=final_mask_R,faces_L=faces_L,faces_R=faces_R,myelination=self.myelination,prediction=self.prediction)
             if self.pre_transform is not None:
                 data=self.pre_transform(data)
             data_list.append(data)
