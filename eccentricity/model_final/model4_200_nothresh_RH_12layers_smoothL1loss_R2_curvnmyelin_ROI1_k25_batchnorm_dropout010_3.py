@@ -17,8 +17,8 @@ from torch_geometric.nn import SplineConv
 
 path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
 pre_transform=T.Compose([T.FaceToEdge()])
-train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='eccentricity',myelination=True,hemisphere='Left')
-dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='eccentricity',myelination=True,hemisphere='Left')
+train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='eccentricity',myelination=True,hemisphere='Right')
+dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='eccentricity',myelination=True,hemisphere='Right')
 train_loader=DataLoader(train_dataset,batch_size=1,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
@@ -183,13 +183,13 @@ for epoch in range(1, 201):
     test_output = test()
     print('Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {:.4f}, Test_MAE_thr: {:.4f}'.format(epoch, loss, MAE,test_output['MAE'],test_output['MAE_thr']))
     if epoch%25==0:
-        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_ecc_12layers_smoothL1loss_curvnmyelin_ROI1_k25_batchnorm_dropout010_2_output_epoch'+str(epoch)+'.pt'))
+        torch.save({'Epoch':epoch,'Predicted_values':test_output['Predicted_values'],'Measured_values':test_output['Measured_values'],'R2':test_output['R2'],'Loss':loss,'Dev_MAE':test_output['MAE']},osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_RH_ecc_12layers_smoothL1loss_curvnmyelin_ROI1_k25_batchnorm_dropout010_3_output_epoch'+str(epoch)+'.pt'))
     if test_output['MAE']<=0.3: #MeanAbsError from Benson2014
         break
 
 
 #Saving the model's learned parameter and predicted/y values
-torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_ecc_12layers_smoothL1loss_curvnmyelin_ROI1_k25_batchnorm_dropout010_2.pt'))
+torch.save(model.state_dict(),osp.join(osp.dirname(osp.realpath(__file__)),'..','output','model4_nothresh_RH_ecc_12layers_smoothL1loss_curvnmyelin_ROI1_k25_batchnorm_dropout010_3.pt'))
 
 end=time.time()
 time=(end-init)/60
