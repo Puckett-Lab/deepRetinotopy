@@ -25,31 +25,16 @@ final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual
 pred=np.zeros((32492,1))
 measured=np.zeros((32492,1))
 R2_thr=np.zeros((32492,1))
-#
-#
-# a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_9layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch200.pt',map_location='cpu')
-# pred[final_mask_R==1]=np.reshape(np.array(a['Predicted_values'][3]),(-1,1))
 
-import os.path as osp
-import torch_geometric.transforms as T
-import numpy as np
-import sys
 
-sys.path.append('../..')
-from dataset.HCP_3sets_visual_nothr_rotated_ROI1 import Retinotopy
-from torch_geometric.data import DataLoader
-from torch_geometric.nn import SplineConv
+a=torch.load('/home/uqfribe1/Desktop/Wiener/July/output/model4_nothresh_rotated_9layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_5_output_epoch200.pt',map_location='cpu')
+pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][7]),(-1,1))
 
-path=osp.join(osp.dirname(osp.realpath(__file__)),'data')
-pre_transform=T.Compose([T.FaceToEdge()])
-train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True,hemisphere='Right')
-dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True,hemisphere='Right')
-train_loader=DataLoader(train_dataset,batch_size=1,shuffle=True)
-dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
+
 #R2_thr[final_mask_L==1]=np.reshape(np.array(a['R2'][0]),(-1,1))
 #R2_thr=R2_thr<2.2
 
-measured[final_mask_R==1]=np.reshape(np.array(dev_dataset[1].y),(-1,1))
+measured[final_mask_L==1]=np.reshape(np.array(a['Measured_values'][7]),(-1,1))
 
 pred=np.array(pred)
 minus=pred>180
@@ -69,8 +54,8 @@ measured=np.array(measured)
 #measured[final_mask_L!=1]=-2
 #measured[R2_thr]=0
 
-measured[final_mask_R!=1]=0
-pred[final_mask_R!=1]=0
+measured[final_mask_L!=1]=0
+pred[final_mask_L!=1]=0
 
 
 
@@ -80,5 +65,5 @@ pred[final_mask_R!=1]=0
 
 
 
-view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.R.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(measured[0:32492],(-1)),bg_map=background,cmap='gist_rainbow_r',black_bg=True,symmetric_cmap=False,threshold=threshold,vmax=361)
+view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'../..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(pred[0:32492],(-1)),bg_map=background,cmap='gist_rainbow_r',black_bg=True,symmetric_cmap=False,threshold=threshold,vmax=361)
 view.open_in_browser()
