@@ -22,7 +22,7 @@ visual_areas = [['hV4'],['VO1','VO2','PHC1','PHC2'],['V3a','V3b'],['LO1','LO2','
 number_layers=['1','2','3','4','5','6','7','8','9','10','11','12','14','16','18','20']
 
 
-fig = plt.figure()
+sns.set_style("whitegrid")
 for k in range(len(visual_areas)):
     mean_delta = np.zeros((5,16))
     mean_across = np.zeros((5,16))
@@ -280,8 +280,8 @@ for k in range(len(visual_areas)):
         mean_delta[l]=np.array(mean_delta_temp)
         mean_across[l] = np.array(mean_across_temp)
         l += 1
-
-    ax = fig.add_subplot(5, 1, k + 2)
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
     data = np.concatenate([[mean_across[0], number_layers, len(number_layers) * ['Between predicted maps']],
                            [mean_across[1], number_layers, len(number_layers) * ['Between predicted maps']],
                            [mean_across[2], number_layers, len(number_layers) * ['Between predicted maps']],
@@ -301,14 +301,15 @@ for k in range(len(visual_areas)):
     df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
     palette = ['dimgray', 'lightgray']
     ax = sns.boxplot(y='$\Delta$$\t\Theta$', x='Layers', order=number_layers, hue='label', data=df, palette=palette)
-    ax.set_title('Cluster' + str(k+1))
-    plt.legend(loc='upper left')
+    ax.set_title('Cluster ' + str(k+1))
+    legend=plt.legend()
+    legend.remove()
 
-    plt.ylim([0,60])
+    plt.ylim([0,70])
     #x = sns.swarmplot(data=mean_delta,color='gray')
 
 
-plt.show()
+    plt.show()
 
 
 
@@ -627,7 +628,7 @@ df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
 palette=['dimgray','lightgray']
 ax = sns.boxplot(y='$\Delta$$\t\Theta$',x='Layers',order=number_layers,hue='label',data=df, palette=palette)
 ax.set_title(''+label[0])
-plt.legend(loc='upper left')
+plt.legend(loc='upper right')
 plt.ylim([0,70])
-fig.savefig('test.svg')
+#fig.savefig('test.svg')
 plt.show()
