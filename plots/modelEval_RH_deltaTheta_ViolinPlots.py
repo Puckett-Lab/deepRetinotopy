@@ -9,7 +9,7 @@ from functions.plusFovea import add_fovea
 mean_delta=[]
 mean_across=[]
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/plots/right_hemi/model4_nothresh_RH_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_1_output_epoch200.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/plots/right_hemi/model4_nothresh_RH_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_5_output_epoch200.pt',map_location='cpu')
 #b=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testing_shuffled-myelin.pt',map_location='cpu')
 
 theta_withinsubj=[]
@@ -164,11 +164,11 @@ mean_theta_acrosssubj_pred=np.mean(np.array(theta_acrosssubj_pred),axis=0)
 
 ratio=mean_theta_acrosssubj_pred/(1+mean_theta_acrosssubj_emp)
 
-# fig=sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_pred[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_emp[mask==1],(-1))])
-# fig.set_xticklabels(['Pred i vs GT i','Pred i vs GT j','Pred i vs Pred j','GT i vs GT j'])
-# plt.ylim(0,180)
-# plt.ylabel(r'Mean $\Delta$$\theta$ per node')
-# plt.show()
+fig=sns.violinplot(data=[np.reshape(mean_theta_withinsubj,(-1)),np.reshape(mean_theta_acrosssubj,(-1)),np.reshape(mean_theta_acrosssubj_pred,(-1)),np.reshape(mean_theta_acrosssubj_emp,(-1))])
+fig.set_xticklabels(['Pred i vs GT i','Pred i vs GT j','Pred i vs Pred j','GT i vs GT j'])
+plt.ylim(0,180)
+plt.ylabel(r'Mean $\Delta$$\theta$ per node')
+plt.show()
 
 
 # sns.violinplot(data=[np.reshape(mean_theta_acrosssubj_emp[mask==1],(-1))])
@@ -176,28 +176,28 @@ ratio=mean_theta_acrosssubj_pred/(1+mean_theta_acrosssubj_emp)
 # plt.show()
 
 
-
-#correct for V1-3 with fovea
-label_primary_visual_areas = ['V1d', 'V1v','fovea_V1', 'V2d', 'V2v' ,'fovea_V2', 'V3d',  'V3v','fovea_V3']
-V1,V2,V3=add_fovea(label_primary_visual_areas)
-primary_visual_areas=[V1,V2,V3]
-label=['V1','V2','V3']
-
-label_primary_visual_areas = ['ROI']
-final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(label_primary_visual_areas)
-ROI1 = np.zeros((32492, 1))
-ROI1[final_mask_R == 1] = 1
-mask = ROI1 + np.reshape(np.sum(primary_visual_areas,axis=0), (32492, 1))
-mask = mask[ROI1 == 1]
-
-
-
-
-
-
-sns.set()
-sns.kdeplot(data=np.reshape(mean_theta_acrosssubj_emp[mask!=1],(-1)),shade=True)
-plt.ylim(0,0.025)
-plt.xlim(0,180)
-plt.show()
+#
+# #correct for V1-3 with fovea
+# label_primary_visual_areas = ['V1d', 'V1v','fovea_V1', 'V2d', 'V2v' ,'fovea_V2', 'V3d',  'V3v','fovea_V3']
+# V1,V2,V3=add_fovea(label_primary_visual_areas)
+# primary_visual_areas=[V1,V2,V3]
+# label=['V1','V2','V3']
+#
+# label_primary_visual_areas = ['ROI']
+# final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(label_primary_visual_areas)
+# ROI1 = np.zeros((32492, 1))
+# ROI1[final_mask_R == 1] = 1
+# mask = ROI1 + np.reshape(np.sum(primary_visual_areas,axis=0), (32492, 1))
+# mask = mask[ROI1 == 1]
+#
+#
+#
+#
+#
+#
+# sns.set()
+# sns.kdeplot(data=np.reshape(mean_theta_acrosssubj_emp[mask!=1],(-1)),shade=True)
+# plt.ylim(0,0.025)
+# plt.xlim(0,180)
+# plt.show()
 

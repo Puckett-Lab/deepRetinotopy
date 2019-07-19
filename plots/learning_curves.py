@@ -3,7 +3,7 @@ import numpy as np
 import os.path as osp
 
 
-text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/eccentricity/output_l12_LH_ecc_models.txt')
+text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_l12_RH_models.txt')
 #text_file=open('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/output_3105-2_2_model16noDO.txt')
 lines=text_file.readlines()
 epochs=[]
@@ -39,10 +39,10 @@ for i in range(5):
     #plt.scatter(np.arange(1000),MAE_test[0:1000],color='red',marker='.')
 
     plt.xlim(0,  200)
-    # plt.ylim(0, 100)
-    plt.ylim(0, 10)
-    plt.axhline(y=1, color='r', linestyle='-')
-    plt.axhline(y=2, color='r', linestyle='-')
-    # plt.axhline(y=28, color='r', linestyle='-')
-    # plt.axhline(y=19, color='r', linestyle='-')
+    plt.ylim(0, 100)
+    # plt.ylim(0, 10)
+    # plt.axhline(y=1, color='r', linestyle='-')
+    # plt.axhline(y=2, color='r', linestyle='-')
+    plt.axhline(y=28, color='r', linestyle='-')
+    plt.axhline(y=19, color='r', linestyle='-')
     plt.show()
