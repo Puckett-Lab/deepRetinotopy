@@ -26,19 +26,19 @@ dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net,self).__init__()
-        self.conv1 = SplineConv(2, 256, dim=3, kernel_size=25, norm=False)
+        self.conv1 = SplineConv(2, 128, dim=3, kernel_size=25, norm=False)
         self.bn1 = torch.nn.BatchNorm1d(256)
 
-        self.conv2 = SplineConv(256, 256, dim=3, kernel_size=25, norm=False)
+        self.conv2 = SplineConv(128, 128, dim=3, kernel_size=25, norm=False)
         self.bn2 = torch.nn.BatchNorm1d(256)
 
-        self.conv3 = SplineConv(256, 128, dim=3, kernel_size=25, norm=False)
+        self.conv3 = SplineConv(128, 64, dim=3, kernel_size=25, norm=False)
         self.bn3 = torch.nn.BatchNorm1d(128)
 
-        self.conv4 = SplineConv(128, 128, dim=3, kernel_size=25, norm=False)
+        self.conv4 = SplineConv(64, 64, dim=3, kernel_size=25, norm=False)
         self.bn4 = torch.nn.BatchNorm1d(128)
 
-        self.conv5 = SplineConv(128, 64, dim=3, kernel_size=25, norm=False)
+        self.conv5 = SplineConv(64, 64, dim=3, kernel_size=25, norm=False)
         self.bn5 = torch.nn.BatchNorm1d(64)
 
         self.conv6 = SplineConv(64, 64, dim=3, kernel_size=25, norm=False)
