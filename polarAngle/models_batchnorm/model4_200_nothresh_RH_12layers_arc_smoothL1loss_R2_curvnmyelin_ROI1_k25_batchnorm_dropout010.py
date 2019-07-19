@@ -36,7 +36,7 @@ class Net(torch.nn.Module):
         self.bn3 = torch.nn.BatchNorm1d(64)
 
         self.conv4 = SplineConv(64, 32, dim=3, kernel_size=25, norm=False)
-        self.bn4 = torch.nn.BatchNorm1d(132)
+        self.bn4 = torch.nn.BatchNorm1d(32)
 
         self.conv5 = SplineConv(32, 32, dim=3, kernel_size=25, norm=False)
         self.bn5 = torch.nn.BatchNorm1d(32)
