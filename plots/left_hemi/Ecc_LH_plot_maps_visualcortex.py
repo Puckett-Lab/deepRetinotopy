@@ -25,11 +25,11 @@ R2_thr=np.zeros((32492,1))
 
 
 a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/eccentricity/model4_nothresh_ecc_12layers_smoothL1loss_curvnmyelin_ROI1_k25_batchnorm_dropout010_1_output_epoch200.pt',map_location='cpu')
-pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][7]),(-1,1))
+pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][3]),(-1,1))
 
 #R2_thr[final_mask_L==1]=np.reshape(np.array(a['R2'][0]),(-1,1))
 #R2_thr=R2_thr<2.2
-measured[final_mask_L==1]=np.reshape(np.array(a['Measured_values'][7]),(-1,1))
+measured[final_mask_L==1]=np.reshape(np.array(a['Measured_values'][3]),(-1,1))
 
 pred=np.array(pred)+threshold
 #pred[R2_thr]=0

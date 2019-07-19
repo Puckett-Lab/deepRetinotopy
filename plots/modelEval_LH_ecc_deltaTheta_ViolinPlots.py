@@ -4,12 +4,11 @@ import torch
 import seaborn as sns
 from functions.def_ROIs import roi as roi2
 from functions.def_ROIs_ROI import roi
-from functions.plusFovea import add_fovea
 
 mean_delta=[]
 mean_across=[]
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/plots/right_hemi/model4_nothresh_RH_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_1_output_epoch200.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/eccentricity/model4_nothresh_ecc_12layers_smoothL1loss_curvnmyelin_ROI1_k25_batchnorm_dropout010_1_output_epoch200.pt',map_location='cpu')
 #b=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testing_shuffled-myelin.pt',map_location='cpu')
 
 theta_withinsubj=[]
@@ -24,12 +23,12 @@ R2_thr=[]
 label_primary_visual_areas = ['ROI']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
 ROI1=np.zeros((32492,1))
-ROI1[final_mask_R==1]=1
+ROI1[final_mask_L==1]=1
 
 visual_areas = ['hV4','VO1','VO2','PHC1','PHC2','V3a','V3b','LO1','LO2','TO1','TO2','IPS0','IPS1','IPS2','IPS3','IPS4','IPS5','SPL1']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi2(visual_areas)
 primary_visual_areas=np.zeros((32492,1))
-primary_visual_areas[final_mask_R==1]=1
+primary_visual_areas[final_mask_L==1]=1
 
 mask=ROI1+primary_visual_areas
 mask=mask[ROI1==1]
@@ -164,40 +163,41 @@ mean_theta_acrosssubj_pred=np.mean(np.array(theta_acrosssubj_pred),axis=0)
 
 ratio=mean_theta_acrosssubj_pred/(1+mean_theta_acrosssubj_emp)
 
-# fig=sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_pred[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_emp[mask==1],(-1))])
-# fig.set_xticklabels(['Pred i vs GT i','Pred i vs GT j','Pred i vs Pred j','GT i vs GT j'])
-# plt.ylim(0,180)
-# plt.ylabel(r'Mean $\Delta$$\theta$ per node')
-# plt.show()
-
-
-# sns.violinplot(data=[np.reshape(mean_theta_acrosssubj_emp[mask==1],(-1))])
-# plt.ylim(0,180)
-# plt.show()
-
-
-
-#correct for V1-3 with fovea
-label_primary_visual_areas = ['V1d', 'V1v','fovea_V1', 'V2d', 'V2v' ,'fovea_V2', 'V3d',  'V3v','fovea_V3']
-V1,V2,V3=add_fovea(label_primary_visual_areas)
-primary_visual_areas=[V1,V2,V3]
-label=['V1','V2','V3']
-
-label_primary_visual_areas = ['ROI']
-final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(label_primary_visual_areas)
-ROI1 = np.zeros((32492, 1))
-ROI1[final_mask_R == 1] = 1
-mask = ROI1 + np.reshape(np.sum(primary_visual_areas,axis=0), (32492, 1))
-mask = mask[ROI1 == 1]
-
-
-
-
-
-
-sns.set()
-sns.kdeplot(data=np.reshape(mean_theta_acrosssubj_emp[mask!=1],(-1)),shade=True)
-plt.ylim(0,0.025)
-plt.xlim(0,180)
+fig=sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_pred[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_emp[mask==1],(-1))])
+fig.set_xticklabels(['Pred i vs GT i','Pred i vs GT j','Pred i vs Pred j','GT i vs GT j'])
+plt.ylim(0,15)
+plt.ylabel(r'Mean $\Delta$$\theta$ per node')
 plt.show()
 
+
+# sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==1],(-1)),np.reshape(mean_theta_withinsubj_shuffled[mask==1],(-1))])
+# plt.ylim(0,180)
+# plt.show()
+
+
+'''
+
+import scipy.io
+import os.path as osp
+
+
+from nilearn import plotting
+
+path='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
+curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
+
+
+label_primary_visual_areas = ['ROI1']
+final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
+ROI1=np.zeros((32492,1))
+ROI1[final_mask_L==1]=ratio*R2_thr
+
+
+
+background=np.reshape(curv['x100610_curvature'][0][0][0:32492],(-1))
+nocurv=np.isnan(background)
+background[nocurv==1] = 0
+
+
+view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(ROI1[0:32492],(-1)),bg_map=background,cmap='brg',black_bg=True,symmetric_cmap=False)
+view.open_in_browser() '''
