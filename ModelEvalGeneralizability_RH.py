@@ -116,31 +116,27 @@ device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
 model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010.pt',map_location='cpu'))
 
-def test():
-    model.eval()
-    MeanAbsError = 0
-    y = []
-    y_hat = []
-    myelin=[]
-    curv=[]
-    for data in dev_loader:
-        # Shuffling myelin and curv
-        data.x=data.x[torch.randperm(3267)]
-        myelin.append(data.x.transpose(0, 1)[1])
-        curv.append(data.x.transpose(0, 1)[0])
-        pred = model(data.to(device)).detach()
-        y_hat.append(pred)
-        y.append(data.to(device).y.view(-1))
-        MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
-        MeanAbsError += MAE
-    test_MAE = MeanAbsError / len(dev_loader)
-    output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE,'Shuffled_myelin':myelin,'Shuffled_curv':curv}
-    return output
-
-
-evaluation = test()
-torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values'],'Shuffled_myelin':evaluation['Shuffled_myelin'],'Shuffled_curv':evaluation['Shuffled_curv']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testing_shuffled-myelincurv.pt'))
+# def test():
+#     model.eval()
+#     MeanAbsError = 0
+#     y = []
+#     y_hat = []
+#     for data in dev_loader:
+#         # Shuffling myelin and curv
+#         data.x=data.x[torch.randperm(3267)]
+#         pred = model(data.to(device)).detach()
+#         y_hat.append(pred)
+#         y.append(data.to(device).y.view(-1))
+#         MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
+#         MeanAbsError += MAE
+#     test_MAE = MeanAbsError / len(dev_loader)
+#     output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE}
+#     return output
+#
+#
+# evaluation = test()
+# torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},
+#            osp.join(osp.dirname(osp.realpath(__file__)), 'testing_RH_shuffled-myelincurv.pt'))
 
 # def test():
 #     model.eval()
@@ -160,9 +156,9 @@ torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values
 #     return output
 #
 # evaluation=test()
-# torch.save({'Predicted_values':evaluation['Predicted_values'],'Measured_values':evaluation['Measured_values']},osp.join(osp.dirname(osp.realpath(__file__)),'testing_shuffled-curv.pt'))
-#
-#
+# torch.save({'Predicted_values':evaluation['Predicted_values'],'Measured_values':evaluation['Measured_values']},osp.join(osp.dirname(osp.realpath(__file__)),'testing_RH_shuffled-curv.pt'))
+
+
 # def test():
 #     model.eval()
 #     MeanAbsError = 0
@@ -177,31 +173,30 @@ torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values
 #         MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
 #         MeanAbsError += MAE
 #     test_MAE = MeanAbsError / len(dev_loader)
-#     output = {'Predicted_values': y_hat, 'Measured_values': y,'Shuffled_myelin':x, 'MAE': test_MAE}
-#     return output
-#
-#
-# evaluation = test()
-# torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},osp.join(osp.dirname(osp.realpath(__file__)), 'testing_shuffled-myelin.pt'))
-#
-# def test():
-#     model.eval()
-#     MeanAbsError = 0
-#     y = []
-#     y_hat = []
-#     for data in dev_loader:
-#         data.x.transpose(0, 1)[0] = 0.027303819
-#         data.x.transpose(0, 1)[1] = 1.4386905
-#         pred = model(data.to(device)).detach()
-#         y_hat.append(pred)
-#         y.append(data.to(device).y.view(-1))
-#         MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
-#         MeanAbsError += MAE
-#     test_MAE = MeanAbsError / len(dev_loader)
 #     output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE}
 #     return output
 #
 #
 # evaluation = test()
 # torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},
-#            osp.join(osp.dirname(osp.realpath(__file__)), 'testing_constant.pt'))
+#            osp.join(osp.dirname(osp.realpath(__file__)), 'testing_RH_shuffled-myelin.pt'))
+
+def test():
+    model.eval()
+    MeanAbsError = 0
+    y = []
+    y_hat = []
+    for data in dev_loader:
+        pred = model(data.to(device)).detach()
+        y_hat.append(pred)
+        y.append(data.to(device).y.view(-1))
+        MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
+        MeanAbsError += MAE
+    test_MAE = MeanAbsError / len(dev_loader)
+    output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE}
+    return output
+
+
+evaluation = test()
+torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},
+           osp.join(osp.dirname(osp.realpath(__file__)), 'testing_RH_final-pred.pt'))

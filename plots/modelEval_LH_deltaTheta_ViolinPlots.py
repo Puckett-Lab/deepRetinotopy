@@ -10,7 +10,7 @@ import pandas as pd
 mean_delta=[]
 mean_across=[]
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/polarAngle/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch200.pt',map_location='cpu')
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testing_final-pred.pt',map_location='cpu')
 #b=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testing_shuffled-myelin.pt',map_location='cpu')
 
 theta_withinsubj=[]
@@ -51,7 +51,7 @@ for j in range(len(a['Predicted_values'])):
     theta_across_temp=[]
     theta_pred_across_temp = []
     theta_emp_across_temp=[]
-    R2_thr.append(np.reshape(np.array(a['R2'][j]), (-1)))
+    # R2_thr.append(np.reshape(np.array(a['R2'][j]), (-1)))
 
 
 
@@ -154,7 +154,7 @@ for j in range(len(a['Predicted_values'])):
 
 
 
-R2_thr=np.mean(R2_thr,axis=0)
+# R2_thr=np.mean(R2_thr,axis=0)
 
 mean_theta_acrosssubj=np.mean(np.array(theta_acrosssubj),axis=0)
 mean_theta_withinsubj=np.mean(np.array(theta_withinsubj),axis=0)
@@ -165,11 +165,11 @@ mean_theta_acrosssubj_pred=np.mean(np.array(theta_acrosssubj_pred),axis=0)
 
 ratio=mean_theta_acrosssubj_pred/(1+mean_theta_acrosssubj_emp)
 
-# fig=sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_pred[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_emp[mask==1],(-1))])
-# fig.set_xticklabels(['Pred i vs GT i','Pred i vs GT j','Pred i vs Pred j','GT i vs GT j'])
-# plt.ylim(0,180)
-# plt.ylabel(r'Mean $\Delta$$\theta$ per node')
-# plt.show()
+fig=sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_pred[mask==1],(-1)),np.reshape(mean_theta_acrosssubj_emp[mask==1],(-1))])
+fig.set_xticklabels(['Pred i vs GT i','Pred i vs GT j','Pred i vs Pred j','GT i vs GT j'])
+plt.ylim(0,180)
+plt.ylabel(r'Mean $\Delta$$\theta$ per node')
+plt.show()
 
 
 # sns.violinplot(data=[np.reshape(mean_theta_withinsubj[mask==1],(-1)),np.reshape(mean_theta_withinsubj_shuffled[mask==1],(-1))])
@@ -192,12 +192,6 @@ ratio=mean_theta_acrosssubj_pred/(1+mean_theta_acrosssubj_emp)
 #
 
 
-
-sns.set()
-sns.kdeplot(data=np.reshape(mean_theta_acrosssubj_emp[mask==1],(-1)),shade=True)
-plt.xlim(0,180)
-plt.ylim(0,0.025)
-plt.show()
 
 '''
 

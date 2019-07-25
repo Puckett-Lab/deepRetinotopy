@@ -1,36 +1,30 @@
 import os.path as osp
-from nilearn import plotting
+import torch
+import torch.nn.functional as F
 import torch_geometric.transforms as T
 import numpy as np
-import matplotlib.pyplot as plt
-from functions.def_ROIs_ROI import roi
-
 import sys
+import time
+
 sys.path.append('../..')
 
-from dataset.test_HCP_3sets_visual_nothr_rotated_myelin import Retinotopy
+
+from dataset.HCP_3sets_visual_nothr_rotated_ROI1 import Retinotopy
 from torch_geometric.data import DataLoader
-
-label_primary_visual_areas = ['ROI1']
-final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
-myelin_thr=np.zeros((32492,1))
+from torch_geometric.nn import SplineConv
 
 
-
-
-
-path=osp.join(osp.dirname(osp.realpath(__file__)),'..','data')
+path=osp.join(osp.dirname(osp.realpath(__file__)),'data')
 pre_transform=T.Compose([T.FaceToEdge()])
-train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True)
-dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,myelination=True)
-train_loader=DataLoader(train_dataset,batch_size=1,shuffle=False)
+train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True,hemisphere='Left')
+dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True,hemisphere='Left')
+train_loader=DataLoader(train_dataset,batch_size=1,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
-
 
 
 myelin=[]
 for data in train_loader:
-    myelin.append(np.array(data.x))
+    myelin.append(np.array(data.x).T[1])
 
 myelin=np.mean(myelin,0)
 

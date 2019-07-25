@@ -19,13 +19,13 @@ def smallest_angle(x, y):
 
 
 visual_areas = [['hV4'],['VO1','VO2','PHC1','PHC2'],['V3a','V3b'],['LO1','LO2','TO1','TO2'],['IPS0','IPS1','IPS2','IPS3','IPS4','IPS5','SPL1']]
-number_layers=['1','2','3','4','5','6','7','8','9','10','11','12','14','16','18','20']
+number_layers=['9','10','11','12']
 
 
 sns.set_style("whitegrid")
 for k in range(len(visual_areas)):
-    mean_delta = np.zeros((5,16))
-    mean_across = np.zeros((5,16))
+    mean_delta = np.zeros((5,4))
+    mean_across = np.zeros((5,4))
 
 
     l=0
@@ -33,9 +33,9 @@ for k in range(len(visual_areas)):
         mean_delta_temp=[]
         mean_across_temp=[]
 
-        for m in range(16):
+        for m in range(4):
             if m<12:
-                a=torch.load('/home/uqfribe1/Desktop/Wiener/July/output/model4_nothresh_rotated_'+str(m+1)+'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_'+str(l+1)+'_output_epoch200.pt',map_location='cpu')
+                a=torch.load('/home/uqfribe1/Desktop/Wiener/July/output_RH/model4_nothresh_RH_'+str(m+9)+'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_'+str(l+1)+'_output_epoch100.pt',map_location='cpu')
 
                 theta_withinsubj=[]
                 theta_acrosssubj=[]
@@ -48,11 +48,11 @@ for k in range(len(visual_areas)):
                 label_primary_visual_areas = ['ROI']
                 final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
                 ROI1=np.zeros((32492,1))
-                ROI1[final_mask_L==1]=1
+                ROI1[final_mask_R==1]=1
 
                 final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi2(visual_areas[k])
                 primary_visual_areas=np.zeros((32492,1))
-                primary_visual_areas[final_mask_L==1]=1
+                primary_visual_areas[final_mask_R==1]=1
 
                 mask=ROI1+primary_visual_areas
                 mask=mask[ROI1==1]
@@ -164,7 +164,7 @@ for k in range(len(visual_areas)):
                 mean_across_temp.append(np.mean(mean_theta_acrosssubj_pred[mask>1]))
 
             else:
-                a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output/model4_nothresh_rotated_' + str(
+                a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output_RH/model4_nothresh_rotated_' + str(
                 12 + (m-12)*2) + 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
                 l + 1) + '_output_epoch200.pt', map_location='cpu')
 
@@ -178,11 +178,11 @@ for k in range(len(visual_areas)):
                 label_primary_visual_areas = ['ROI']
                 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(label_primary_visual_areas)
                 ROI1 = np.zeros((32492, 1))
-                ROI1[final_mask_L == 1] = 1
+                ROI1[final_mask_R == 1] = 1
 
                 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi2(visual_areas[k])
                 primary_visual_areas = np.zeros((32492, 1))
-                primary_visual_areas[final_mask_L == 1] = 1
+                primary_visual_areas[final_mask_R == 1] = 1
 
                 mask = ROI1 + primary_visual_areas
                 mask = mask[ROI1 == 1]
@@ -308,7 +308,7 @@ for k in range(len(visual_areas)):
     plt.ylim([0,70])
     #x = sns.swarmplot(data=mean_delta,color='gray')
 
-    plt.savefig('PAdif_cluster'+str(k+1)+'.svg')
+    plt.savefig('PAdif_RH_cluster'+str(k+1)+'.svg')
     plt.show()
 
 
@@ -325,8 +325,8 @@ label=['Early visual cortex']
 
 fig = plt.figure()
 
-mean_delta_2=np.zeros((5,16))
-mean_across_2=np.zeros((5,16))
+mean_delta_2=np.zeros((5,4))
+mean_across_2=np.zeros((5,4))
 
 
 l=0
@@ -334,11 +334,11 @@ while l<5:
     mean_delta_temp=[]
     mean_across_temp=[]
 
-    for m in range(16):
+    for m in range(4):
         if m<12:
-            a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output/model4_nothresh_rotated_' + str(
-                m + 1) + 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
-                l + 1) + '_output_epoch200.pt', map_location='cpu')
+            a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output_RH/model4_nothresh_RH_' + str(
+                m + 9) + 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
+                l + 1) + '_output_epoch100.pt', map_location='cpu')
 
             theta_withinsubj=[]
             # theta_withinsubj_shuffled=[]
@@ -352,7 +352,7 @@ while l<5:
             label_primary_visual_areas = ['ROI']
             final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
             ROI1=np.zeros((32492,1))
-            ROI1[final_mask_L==1]=1
+            ROI1[final_mask_R==1]=1
             mask=ROI1+np.reshape(primary_visual_areas,(32492,1))
             mask=mask[ROI1==1]
 
@@ -478,7 +478,7 @@ while l<5:
 
         else:
 
-            a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output/model4_nothresh_rotated_' + str(
+            a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output_RH/model4_nothresh_RH_' + str(
                 12 + (m-12)*2) + 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
                 l + 1) + '_output_epoch200.pt', map_location='cpu')
 
@@ -494,7 +494,7 @@ while l<5:
             label_primary_visual_areas = ['ROI']
             final_mask_L, final_mask_R, index_L_mask, index_R_mask= roi(label_primary_visual_areas)
             ROI1=np.zeros((32492,1))
-            ROI1[final_mask_L==1]=1
+            ROI1[final_mask_R==1]=1
             mask=ROI1+np.reshape(primary_visual_areas,(32492,1))
             mask=mask[ROI1==1]
 
@@ -630,5 +630,5 @@ ax = sns.boxplot(y='$\Delta$$\t\Theta$',x='Layers',order=number_layers,hue='labe
 ax.set_title(''+label[0])
 plt.legend(loc='upper right')
 plt.ylim([0,70])
-plt.savefig('PAdif_EarlyVisualArea.svg')
+plt.savefig('PAdif_RH_EarlyVisualArea.svg')
 plt.show()
