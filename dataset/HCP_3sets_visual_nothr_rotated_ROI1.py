@@ -47,32 +47,45 @@ class Retinotopy(InMemoryDataset):
                 if self.prediction == 'eccentricity':
                     return ['training_ecc_visual_nothresh_rotated_LH_myelincurv_ROI1.pt', 'development_ecc_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
                             'test_ecc_visual_nothresh_rotated_LH_myelincurv_ROI1.pt']
-                else:
+
+                elif self.prediction=='polarAngle':
                     return ['training_PA_visual_nothresh_rotated_LH_myelincurv_ROI1.pt', 'development_PA_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
                             'test_PA_visual_nothresh_rotated_LH_myelincurv_ROI1.pt']
+                else:
+                    return ['training_pRFsize_visual_nothresh_rotated_LH_myelincurv_ROI1.pt', 'development_pRFsize_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
+                            'test_pRFsize_visual_nothresh_rotated_LH_myelincurv_ROI1.pt']
             else:
                 if self.prediction=='eccentricity':
                     return ['training_ecc_visual_nothresh_rotated_LH_ROI1.pt','development_ecc_visual_nothresh_rotated_LH_ROI1.pt','test_ecc_visual_nothresh_rotated_LH_ROI1.pt']
-                else:
+                elif self.prediction=='polarAngle':
                     return ['training_PA_visual_nothresh_rotated_LH_ROI1.pt','development_PA_visual_nothresh_rotated_LH_ROI1.pt','test_PA_visual_nothresh_rotated_LH_ROI1.pt']
+                else:
+                    return ['training_pRFsize_visual_nothresh_rotated_LH_ROI1.pt','development_pRFsize_visual_nothresh_rotated_LH_ROI1.pt','test_pRFsize_visual_nothresh_rotated_LH_ROI1.pt']
         else:
             if self.myelination == True:
                 if self.prediction == 'eccentricity':
                     return ['training_ecc_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
                             'development_ecc_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
                             'test_ecc_visual_nothresh_rotated_RH_myelincurv_ROI1.pt']
-                else:
+                elif self.prediction=='polarAngle':
                     return ['training_PA_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
                             'development_PA_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
                             'test_PA_visual_nothresh_rotated_RH_myelincurv_ROI1.pt']
+                else:
+                    return ['training_pRFsize_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
+                            'development_pRFsize_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
+                            'test_pRFsize_visual_nothresh_rotated_RH_myelincurv_ROI1.pt']
             else:
                 if self.prediction == 'eccentricity':
                     return ['training_ecc_visual_nothresh_rotated_RH_ROI1.pt',
                             'development_ecc_visual_nothresh_rotated_RH_ROI1.pt',
                             'test_ecc_visual_nothresh_rotated_RH_ROI1.pt']
-                else:
+                elif self.prediction=='polarAngle':
                     return ['training_PA_visual_nothresh_rotated_RH_ROI1.pt',
                             'development_PA_visual_nothresh_rotated_RH_ROI1.pt', 'test_PA_visual_nothresh_rotated_RH_ROI1.pt']
+                else:
+                    return ['training_pRFsize_visual_nothresh_rotated_RH_ROI1.pt',
+                            'development_pRFsize_visual_nothresh_rotated_RH_ROI1.pt', 'test_pRFsize_visual_nothresh_rotated_RH_ROI1.pt']
 
     def download(self):
         raise RuntimeError(

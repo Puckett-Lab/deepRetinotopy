@@ -16,10 +16,6 @@ save('mid_pos_R','mid_pos_R');
 %Loading cifti files, and getting measures for each cortical vertex, where
 %the brain structure labels are so that 1=Left; 2=Right; >2=subcortical structures
 
-%Eccentricity values
-cifti_eccentricity=ft_read_cifti('S1200_7T_Retinotopy181.All.Fit1_Eccentricity_MSMAll.32k_fs_LR.dscalar.nii');
-save('cifti_eccentricity_all','cifti_eccentricity')
-
 %Curvature values
 cifti_curv=ft_read_cifti('S1200_7T_Retinotopy181.All.curvature_MSMAll.32k_fs_LR.dscalar.nii');
 save('cifti_curv_all','cifti_curv')
@@ -36,3 +32,10 @@ save('cifti_R2_all','cifti_R2')
 cifti_polarAngle=ft_read_cifti('S1200_7T_Retinotopy181.All.Fit1_PolarAngle_MSMAll.32k_fs_LR.dscalar.nii');
 save('cifti_polarAngle_all','cifti_polarAngle')
 
+%Eccentricity values
+cifti_eccentricity=ft_read_cifti('S1200_7T_Retinotopy181.All.Fit1_Eccentricity_MSMAll.32k_fs_LR.dscalar.nii');
+save('cifti_eccentricity_all','cifti_eccentricity')
+
+%pRF size values
+cifti_pRFsize=ft_read_cifti('S1200_7T_Retinotopy181.All.Fit1_ReceptiveFieldSize_MSMAll.32k_fs_LR.dscalar.nii');
+save('cifti_pRFsize_all','cifti_pRFsize')
