@@ -19,13 +19,13 @@ def smallest_angle(x, y):
 
 
 visual_areas = [['hV4'],['VO1','VO2','PHC1','PHC2'],['V3a','V3b'],['LO1','LO2','TO1','TO2'],['IPS0','IPS1','IPS2','IPS3','IPS4','IPS5','SPL1']]
-number_layers=['9','10','11','12']
+number_layers=['9','10','11','12','14','16','18','20']
 
 
 sns.set_style("whitegrid")
 for k in range(len(visual_areas)):
-    mean_delta = np.zeros((5,4))
-    mean_across = np.zeros((5,4))
+    mean_delta = np.zeros((5,8))
+    mean_across = np.zeros((5,8))
 
 
     l=0
@@ -33,8 +33,8 @@ for k in range(len(visual_areas)):
         mean_delta_temp=[]
         mean_across_temp=[]
 
-        for m in range(4):
-            if m<12:
+        for m in range(8):
+            if m<4:
                 a=torch.load('/home/uqfribe1/Desktop/Wiener/July/output_RH/model4_nothresh_RH_'+str(m+9)+'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_'+str(l+1)+'_output_epoch100.pt',map_location='cpu')
 
                 theta_withinsubj=[]
@@ -164,8 +164,8 @@ for k in range(len(visual_areas)):
                 mean_across_temp.append(np.mean(mean_theta_acrosssubj_pred[mask>1]))
 
             else:
-                a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output_RH/model4_nothresh_rotated_' + str(
-                12 + (m-12)*2) + 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
+                a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output_RH/model4_nothresh_RH_' + str(
+                12 + (m-4)*2) + 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
                 l + 1) + '_output_epoch200.pt', map_location='cpu')
 
                 theta_withinsubj = []
@@ -325,8 +325,8 @@ label=['Early visual cortex']
 
 fig = plt.figure()
 
-mean_delta_2=np.zeros((5,4))
-mean_across_2=np.zeros((5,4))
+mean_delta_2=np.zeros((5,8))
+mean_across_2=np.zeros((5,8))
 
 
 l=0
@@ -334,8 +334,8 @@ while l<5:
     mean_delta_temp=[]
     mean_across_temp=[]
 
-    for m in range(4):
-        if m<12:
+    for m in range(8):
+        if m<4:
             a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output_RH/model4_nothresh_RH_' + str(
                 m + 9) + 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
                 l + 1) + '_output_epoch100.pt', map_location='cpu')
@@ -479,7 +479,7 @@ while l<5:
         else:
 
             a = torch.load('/home/uqfribe1/Desktop/Wiener/July/output_RH/model4_nothresh_RH_' + str(
-                12 + (m-12)*2) + 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
+                12 + (m-4)*2) + 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
                 l + 1) + '_output_epoch200.pt', map_location='cpu')
 
             theta_withinsubj=[]
