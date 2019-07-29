@@ -2,6 +2,7 @@
 
 mkdir ./matlab/packages &&\
 cd ./matlab && \
+wget https://www.artefact.tk/software/matlab/gifti/gifti-1.8.zip && \
 
 unzip gifti-1.8.zip -d packages && \
 unzip fieldtrip-20190403.zip -d packages && \
