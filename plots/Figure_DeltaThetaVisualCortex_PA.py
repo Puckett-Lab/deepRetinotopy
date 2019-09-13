@@ -16,14 +16,14 @@ threshold=1
 nocurv=np.isnan(background)
 background[nocurv==1] = 0
 
-models=['final-pred','shuffled-myelincurv','constant']
+models=['pred','shuffled-myelincurv','constant']
 
 mean_delta = []
 mean_across = []
 
 
 for m in range(len(models)):
-    a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testing_'+models[m]+'.pt',map_location='cpu')
+    a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset-'+models[m]+'_Model3_PA_LH.pt',map_location='cpu')
 
     theta_withinsubj=[]
     theta_acrosssubj=[]
@@ -151,12 +151,12 @@ mean_across = np.reshape(np.array(mean_across), (3, -1))
 
 
 delta_theta=np.ones((32492,1))
-delta_theta[final_mask_L==1]=np.reshape(mean_delta[0],(3267,1))+threshold
+delta_theta[final_mask_L==1]=np.reshape(mean_delta[2],(3267,1))+threshold
 delta_theta[final_mask_L!=1]=0
 
 delta_across=np.ones((32492,1))
-delta_across[final_mask_L==1]=np.reshape(mean_across[0],(3267,1))+threshold
+delta_across[final_mask_L==1]=np.reshape(mean_across[2],(3267,1))+threshold
 delta_across[final_mask_L!=1]=0
 
-view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(delta_theta[0:32492],(-1)),bg_map=background,cmap='Reds',black_bg=True,symmetric_cmap=False,threshold=threshold,vmax=140)
+view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(delta_across[0:32492],(-1)),bg_map=background,cmap='Blues',black_bg=False,symmetric_cmap=False,threshold=threshold,vmax=75+threshold)
 view.open_in_browser()

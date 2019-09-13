@@ -97,12 +97,19 @@ newcmp = ListedColormap(newcolors, name='VisualAreas')
 #
 # plotting.plot_surf_roi(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.R.midthickness_MSMAll.32k_fs_LR.surf.gii'),roi_map=np.reshape(visual_areas_R[0:32492],(-1)),hemi='right',bg_map=background_R,cmap=newcmp,symmetric_cbar=False,vmax=21,view='posterior',output_file='R_visualareas_posterior.svg')
 # plotting.show()
+
+plotting.plot_surf_roi(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.midthickness_MSMAll.32k_fs_LR.surf.gii'),roi_map=np.reshape(visual_areas_L[0:32492],(-1)),hemi='left',bg_map=background_L,cmap=newcmp,symmetric_cbar=False,vmax=21,view='lateral',output_file='L_visualareas_lateral.svg')
+plotting.show()
+print(np.sum(visual_areas_L[0:32492]>0))
+
+plotting.plot_surf_roi(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.R.midthickness_MSMAll.32k_fs_LR.surf.gii'),roi_map=np.reshape(visual_areas_R[0:32492],(-1)),hemi='right',bg_map=background_R,cmap=newcmp,symmetric_cbar=False,vmax=21,view='lateral',output_file='R_visualareas_lateral.svg')
+print(np.sum(visual_areas_R[0:32492]>0))
+plotting.show()
+
+
 #
-
-
-
-view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.R.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(visual_areas_R[0:32492],(-1)),bg_map=background_R,cmap=newcmp,black_bg=True,symmetric_cmap=False,threshold=threshold,vmax=22)
-view.open_in_browser()
-
-view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(visual_areas_L[0:32492],(-1)),bg_map=background_L,cmap=newcmp,black_bg=True,symmetric_cmap=False,threshold=threshold,vmax=22)
-view.open_in_browser()
+# view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.R.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(visual_areas_R[0:32492],(-1)),bg_map=background_R,cmap=newcmp,black_bg=False,symmetric_cmap=False,threshold=threshold,vmax=22)
+# view.open_in_browser()
+#
+# view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(visual_areas_L[0:32492],(-1)),bg_map=background_L,cmap=newcmp,black_bg=False,symmetric_cmap=False,threshold=threshold,vmax=22)
+# view.open_in_browser()

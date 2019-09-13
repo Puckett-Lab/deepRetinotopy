@@ -14,12 +14,24 @@ from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
 
+# path=osp.join(osp.dirname(osp.realpath(__file__)),'data')
+# pre_transform=T.Compose([T.FaceToEdge()])
+# train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True,hemisphere='Left')
+# dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True,hemisphere='Left')
+# train_loader=DataLoader(train_dataset,batch_size=1,shuffle=True)
+# dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
+
+
 path=osp.join(osp.dirname(osp.realpath(__file__)),'data')
 pre_transform=T.Compose([T.FaceToEdge()])
-train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True,hemisphere='Left')
-dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='polarAngle',myelination=True,hemisphere='Left')
+train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='eccentricity',myelination=True,hemisphere='Left')
+dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='eccentricity',myelination=True,hemisphere='Left')
+test_dataset=Retinotopy(path,'Test', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=181,prediction='eccentricity',myelination=True,hemisphere='Left')
+
+
 train_loader=DataLoader(train_dataset,batch_size=1,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
+test_loader=DataLoader(test_dataset,batch_size=1,shuffle=False)
 
 
 
@@ -114,7 +126,7 @@ class Net(torch.nn.Module):
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010.pt',map_location='cpu'))
+model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/model4_nothresh_ecc_12layers_smoothL1loss_curvnmyelin_ROI1_k25_batchnorm_dropout010_4.pt',map_location='cpu'))
 
 def test():
     model.eval()
@@ -123,7 +135,7 @@ def test():
     y_hat = []
     myelin=[]
     curv=[]
-    for data in dev_loader:
+    for data in test_loader:
         # Shuffling myelin and curv
         data.x=data.x[torch.randperm(3267)]
         myelin.append(data.x.transpose(0, 1)[1])
@@ -133,14 +145,14 @@ def test():
         y.append(data.to(device).y.view(-1))
         MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
         MeanAbsError += MAE
-    test_MAE = MeanAbsError / len(dev_loader)
+    test_MAE = MeanAbsError / len(test_loader)
     output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE,'Shuffled_myelin':myelin,'Shuffled_curv':curv}
     return output
 
 
 evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values'],'Shuffled_myelin':evaluation['Shuffled_myelin'],'Shuffled_curv':evaluation['Shuffled_curv']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testing_shuffled-myelincurv.pt'))
+           osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-shuffled-myelincurv_Model4_ecc_LH.pt'))
 
 # def test():
 #     model.eval()
@@ -189,7 +201,7 @@ torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values
 #     MeanAbsError = 0
 #     y = []
 #     y_hat = []
-#     for data in dev_loader:
+#     for data in test_loader:
 #         data.x.transpose(0, 1)[0] = 0.027303819
 #         data.x.transpose(0, 1)[1] = 1.4386905
 #         pred = model(data.to(device)).detach()
@@ -197,11 +209,31 @@ torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values
 #         y.append(data.to(device).y.view(-1))
 #         MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
 #         MeanAbsError += MAE
-#     test_MAE = MeanAbsError / len(dev_loader)
+#     test_MAE = MeanAbsError / len(test_loader)
 #     output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE}
 #     return output
 #
 #
 # evaluation = test()
 # torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},
-#            osp.join(osp.dirname(osp.realpath(__file__)), 'testing_constant.pt'))
+#            osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-constant_Model4_ecc_LH.pt'))
+
+# def test():
+#     model.eval()
+#     MeanAbsError = 0
+#     y = []
+#     y_hat = []
+#     for data in test_loader:
+#         pred = model(data.to(device)).detach()
+#         y_hat.append(pred)
+#         y.append(data.to(device).y.view(-1))
+#         MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
+#         MeanAbsError += MAE
+#     test_MAE = MeanAbsError / len(test_loader)
+#     output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE}
+#     return output
+#
+#
+# evaluation = test()
+# torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},
+#            osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-pred_Model4_ecc_LH.pt'))
