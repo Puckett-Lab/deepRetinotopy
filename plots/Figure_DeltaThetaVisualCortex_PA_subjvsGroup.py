@@ -9,7 +9,7 @@ from functions.least_difference_angles import smallest_angle
 
 path='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
-background=np.reshape(curv['x617748_curvature'][0][0][0:32492],(-1))
+background=np.reshape(curv['x198653_curvature'][0][0][0:32492],(-1))
 
 
 background[background<0]=0
@@ -45,7 +45,7 @@ for m in range(len(models)):
     mask=ROI1
     mask=mask[ROI1==1]
 
-    j=0
+    j=4
 
     # #Compute angle between predicted and empirical predictions across subj
     # for j in range(len(a['Predicted_values'])):
@@ -156,12 +156,12 @@ mean_across = np.reshape(np.array(mean_across), (3, -1))
 
 
 delta_theta=np.ones((32492,1))
-delta_theta[final_mask_L==1]=np.reshape(mean_delta[0],(3267,1))+threshold
+delta_theta[final_mask_L==1]=(np.reshape(mean_delta[0],(3267,1))+threshold)*10
 delta_theta[final_mask_L!=1]=0
 
 delta_across=np.ones((32492,1))
-delta_across[final_mask_L==1]=np.reshape(mean_across[0],(3267,1))+threshold
+delta_across[final_mask_L==1]=(np.reshape(mean_across[0],(3267,1))+threshold)*10
 delta_across[final_mask_L!=1]=0
 
-view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(delta_across[0:32492],(-1)),bg_map=background,cmap='Blues',black_bg=False,symmetric_cmap=False,threshold=threshold,vmax=75+threshold)
+view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(delta_across[0:32492],(-1)),bg_map=background,cmap='Blues',black_bg=False,symmetric_cmap=False,threshold=threshold*10,vmax=(75+threshold)*10)
 view.open_in_browser()

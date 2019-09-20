@@ -305,8 +305,9 @@ mean_across_2 = np.reshape(np.array(mean_across_2), (1, -1))
 
 mean_earlyVisualCortex=np.mean(mean_delta_2[0])
 std_earlyVisualCortex=np.std(mean_delta_2[0])
-print(len(np.concatenate((mean_delta[0],mean_delta_2[0]))))
 mean_all=np.mean(np.concatenate((mean_delta[0],mean_delta_2[0])))
 std_all=np.std(np.concatenate((mean_delta[0],mean_delta_2[0])))
+
+print(len(np.concatenate((mean_delta[0],mean_delta_2[0]))))
 print(mean_earlyVisualCortex,std_earlyVisualCortex)
 print(mean_all,std_all)

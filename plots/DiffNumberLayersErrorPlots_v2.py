@@ -282,26 +282,28 @@ for k in range(len(visual_areas)):
         l += 1
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    data = np.concatenate([[mean_across[0], number_layers, len(number_layers) * ['Between predicted maps']],
-                           [mean_across[1], number_layers, len(number_layers) * ['Between predicted maps']],
-                           [mean_across[2], number_layers, len(number_layers) * ['Between predicted maps']],
-                           [mean_across[3], number_layers, len(number_layers) * ['Between predicted maps']],
-                           [mean_across[4], number_layers, len(number_layers) * ['Between predicted maps']],
-                           [mean_delta[0], number_layers,
-                            len(number_layers) * ['Between predicted map and ground truth']],
+    data = np.concatenate([[mean_delta[0], number_layers,
+                            len(number_layers) * ['Error']],
                            [mean_delta[1], number_layers,
-                            len(number_layers) * ['Between predicted map and ground truth']],
+                            len(number_layers) * ['Error']],
                            [mean_delta[2], number_layers,
-                            len(number_layers) * ['Between predicted map and ground truth']],
+                            len(number_layers) * ['Error']],
                            [mean_delta[3], number_layers,
-                            len(number_layers) * ['Between predicted map and ground truth']],
+                            len(number_layers) * ['Error']],
                            [mean_delta[4], number_layers,
-                            len(number_layers) * ['Between predicted map and ground truth']]], axis=1)
+                            len(number_layers) * ['Error']],
+                           [mean_across[0], number_layers, len(number_layers) * ['Individual variability']],
+                           [mean_across[1], number_layers, len(number_layers) * ['Individual variability']],
+                           [mean_across[2], number_layers, len(number_layers) * ['Individual variability']],
+                           [mean_across[3], number_layers, len(number_layers) * ['Individual variability']],
+                           [mean_across[4], number_layers, len(number_layers) * ['Individual variability']]
+                           ], axis=1)
     df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'Layers', 'label'], data=data.T)
     df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
     palette = ['dimgray', 'lightgray']
     ax = sns.boxplot(y='$\Delta$$\t\Theta$', x='Layers', order=number_layers, hue='label', data=df, palette=palette)
-    ax.set_title('Cluster ' + str(k+1))
+    title=['V4','Ventral','V3a/b','Lateral','Parietal']
+    ax.set_title(title[k])
     legend=plt.legend()
     legend.remove()
 
@@ -622,7 +624,7 @@ while l<5:
     l += 1
 
 ax=fig.add_subplot(1,1,1)
-data=np.concatenate([[mean_across_2[0],number_layers,len(number_layers)*['Between predicted maps']],[mean_across_2[1],number_layers,len(number_layers)*['Between predicted maps']],[mean_across_2[2],number_layers,len(number_layers)*['Between predicted maps']],[mean_across_2[3],number_layers,len(number_layers)*['Between predicted maps']],[mean_across_2[4],number_layers,len(number_layers)*['Between predicted maps']],[mean_delta_2[0],number_layers,len(number_layers)*['Between predicted map and ground truth']],[mean_delta_2[1],number_layers,len(number_layers)*['Between predicted map and ground truth']],[mean_delta_2[2],number_layers,len(number_layers)*['Between predicted map and ground truth']],[mean_delta_2[3],number_layers,len(number_layers)*['Between predicted map and ground truth']],[mean_delta_2[4],number_layers,len(number_layers)*['Between predicted map and ground truth']]],axis=1)
+data=np.concatenate([[mean_delta_2[0],number_layers,len(number_layers)*['Error']],[mean_delta_2[1],number_layers,len(number_layers)*['Error']],[mean_delta_2[2],number_layers,len(number_layers)*['Error']],[mean_delta_2[3],number_layers,len(number_layers)*['Error']],[mean_delta_2[4],number_layers,len(number_layers)*['Error']],[mean_across_2[0],number_layers,len(number_layers)*['Individual variability']],[mean_across_2[1],number_layers,len(number_layers)*['Individual variability']],[mean_across_2[2],number_layers,len(number_layers)*['Individual variability']],[mean_across_2[3],number_layers,len(number_layers)*['Individual variability']],[mean_across_2[4],number_layers,len(number_layers)*['Individual variability']]],axis=1)
 df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'Layers', 'label'], data=data.T)
 df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
 palette=['dimgray','lightgray']
