@@ -125,33 +125,33 @@ class Net(torch.nn.Module):
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_3.pt',map_location='cpu'))
-
-def test():
-    model.eval()
-    MeanAbsError = 0
-    y = []
-    y_hat = []
-    myelin=[]
-    curv=[]
-    for data in test_loader:
-        # Shuffling myelin and curv
-        data.x=data.x[torch.randperm(3267)]
-        myelin.append(data.x.transpose(0, 1)[1])
-        curv.append(data.x.transpose(0, 1)[0])
-        pred = model(data.to(device)).detach()
-        y_hat.append(pred)
-        y.append(data.to(device).y.view(-1))
-        MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
-        MeanAbsError += MAE
-    test_MAE = MeanAbsError / len(test_loader)
-    output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE,'Shuffled_myelin':myelin,'Shuffled_curv':curv}
-    return output
-
-
-evaluation = test()
-torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values'],'Shuffled_myelin':evaluation['Shuffled_myelin'],'Shuffled_curv':evaluation['Shuffled_curv']},
-           osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-shuffled-myelincurv_Model3_PA_LH.pt'))
+model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_5.pt',map_location='cpu'))
+#
+# def test():
+#     model.eval()
+#     MeanAbsError = 0
+#     y = []
+#     y_hat = []
+#     myelin=[]
+#     curv=[]
+#     for data in test_loader:
+#         # Shuffling myelin and curv
+#         data.x=data.x[torch.randperm(3267)]
+#         myelin.append(data.x.transpose(0, 1)[1])
+#         curv.append(data.x.transpose(0, 1)[0])
+#         pred = model(data.to(device)).detach()
+#         y_hat.append(pred)
+#         y.append(data.to(device).y.view(-1))
+#         MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
+#         MeanAbsError += MAE
+#     test_MAE = MeanAbsError / len(test_loader)
+#     output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE,'Shuffled_myelin':myelin,'Shuffled_curv':curv}
+#     return output
+#
+#
+# evaluation = test()
+# torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values'],'Shuffled_myelin':evaluation['Shuffled_myelin'],'Shuffled_curv':evaluation['Shuffled_curv']},
+#            osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-shuffled-myelincurv_Model3_PA_LH.pt'))
 
 # def test():
 #     model.eval()
@@ -217,22 +217,22 @@ torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values
 # torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},
 #            osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-constant_Model3_PA_LH.pt'))
 #
-# def test():
-#     model.eval()
-#     MeanAbsError = 0
-#     y = []
-#     y_hat = []
-#     for data in test_loader:
-#         pred = model(data.to(device)).detach()
-#         y_hat.append(pred)
-#         y.append(data.to(device).y.view(-1))
-#         MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
-#         MeanAbsError += MAE
-#     test_MAE = MeanAbsError / len(test_loader)
-#     output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE}
-#     return output
-#
-#
-# evaluation = test()
-# torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},
-#            osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-pred_Model3_PA_LH.pt'))
+def test():
+    model.eval()
+    MeanAbsError = 0
+    y = []
+    y_hat = []
+    for data in test_loader:
+        pred = model(data.to(device)).detach()
+        y_hat.append(pred)
+        y.append(data.to(device).y.view(-1))
+        MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
+        MeanAbsError += MAE
+    test_MAE = MeanAbsError / len(test_loader)
+    output = {'Predicted_values': y_hat, 'Measured_values': y, 'MAE': test_MAE}
+    return output
+
+
+evaluation = test()
+torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},
+           osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-pred_Model5_PA_LH.pt'))

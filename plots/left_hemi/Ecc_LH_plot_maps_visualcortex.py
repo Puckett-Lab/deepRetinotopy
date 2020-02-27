@@ -41,5 +41,5 @@ measured=np.array(measured)*10+threshold
 measured[final_mask_L!=1]=0
 pred[final_mask_L!=1]=0
 
-view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'../..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(measured[0:32492],(-1)),bg_map=background,cmap='gist_rainbow_r',black_bg=False,symmetric_cmap=False,threshold=threshold,vmax=130)
+view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'../..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.midthickness_MSMAll.32k_fs_LR.surf.gii'),surf_map=np.reshape(measured[0:32492],(-1)),bg_map=background,cmap='gist_rainbow_r',black_bg=False,symmetric_cmap=False,threshold=threshold,vmax=130)
 view.open_in_browser()
