@@ -17,8 +17,8 @@ from torch_geometric.nn import SplineConv
 
 path=osp.join(osp.dirname(osp.realpath(__file__)),'..','..','data')
 pre_transform=T.Compose([T.FaceToEdge()])
-train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=179,prediction='polarAngle',myelination=True)
-dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=179,prediction='polarAngle',myelination=True)
+train_dataset=Retinotopy(path,'Train', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=179,prediction='polarAngle',myelination=True,hemisphere='Left')
+dev_dataset=Retinotopy(path,'Development', transform=T.Cartesian(),pre_transform=pre_transform,n_examples=179,prediction='polarAngle',myelination=True,hemisphere='Left')
 train_loader=DataLoader(train_dataset,batch_size=1,shuffle=True)
 dev_loader=DataLoader(dev_dataset,batch_size=1,shuffle=False)
 
