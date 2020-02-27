@@ -18,6 +18,7 @@ def labels(input,labels):
         index.sort
         faces[np.where(faces == index[i])] = i
 
+    # Select only faces composed of vertices that are within the ROI
     final_faces = []
     for i in range(len(faces)):
         if np.sum(faces <=len(labels)-1, axis=1)[i] == 3:

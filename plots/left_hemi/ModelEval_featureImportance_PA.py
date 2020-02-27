@@ -164,6 +164,9 @@ for k in range(len(visual_areas)):
         mean_across.append(mean_theta_acrosssubj_pred[mask>1])
 
     mean_delta=np.reshape(np.array(mean_delta),(3,-1))
+    # print('cluster'+str(k))
+    # print(scipy.stats.mannwhitneyu(mean_delta[0], mean_delta[1]))
+    # print(scipy.stats.mannwhitneyu(mean_delta[0], mean_delta[2]))
     mean_across = np.reshape(np.array(mean_across), (3, -1))
 
 
@@ -340,7 +343,8 @@ for m in range(len(models)):
 
 mean_delta_2=np.reshape(np.array(mean_delta_2),(3,-1))
 mean_across_2 = np.reshape(np.array(mean_across_2), (3, -1))
-
+# print(scipy.stats.mannwhitneyu(mean_delta_2[0], mean_delta_2[1]))
+# print(scipy.stats.mannwhitneyu(mean_delta_2[0], mean_delta_2[2]))
 # fig = plt.figure()
 ax = fig.add_subplot(1, 6, 1)
 # data = np.concatenate([[mean_across_2[0], len(mean_across_2[0])*[models[0]], len(mean_across_2[0])*['Between predicted maps']],
@@ -374,6 +378,4 @@ plt.ylim([0,80])
 
 plt.savefig('ModelEval_AllClusters.svg', format="svg")
 plt.show()
-
-
 
