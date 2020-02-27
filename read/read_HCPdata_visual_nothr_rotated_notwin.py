@@ -8,7 +8,10 @@ from numpy.random import seed
 
 from torch_geometric.data import Data
 
+
 def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle=True,visual_mask_L=None,visual_mask_R=None,faces_L=None,faces_R=None,myelination=None,prediction=None):
+
+
     # Loading the measures
     curv = scipy.io.loadmat(osp.join(path,'cifti_curv_all.mat'))['cifti_curv']
     eccentricity = scipy.io.loadmat(osp.join(path,'cifti_eccentricity_all.mat'))['cifti_eccentricity']
@@ -31,8 +34,6 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
         np.random.shuffle(subjects)
     subjects.remove('525541')
     subjects.remove('581450')
-
-
 
 
     if Hemisphere=='Right':
@@ -117,6 +118,7 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
 
         data.face=faces
         data.R2 = R2_values
+
 
 
     if Hemisphere=='Left':
