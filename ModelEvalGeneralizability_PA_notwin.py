@@ -125,7 +125,7 @@ class Net(torch.nn.Module):
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model=Net().to(device)
-model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_notwin_5.pt',map_location='cpu'))
+model.load_state_dict(torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_notwin10_5.pt',map_location='cpu'))
 #
 # def test():
 #     model.eval()
@@ -235,4 +235,4 @@ def test():
 
 evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'], 'Measured_values': evaluation['Measured_values']},
-           osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-pred_Model5_PA_LH_notwin.pt'))
+           osp.join(osp.dirname(osp.realpath(__file__)),'testset_results', 'testset-pred_Model5_PA_LH_notwin10.pt'))
