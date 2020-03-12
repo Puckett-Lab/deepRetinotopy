@@ -32,8 +32,10 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
     seed(1)
     if shuffle==True:
         np.random.shuffle(subjects)
-    subjects.remove('525541')
-    subjects.remove('581450')
+
+    twin_pair=['102816','181232','525541','814649','581450','573249','393247','185442','395756','429040']
+    for i in range(len(twin_pair)):
+        subjects.remove(twin_pair[i])
 
 
     if Hemisphere=='Right':
