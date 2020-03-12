@@ -115,7 +115,7 @@ class Retinotopy(InMemoryDataset):
 
         train = data_list[0:int(151)]
         dev = data_list[int(151):int(161)]
-        test = data_list[int(161):len(data_list)]
+        test = data_list[int(161):len(data_list)] #twin pairs in the test dataset
 
         torch.save(self.collate(train),self.processed_paths[0])
         torch.save(self.collate(dev), self.processed_paths[1])
