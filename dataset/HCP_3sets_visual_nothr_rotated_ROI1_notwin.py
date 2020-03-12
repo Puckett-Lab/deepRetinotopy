@@ -113,9 +113,9 @@ class Retinotopy(InMemoryDataset):
                 data=self.pre_transform(data)
             data_list.append(data)
 
-        train = data_list[0:int(159)]
-        dev = data_list[int(159):int(169)]
-        test = data_list[int(169):len(data_list)]
+        train = data_list[0:int(151)]
+        dev = data_list[int(151):int(161)]
+        test = data_list[int(161):len(data_list)]
 
         torch.save(self.collate(train),self.processed_paths[0])
         torch.save(self.collate(dev), self.processed_paths[1])

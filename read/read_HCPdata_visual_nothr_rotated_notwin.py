@@ -37,6 +37,8 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
     for i in range(len(twin_pair)):
         subjects.remove(twin_pair[i])
 
+    subjects=subjects+twin_pair #adding the twin pairs to the test dataset to test their similarity
+
 
     if Hemisphere=='Right':
         #Loading connectivity of triangles
