@@ -36,8 +36,8 @@ myelin_s=np.zeros((32492,1))
 R2_thr=np.zeros((32492,1))
 
 
-a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset-pred_Model5_PA_LH_notwin.pt',map_location='cpu')
-pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][5]),(-1,1))
+a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset-pred_Model5_PA_LH_notwin10.pt',map_location='cpu')
+pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][14]),(-1,1))
 
 # curv_s[final_mask_L==1]=np.reshape(np.array(a['Shuffled_curv'][3]),(-1,1))
 # myelin_s[final_mask_L==1]=np.reshape(np.array(a['Shuffled_myelin'][3]),(-1,1))
@@ -46,7 +46,7 @@ pred[final_mask_L==1]=np.reshape(np.array(a['Predicted_values'][5]),(-1,1))
 #R2_thr[final_mask_L==1]=np.reshape(np.array(a['R2'][0]),(-1,1))
 #R2_thr=R2_thr<2.2
 
-measured[final_mask_L==1]=np.reshape(np.array(a['Measured_values'][4]),(-1,1))
+measured[final_mask_L==1]=np.reshape(np.array(a['Measured_values'][14]),(-1,1))
 
 pred=np.array(pred)
 minus=pred>180

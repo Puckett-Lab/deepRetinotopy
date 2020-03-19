@@ -40,6 +40,7 @@ def read_HCP(path,Hemisphere=None,index=None,surface=None,threshold=None,shuffle
     subjects=subjects+twin_pair #adding the twin pairs to the test dataset to test their similarity
 
     print(subjects)
+
     if Hemisphere=='Right':
         #Loading connectivity of triangles
         faces=torch.tensor(faces_R.T,dtype=torch.long)        #Transforming data to torch data type

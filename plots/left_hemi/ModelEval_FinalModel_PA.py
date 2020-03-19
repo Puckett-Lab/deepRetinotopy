@@ -32,7 +32,7 @@ for k in range(len(visual_areas)):
 
 
     for m in range(len(models)):
-        a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/plots/left_hemi/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_'+models[m]+'_output_epoch200.pt',map_location='cpu')
+        a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/plots/left_hemi/NoTwin/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_notwin10_'+models[m]+'_output_epoch200.pt',map_location='cpu')
 
         theta_withinsubj=[]
         theta_acrosssubj=[]

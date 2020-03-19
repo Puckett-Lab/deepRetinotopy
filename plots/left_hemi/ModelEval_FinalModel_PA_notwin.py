@@ -22,21 +22,17 @@ def smallest_angle(x, y):
 
 visual_areas = [['hV4'],['VO1','VO2','PHC1','PHC2'],['V3a','V3b'],['LO1','LO2','TO1','TO2'],['IPS0','IPS1','IPS2','IPS3','IPS4','IPS5','SPL1']]
 # models=['final-pred','shuffled-myelincurv','shuffled-myelin','shuffled-curv']
-models=['pred','shuffled-myelincurv','constant']
-models_name=['Default','Shuffled','Constant']
+models=['1','2','3','4','5']
 
-
-color=[['darkblue','royalblue'],['steelblue','lightskyblue'],['green','lightgreen'],['darkgoldenrod','goldenrod'],['saddlebrown','chocolate'],['hotpink','pink']]
 
 sns.set_style("whitegrid")
-fig = plt.figure(figsize=(25, 7))
 for k in range(len(visual_areas)):
     mean_delta = []
     mean_across = []
 
 
     for m in range(len(models)):
-        a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset-'+models[m]+'_Model3_PA_LH.pt',map_location='cpu')
+        a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/plots/left_hemi/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_'+models[m]+'_output_epoch200.pt',map_location='cpu')
 
         theta_withinsubj=[]
         theta_acrosssubj=[]
@@ -92,7 +88,7 @@ for k in range(len(visual_areas)):
 
 
 
-                    #Computing delta theta, angle between vector defined by the predicted value and the one defined by empirical value of the same subj
+                    #Computing delta theta, angle between vector defined predicted value and empirical value same subj
                     theta = smallest_angle(pred,measured)
                     theta_withinsubj.append(theta)
 
@@ -163,14 +159,11 @@ for k in range(len(visual_areas)):
         mean_delta.append(mean_theta_withinsubj[mask>1])
         mean_across.append(mean_theta_acrosssubj_pred[mask>1])
 
-    mean_delta=np.reshape(np.array(mean_delta),(3,-1))
-    # print('cluster'+str(k))
-    # print(scipy.stats.mannwhitneyu(mean_delta[0], mean_delta[1]))
-    # print(scipy.stats.mannwhitneyu(mean_delta[0], mean_delta[2]))
-    mean_across = np.reshape(np.array(mean_across), (3, -1))
+    mean_delta=np.reshape(np.array(mean_delta),(5,-1))
+    mean_across = np.reshape(np.array(mean_across), (5, -1))
 
-
-    ax = fig.add_subplot(1, 6, k+2)
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
     # data = np.concatenate(
     #     [[mean_across[0], len(mean_across[0]) * [models[0]], len(mean_across[0]) * ['Between predicted maps']],
     #      [mean_across[1], len(mean_across[1]) * [models[1]], len(mean_across[1]) * ['Between predicted maps']],
@@ -184,29 +177,35 @@ for k in range(len(visual_areas)):
     #       len(mean_across[2]) * ['Between predicted map and ground truth']],
     #      [mean_delta[3], len(mean_across[3]) * [models[3]],
     #       len(mean_across[3]) * ['Between predicted map and ground truth']]], axis=1)
-    data = np.concatenate([[mean_delta[0], len(mean_across[0])*[models_name[0]], len(mean_across[0])*['Error'],len(mean_across[0])*['Cluster'+str(k+1)]],
-                           [mean_delta[1], len(mean_across[1])*[models_name[1]], len(mean_across[1])*['Error'],len(mean_across[1])*['Cluster'+str(k+1)]],
-                           [mean_delta[2], len(mean_across[2])*[models_name[2]], len(mean_across[2])*['Error'],len(mean_across[2])*['Cluster'+str(k+1)]],
-                           [mean_across[0], len(mean_across[0])*[models_name[0]], len(mean_across[0])*['Individual variability'],len(mean_across[0])*['Cluster'+str(k+1)]],
-                           [mean_across[1], len(mean_across[1])*[models_name[1]], len(mean_across[1])*['Individual variability'],len(mean_across[1])*['Cluster'+str(k+1)]],
-                           [mean_across[2], len(mean_across[2])*[models_name[2]], len(mean_across[2])*['Individual variability'],len(mean_across[2])*['Cluster'+str(k+1)]]], axis=1)
-    df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'Input', 'label','cluster'], data=data.T)
+    data = np.concatenate([[mean_across[0], len(mean_across[0])*[models[0]], len(mean_across[0])*['Between predicted maps']],
+                           [mean_across[1], len(mean_across[1])*[models[1]], len(mean_across[1])*['Between predicted maps']],
+                           [mean_across[2], len(mean_across[2])*[models[2]], len(mean_across[2])*['Between predicted maps']],
+                           [mean_across[3], len(mean_across[3]) * [models[3]], len(mean_across[3]) * ['Between predicted maps']],
+                           [mean_across[4], len(mean_across[4]) * [models[4]], len(mean_across[4]) * ['Between predicted maps']],
+                           [mean_delta[0], len(mean_across[0])*[models[0]], len(mean_across[0])*['Between predicted map and ground truth']],
+                           [mean_delta[1], len(mean_across[1])*[models[1]], len(mean_across[1])*['Between predicted map and ground truth']],
+                           [mean_delta[2], len(mean_across[2])*[models[2]], len(mean_across[2])*['Between predicted map and ground truth']],
+                           [mean_delta[3], len(mean_across[3]) * [models[3]],
+                            len(mean_across[3]) * ['Between predicted map and ground truth']],
+                           [mean_delta[4], len(mean_across[4]) * [models[4]],
+                            len(mean_across[4]) * ['Between predicted map and ground truth']]], axis=1)
+    df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'models', 'label'], data=data.T)
     df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
     palette = ['dimgray', 'lightgray']
-    # ax = sns.boxplot(y='$\Delta$$\t\Theta$', x='models', order=models_name, hue='label', data=df, palette=palette,showfliers=False)
-    ax = sns.pointplot(y='$\Delta$$\t\Theta$', x='Input', order=models_name, hue='label', data=df, palette=color[k+1],
+    # ax = sns.boxplot(y='$\Delta$$\t\Theta$', x='models', order=models, hue='label', data=df, palette=palette,showfliers=False)
+    ax = sns.pointplot(y='$\Delta$$\t\Theta$', x='models', order=models, hue='label', data=df, palette=palette,
                        join=False, dodge=True, ci=95)
     ax.set_title('Cluster ' + str(k+1))
     legend=plt.legend()
     legend.remove()
 
-    plt.ylim([0,80])
+    plt.ylim([0,60])
     #x = sns.swarmplot(data=mean_delta,color='gray')
-    ax.set_xlabel('')
+
     # plt.savefig('PAdif_cluster'+str(k+1)+'.svg')
+    plt.show()
 
 
-plt.show()
 
 
 
@@ -218,11 +217,15 @@ primary_visual_areas=np.sum([np.reshape(V1,(-1,1)),np.reshape(V2,(-1,1)),np.resh
 label=['Early visual cortex']
 
 
+fig = plt.figure()
+
 mean_delta_2=[]
 mean_across_2=[]
 
 for m in range(len(models)):
-    a=torch.load('/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset-'+models[m]+'_Model3_PA_LH.pt',map_location='cpu')
+    a = torch.load(
+        '/home/uqfribe1/PycharmProjects/DEEP-fMRI/plots/left_hemi/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' +
+        models[m] + '_output_epoch200.pt', map_location='cpu')
 
     theta_withinsubj=[]
     theta_acrosssubj=[]
@@ -341,12 +344,11 @@ for m in range(len(models)):
     mean_delta_2.append(mean_theta_withinsubj[mask>1])
     mean_across_2.append(mean_theta_acrosssubj_pred[mask>1])
 
-mean_delta_2=np.reshape(np.array(mean_delta_2),(3,-1))
-mean_across_2 = np.reshape(np.array(mean_across_2), (3, -1))
-# print(scipy.stats.mannwhitneyu(mean_delta_2[0], mean_delta_2[1]))
-# print(scipy.stats.mannwhitneyu(mean_delta_2[0], mean_delta_2[2]))
-# fig = plt.figure()
-ax = fig.add_subplot(1, 6, 1)
+mean_delta_2=np.reshape(np.array(mean_delta_2),(5,-1))
+mean_across_2 = np.reshape(np.array(mean_across_2), (5, -1))
+
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
 # data = np.concatenate([[mean_across_2[0], len(mean_across_2[0])*[models[0]], len(mean_across_2[0])*['Between predicted maps']],
 #                        [mean_across_2[1], len(mean_across_2[1])*[models[1]], len(mean_across_2[1])*['Between predicted maps']],
 #                        [mean_across_2[2], len(mean_across_2[2])*[models[2]], len(mean_across_2[2])*['Between predicted maps']],
@@ -355,27 +357,30 @@ ax = fig.add_subplot(1, 6, 1)
 #                        [mean_delta_2[1], len(mean_across_2[1])*[models[1]], len(mean_across_2[1])*['Between predicted map and ground truth']],
 #                        [mean_delta_2[2], len(mean_across_2[2])*[models[2]], len(mean_across_2[2])*['Between predicted map and ground truth']],
 #                        [mean_delta_2[3], len(mean_across_2[3])*[models[3]], len(mean_across_2[3])*['Between predicted map and ground truth']]], axis=1)
-data = np.concatenate([[mean_delta_2[0], len(mean_across_2[0])*[models_name[0]], len(mean_across_2[0])*['Error']],
-                       [mean_delta_2[1], len(mean_across_2[1])*[models_name[1]], len(mean_across_2[1])*['Error']],
-                       [mean_delta_2[2], len(mean_across_2[2])*[models_name[2]], len(mean_across_2[2])*['Error']],
-                       [mean_across_2[0], len(mean_across_2[0])*[models_name[0]], len(mean_across_2[0])*['Individual variability']],
-                       [mean_across_2[1], len(mean_across_2[1])*[models_name[1]], len(mean_across_2[1])*['Individual variability']],
-                       [mean_across_2[2], len(mean_across_2[2])*[models_name[2]], len(mean_across_2[2])*['Individual variability']]], axis=1)
-df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'Input', 'label'], data=data.T)
+data = np.concatenate([[mean_across_2[0], len(mean_across_2[0])*[models[0]], len(mean_across_2[0])*['Between predicted maps']],
+                       [mean_across_2[1], len(mean_across_2[1])*[models[1]], len(mean_across_2[1])*['Between predicted maps']],
+                       [mean_across_2[2], len(mean_across_2[2])*[models[2]], len(mean_across_2[2])*['Between predicted maps']],
+                        [mean_across_2[3], len(mean_across_2[3])*[models[3]], len(mean_across_2[3])*['Between predicted maps']],
+                       [mean_across_2[4], len(mean_across_2[4])*[models[4]], len(mean_across_2[4])*['Between predicted maps']],
+                       [mean_delta_2[0], len(mean_across_2[0])*[models[0]], len(mean_across_2[0])*['Between predicted map and ground truth']],
+                       [mean_delta_2[1], len(mean_across_2[1])*[models[1]], len(mean_across_2[1])*['Between predicted map and ground truth']],
+                       [mean_delta_2[2], len(mean_across_2[2])*[models[2]], len(mean_across_2[2])*['Between predicted map and ground truth']],
+                       [mean_delta_2[3], len(mean_across_2[3])*[models[3]], len(mean_across_2[3])*['Between predicted map and ground truth']],
+                       [mean_delta_2[4], len(mean_across_2[4])*[models[4]], len(mean_across_2[4])*['Between predicted map and ground truth']]], axis=1)
+df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'models', 'label'], data=data.T)
 df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
 palette = ['dimgray', 'lightgray']
-
 # ax = sns.boxplot(y='$\Delta$$\t\Theta$', x='models', order=models, hue='label', data=df, palette=palette,showfliers=False)
-ax = sns.pointplot(y='$\Delta$$\t\Theta$', x='Input', order=models_name, hue='label', data=df, palette=color[0],join=False,dodge=True,ci=95)
+ax = sns.pointplot(y='$\Delta$$\t\Theta$', x='models', order=models, hue='label', data=df, palette=palette,join=False,dodge=True,ci=95)
 ax.set_title('Early visual cortex ')
 legend=plt.legend()
-# legend.remove()
-ax.set_xlabel('')
-plt.ylim([0,80])
+legend.remove()
 
+plt.ylim([0,60])
+#x = sns.swarmplot(data=mean_delta,color='gray')
 
-
-
-plt.savefig('ModelEval_AllClusters.svg', format="svg")
+# plt.savefig('PAdif_cluster'+str(k+1)+'.svg')
 plt.show()
+
+
 
