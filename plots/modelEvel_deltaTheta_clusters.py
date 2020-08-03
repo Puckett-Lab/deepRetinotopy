@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch
 import seaborn as sns
-from functions.def_ROIs import roi as roi2
-from functions.def_ROIs_ROI import roi
+from functions.def_ROIs_WangParcels import roi as roi2
+from functions.def_ROIs_WangParcelsPlusFovea import roi
 from functions.plusFovea import add_fovea
 
 

@@ -2,7 +2,7 @@ import numpy as np
 import scipy.io
 import os.path as osp
 from matplotlib import cm
-from functions.def_ROIs import roi
+from functions.def_ROIs_WangParcels import roi
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
 from nilearn import plotting

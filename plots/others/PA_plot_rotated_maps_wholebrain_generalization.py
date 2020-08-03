@@ -3,7 +3,7 @@ from nilearn import plotting
 import scipy.io
 import os.path as osp
 import torch
-from functions.def_ROIs import roi
+from functions.def_ROIs_WangParcels import roi
 
 path='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/102311_native'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_L_102311_native.mat'))['cifti_curv_L']

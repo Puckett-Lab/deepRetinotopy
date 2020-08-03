@@ -4,8 +4,8 @@ import torch
 import seaborn as sns
 import scipy.io
 import os.path as osp
-from functions.def_ROIs import roi as roi2
-from functions.def_ROIs_ROI import roi
+from functions.def_ROIs_WangParcels import roi as roi2
+from functions.def_ROIs_WangParcelsPlusFovea import roi
 from functions.plusFovea import add_fovea
 import pandas as pd
 

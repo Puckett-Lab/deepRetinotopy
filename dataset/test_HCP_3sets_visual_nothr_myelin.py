@@ -1,6 +1,6 @@
 import os.path as osp
 import scipy.io
-from functions.def_ROIs import roi
+from functions.def_ROIs_WangParcels import roi
 import torch
 from torch_geometric.data import InMemoryDataset
 from read.test_read_HCPdata_visual_nothr_myelin import read_HCP

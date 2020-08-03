@@ -4,7 +4,7 @@ import numpy as np
 import scipy.io
 import os.path as osp
 import torch
-from functions.def_ROIs_ROI import roi
+from functions.def_ROIs_WangParcelsPlusFovea import roi
 
 
 from nilearn import plotting

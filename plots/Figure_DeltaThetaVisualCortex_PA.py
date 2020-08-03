@@ -4,7 +4,7 @@ from nilearn import plotting
 import scipy.io
 import os.path as osp
 import torch
-from functions.def_ROIs_ROI import roi
+from functions.def_ROIs_WangParcelsPlusFovea import roi
 from functions.least_difference_angles import smallest_angle
 
 path='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'

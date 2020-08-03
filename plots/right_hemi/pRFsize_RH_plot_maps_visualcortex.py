@@ -5,7 +5,7 @@ import os.path as osp
 import torch
 import sys
 sys.path.append('..')
-from functions.def_ROIs_ROI import roi
+from functions.def_ROIs_WangParcelsPlusFovea import roi
 
 path='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']

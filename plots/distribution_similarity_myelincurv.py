@@ -7,7 +7,7 @@ import seaborn as sns
 import pandas as pd
 import torch
 from functions.plusFovea import add_fovea
-from functions.def_ROIs_ROI import roi
+from functions.def_ROIs_WangParcelsPlusFovea import roi
 
 import sys
 sys.path.append('..')
