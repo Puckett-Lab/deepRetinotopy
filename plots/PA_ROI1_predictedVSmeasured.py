@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import scipy.io
 import os.path as osp
 import torch
-from functions.def_ROIs_ROI import roi
+from functions.def_ROIs_WangParcelsPlusFovea import roi
 
 path='/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
@@ -44,7 +44,7 @@ measured=np.array(measured)
 
 
 
-from functions.def_ROIs import roi
+from functions.def_ROIs_WangParcels import roi
 V1 = ['hV4','VO1','VO2','PHC1','PHC2','V3a','V3b','LO1','LO2','TO1','TO2','IPS0','IPS1','IPS2','IPS3','IPS4','IPS5','SPL1']
 final_mask_L_v1, final_mask_R_v1, index_L_mask_v1, index_R_mask_v1= roi(V1)
 

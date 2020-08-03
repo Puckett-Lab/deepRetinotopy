@@ -1,6 +1,6 @@
 import os.path as osp
 import scipy.io
-from functions.def_ROIs_ROI import roi
+from functions.def_ROIs_WangParcelsPlusFovea import roi
 import torch
 from torch_geometric.data import InMemoryDataset
 from read.read_HCPdata_visual_nothr_rotated_notwin import read_HCP

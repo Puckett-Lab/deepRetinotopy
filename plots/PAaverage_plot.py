@@ -2,7 +2,7 @@ import os.path as osp
 from nilearn import plotting
 import torch_geometric.transforms as T
 import numpy as np
-from functions.def_ROIs_ROI import roi
+from functions.def_ROIs_WangParcelsPlusFovea import roi
 
 import sys
 sys.path.append('../..')
