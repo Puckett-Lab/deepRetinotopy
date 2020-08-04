@@ -6,13 +6,12 @@ def labels(input, labels):
 
     Args:
         input (.mat file): .mat file with the triangular faces composing the
-        surface template
-
+            surface template
         labels (numpy array): vertices index from the region of interest
 
     Returns:
         numpy array: triangular faces from the region of interest (number of
-        faces, 3)
+            faces, 3)
     """
 
     # Append to faces_indexes from those faces containing nodes from the

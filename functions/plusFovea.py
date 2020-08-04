@@ -59,7 +59,7 @@ def add_fovea_R(list):
 
     Args:
       list: [v1_dorsal, v1_ventral, v1_fovea, v2_dorsal, v2_ventral,
-      v2_fovea, v3_dorsal, v3_ventral, v3_fovea]
+        v2_fovea, v3_dorsal, v3_ventral, v3_fovea]
 
     Returns:
       V1_R (numpy array): V1_R mask (number of vertices,)
