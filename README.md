@@ -26,6 +26,11 @@ This repository contains all Python codes from our recent work on "Predicting br
 Figure 3, Figure 4a - Eccentricity_maps_LH.py and PA_maps_LH.py
 Figure 6b - ModelEval_featureImportance_PA.py
 
+### Plots - right_hemi
+
+
+Figure 3 - Eccentricity_maps_RH.py and PA_maps_RH.py
+
 
 ## Final model selection
 
