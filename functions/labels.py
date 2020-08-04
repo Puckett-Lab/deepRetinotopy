@@ -7,6 +7,7 @@ def labels(input, labels):
     Args:
         input (.mat file): .mat file with the triangular faces composing the
         surface template
+
         labels (numpy array): vertices index from the region of interest
 
     Returns:

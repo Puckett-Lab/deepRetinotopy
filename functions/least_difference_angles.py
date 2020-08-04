@@ -7,6 +7,7 @@ def smallest_angle(x, y):
     Args:
       x (numpy array): An array of shape (number of vertices,1) containing
       the empirical polar angles
+
       y (numpy array): An array of shape (number of vertices,1) containing
       the predicted polar angles
 

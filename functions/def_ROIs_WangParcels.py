@@ -13,10 +13,13 @@ def roi(list_of_labels):
     Returns:
         final_mask_L (numpy array): Mask of the region of interest from left
         hemisphere (32492,)
+
         final_mask_R (numpy array): Mask of the region of interest from
         right hemisphere (32492,)
+
         index_L_mask (list): Indices of the non-zero elements from
         final_mask_L (number of nonzero elements,)
+
         index_R_mask (list): Indices of the non-zero elements from
         final_mask_R (number of nonzero elements,)
     """
