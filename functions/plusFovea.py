@@ -12,7 +12,9 @@ def add_fovea(list):
 
     Returns:
       V1_L (numpy array): V1_L mask (number of vertices,)
+
       V2_L (numpy array): V2_L mask (number of vertices,)
+
       V3_L (numpy array): V3_L mask (number of vertices,)
     """
 
@@ -61,7 +63,9 @@ def add_fovea_R(list):
 
     Returns:
       V1_R (numpy array): V1_R mask (number of vertices,)
+
       V2_R (numpy array): V2_R mask (number of vertices,)
+
       V3_R (numpy array): V3_R mask (number of vertices,)
     """
 
