@@ -8,20 +8,20 @@ def roi(list_of_labels):
 
     Args:
         list_of_labels (list): list with file names of visual areas masks (
-        .mat), from both L and R hemispheres to be merged together.
+            .mat), from both L and R hemispheres to be merged together.
 
     Returns:
         final_mask_L (numpy array): Mask of the region of interest from left
-        hemisphere (32492,)
+            hemisphere (32492,)
 
         final_mask_R (numpy array): Mask of the region of interest from
-        right hemisphere (32492,)
+            right hemisphere (32492,)
 
         index_L_mask (list): Indices of the non-zero elements from
-        final_mask_L (number of nonzero elements,)
+            final_mask_L (number of nonzero elements,)
 
         index_R_mask (list): Indices of the non-zero elements from
-        final_mask_R (number of nonzero elements,)
+            final_mask_R (number of nonzero elements,)
     """
 
     # Defining number of nodes
