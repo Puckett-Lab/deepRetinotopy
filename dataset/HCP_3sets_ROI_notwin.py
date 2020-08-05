@@ -3,12 +3,12 @@ import scipy.io
 import torch
 
 from torch_geometric.data import InMemoryDataset
-from read.read_HCPdata_visual_nothr_rotated import read_HCP
+from read.read_HCPdata_visual_nothr_rotated_notwin import read_HCP
 from functions.labels import labels
 from functions.def_ROIs_WangParcelsPlusFovea import roi
 
 
-# Generates the training, dev and test set separately
+# Generates the training and test set separately
 
 
 class Retinotopy(InMemoryDataset):
@@ -49,75 +49,74 @@ class Retinotopy(InMemoryDataset):
             if self.myelination == True:
                 if self.prediction == 'eccentricity':
                     return [
-                        'training_ecc_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
-                        'development_ecc_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
-                        'test_ecc_visual_nothresh_rotated_LH_myelincurv_ROI1'
-                        '.pt']
+                        'training_ecc_LH_myelincurv_ROI_notwin.pt',
+                        'development_ecc_LH_myelincurv_ROI_notwin.pt',
+                        'test_ecc_LH_myelincurv_ROI_notwin.pt']
 
                 elif self.prediction == 'polarAngle':
                     return [
-                        'training_PA_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
-                        'development_PA_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
-                        'test_PA_visual_nothresh_rotated_LH_myelincurv_ROI1'
-                        '.pt']
+                        'training_PA_LH_myelincurv_ROI_notwin.pt',
+                        'development_PA_LH_myelincurv_ROI_notwin.pt',
+                        'test_PA_LH_myelincurv_ROI_notwin.pt']
+
                 else:
                     return [
-                        'training_pRFsize_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
-                        'development_pRFsize_visual_nothresh_rotated_LH_myelincurv_ROI1.pt',
-                        'test_pRFsize_visual_nothresh_rotated_LH_myelincurv_ROI1.pt']
+                        'training_pRFsize_LH_myelincurv_ROI_notwin.pt',
+                        'development_pRFsize__LH_myelincurv_ROI_notwin.pt',
+                        'test_pRFsize_LH_myelincurv_ROI_notwin.pt']
             else:
                 if self.prediction == 'eccentricity':
-                    return ['training_ecc_visual_nothresh_rotated_LH_ROI1.pt',
-                            'development_ecc_visual_nothresh_rotated_LH_ROI1'
-                            '.pt',
-                            'test_ecc_visual_nothresh_rotated_LH_ROI1.pt']
+                    return ['training_ecc_LH_ROI_notwin.pt',
+                            'development_ecc_LH_ROI_notwin.pt',
+                            'test_ecc_LH_ROI_notwin.pt']
+
                 elif self.prediction == 'polarAngle':
-                    return ['training_PA_visual_nothresh_rotated_LH_ROI1.pt',
-                            'development_PA_visual_nothresh_rotated_LH_ROI1'
-                            '.pt',
-                            'test_PA_visual_nothresh_rotated_LH_ROI1.pt']
+                    return ['training_PA_LH_ROI_notwin.pt',
+                            'development_PA_LH_ROI_notwin.pt',
+                            'test_PA_LH_ROI_notwin.pt']
+
                 else:
                     return [
-                        'training_pRFsize_visual_nothresh_rotated_LH_ROI1.pt',
-                        'development_pRFsize_visual_nothresh_rotated_LH_ROI1'
-                        '.pt',
-                        'test_pRFsize_visual_nothresh_rotated_LH_ROI1.pt']
+                        'training_pRFsize_LH_ROI_notwin.pt',
+                        'development_pRFsize_LH_ROI_notwin.pt',
+                        'test_pRFsize_LH_ROI_notwin.pt']
+
         else:
             if self.myelination == True:
                 if self.prediction == 'eccentricity':
                     return [
-                        'training_ecc_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
-                        'development_ecc_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
-                        'test_ecc_visual_nothresh_rotated_RH_myelincurv_ROI1'
-                        '.pt']
+                        'training_ecc_RH_myelincurv_ROI_notwin.pt',
+                        'development_ecc_RH_myelincurv_ROI_notwin.pt',
+                        'test_ecc_RH_myelincurv_ROI_notwin.pt']
+
                 elif self.prediction == 'polarAngle':
                     return [
-                        'training_PA_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
-                        'development_PA_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
-                        'test_PA_visual_nothresh_rotated_RH_myelincurv_ROI1'
-                        '.pt']
+                        'training_PA_RH_myelincurv_ROI_notwin.pt',
+                        'development_PA_RH_myelincurv_ROI_notwin.pt',
+                        'test_PA_RH_myelincurv_ROI_notwin.pt']
+
                 else:
                     return [
-                        'training_pRFsize_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
-                        'development_pRFsize_visual_nothresh_rotated_RH_myelincurv_ROI1.pt',
-                        'test_pRFsize_visual_nothresh_rotated_RH_myelincurv_ROI1.pt']
+                        'training_pRFsize_RH_myelincurv_ROI_notwin.pt',
+                        'development_pRFsize_RH_myelincurv_ROI_notwin.pt',
+                        'test_pRFsize_RH_myelincurv_ROI_notwin.pt']
+
             else:
                 if self.prediction == 'eccentricity':
-                    return ['training_ecc_visual_nothresh_rotated_RH_ROI1.pt',
-                            'development_ecc_visual_nothresh_rotated_RH_ROI1'
-                            '.pt',
-                            'test_ecc_visual_nothresh_rotated_RH_ROI1.pt']
+                    return ['training_ecc_RH_ROI_notwin.pt',
+                            'development_ecc_RH_ROI_notwin.pt',
+                            'test_ecc_RH_ROI_notwin.pt']
+
                 elif self.prediction == 'polarAngle':
-                    return ['training_PA_visual_nothresh_rotated_RH_ROI1.pt',
-                            'development_PA_visual_nothresh_rotated_RH_ROI1'
-                            '.pt',
-                            'test_PA_visual_nothresh_rotated_RH_ROI1.pt']
+                    return ['training_PA_RH_ROI_notwin.pt',
+                            'development_PA_RH_ROI_notwin.pt',
+                            'test_PA_RH_ROI_notwin.pt']
+                
                 else:
                     return [
-                        'training_pRFsize_visual_nothresh_rotated_RH_ROI1.pt',
-                        'development_pRFsize_visual_nothresh_rotated_RH_ROI1'
-                        '.pt',
-                        'test_pRFsize_visual_nothresh_rotated_RH_ROI1.pt']
+                        'training_pRFsize_RH_ROI_notwin.pt',
+                        'development_pRFsize_RH_ROI_notwin.pt',
+                        'test_pRFsize_RH_ROI_notwin.pt']
 
     def download(self):
         raise RuntimeError(
@@ -142,6 +141,7 @@ class Retinotopy(InMemoryDataset):
                              'tri_faces_L'] - 1, index_L_mask)
 
         for i in range(0, self.n_examples):
+            # global read_HCP
             data = read_HCP(path, Hemisphere=self.hemisphere, index=i,
                             surface='mid', visual_mask_L=final_mask_L,
                             visual_mask_R=final_mask_R, faces_L=faces_L,
@@ -151,9 +151,10 @@ class Retinotopy(InMemoryDataset):
                 data = self.pre_transform(data)
             data_list.append(data)
 
-        train = data_list[0:int(161)]
-        dev = data_list[int(161):int(171)]
-        test = data_list[int(171):len(data_list)]
+        train = data_list[0:int(151)]
+        dev = data_list[int(151):int(161)]
+        test = data_list[int(161):len(data_list)]  # twin pairs in the test
+        # dataset
 
         torch.save(self.collate(train), self.processed_paths[0])
         torch.save(self.collate(dev), self.processed_paths[1])

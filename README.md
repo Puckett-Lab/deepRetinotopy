@@ -1,6 +1,6 @@
 # DeepRetinotopy
 
-This repository contains all Python codes from our recent work on "Predicting brain function from anatomy using geometric deep learning" [bioRxiv](https://www.biorxiv.org/content/10.1101/2020.02.11.934471v2).
+This repository contains all Python codes from our recent work on "Predicting brain function from anatomy using geometric deep learning" available on [bioRxiv](https://www.biorxiv.org/content/10.1101/2020.02.11.934471v2).
 
 ## How to install pytorch and torch_geometric to run locally on cpu
 
@@ -24,67 +24,78 @@ This repository contains all Python codes from our recent work on "Predicting br
 
 - 
 
+## Setting up the dataset for preprocessing
+
+
+
+
 ## Figures codes
 
 ### Figure 1
-VisualCortexHierarchy_WangPlusFovea.py
+./plots/VisualCortexHierarchy_WangPlusFovea.py
 
 ### Figure 3
 
 #### Left Hemisphere
-Eccentricity_maps_LH.py
-PA_maps_LH.py
+./plots/left_hemi/Eccentricity_maps_LH.py
+./plots/left_hemi/PA_maps_LH.py
 
 #### Right Hemisphere
-Eccentricity_maps_LH.py
-PA_maps_LH.py
+./plots/right_hemi/Eccentricity_maps_LH.py
+./plots/right_hemi/PA_maps_LH.py
 
 ### Figure 4a
-Eccentricity_maps_LH.py
-PA_maps_LH.py
+./plots/left_hemi/Eccentricity_maps_LH.py
+./plots/left_hemi/PA_maps_LH.py
 
 ### Figure 4b
-DeltaThetaVisualCortex_PA_subjvsGroup.py
+./plots/DeltaThetaVisualCortex_PA_subjvsGroup.py
 
 ### Figure 5
-R2Average_plot.py
+./plots/R2Average_plot.py
 
 ### Figure 6a
-DeltaThetaVisualCortex_PA.py
+./plots/DeltaThetaVisualCortex_PA.py
 
 ### Figure 6b
-ModelEval_featureImportance_PA.py
+./plots/left_hemi/ModelEval_featureImportance_PA.py
 
 ### Supplementary Figure 1
 #### Left Hemisphere
-PA_maps_LH.py
+./plots/left_hemi/PA_maps_LH.py
 
 #### Right Hemisphere
-PA_maps_LH.py
+./plots/right_hemi/PA_maps_RH.py
 
 ### Supplementary Figure 2
 #### Left Hemisphere
-Eccentricity_maps_LH.py
+./plots/left_hemi/Eccentricity_maps_LH.py
 
 #### Right Hemisphere
-Eccentricity_maps_LH.py
+./plots/right_hemi/Eccentricity_maps_RH.py
 
 
 ### Supplementary Figure 3
 #### Left Hemisphere
-PA_maps_LH.py
+./plots/left_hemi/PA_maps_LH.py
 
 ### Supplementary Figure 4
-DiffNumberLayersErrorPlots_LH.py
+./plots/DiffNumberLayersErrorPlots_LH.py
 
 ## Final model selection
 
-ModelEval_FinalModel_PA.py
+./plots/left(right)_hemi/ModelEval_FinalModel_PA.py
 
-ModelEval_FinalModel_ecc.py
+./plots/left(right)_hemi/ModelEval_FinalModel_ecc.py
+
+## Load model and apply to test dataset
+
+./ModelEvalGeneralizability_ecc.py
+./ModelEvalGeneralizability_PA.py
+
 
 ## Mean error and standard deviation
 
-ModelEval_MeanDeltaTheta_ecc.py
+./plots/left(right)_hemi/ModelEval_MeanDeltaTheta_ecc.py
 
-ModelEval_MeanDeltaTheta_PA.py
+./plots/left(right)_hemi/ModelEval_MeanDeltaTheta_PA.py

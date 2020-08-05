@@ -8,7 +8,7 @@ sys.path.append('../..')
 
 from functions.def_ROIs_WangParcelsPlusFovea import roi
 from nilearn import plotting
-from dataset.HCP_3sets_visual_nothr_rotated_ROI1 import Retinotopy
+from dataset.HCP_3sets_ROI import Retinotopy
 from torch_geometric.data import DataLoader
 
 path = '/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
