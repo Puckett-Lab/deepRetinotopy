@@ -9,7 +9,7 @@ import time
 sys.path.append('../..')
 
 
-from dataset.HCP_3sets_visual_nothr_rotated_ROI1_notwin import Retinotopy
+from dataset.HCP_3sets_ROI_notwin import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 

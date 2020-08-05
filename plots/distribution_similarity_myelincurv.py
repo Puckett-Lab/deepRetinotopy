@@ -12,7 +12,7 @@ sys.path.append('..')
 
 from functions.plusFovea import add_fovea
 from functions.def_ROIs_WangParcelsPlusFovea import roi
-from dataset.HCP_3sets_visual_nothr_rotated_ROI1_notwin import Retinotopy
+from dataset.HCP_3sets_ROI_notwin import Retinotopy
 from torch_geometric.data import DataLoader
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '../data')
