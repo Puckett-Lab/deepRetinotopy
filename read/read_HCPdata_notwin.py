@@ -73,7 +73,7 @@ def read_HCP(path, Hemisphere=None, index=None, surface=None, threshold=None,
     # dataset
     # to test their similarity
 
-    print(subjects)
+    # print(subjects)
 
     if Hemisphere == 'Right':
         # Loading connectivity of triangles

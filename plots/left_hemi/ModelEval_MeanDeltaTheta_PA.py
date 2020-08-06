@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import pandas as pd
 
 from functions.def_ROIs_WangParcels import roi as roi2
 from functions.def_ROIs_WangParcelsPlusFovea import roi
@@ -11,6 +12,10 @@ visual_areas = [
      'TO2', 'IPS0', 'IPS1', 'IPS2', 'IPS3', 'IPS4', 'IPS5', 'SPL1']]
 models = ['pred']
 models_name = ['Default']
+
+# Uncomment to evaluate the performance of the average map
+PA_average = np.load('../../AveragePolarAngleMap_LH.npz')['list']
+# print(np.shape(PA_average))
 
 for k in range(len(visual_areas)):
     mean_delta = []
@@ -54,6 +59,11 @@ for k in range(len(visual_areas)):
                     # Loading predicted values
                     pred = np.reshape(np.array(a['Predicted_values'][i]),
                                       (-1, 1))
+
+                    # Uncomment the line bellow and comment the line above
+                    # to evaluate the performance of the average map
+                    pred = np.reshape(np.array(PA_average), (-1, 1))
+
                     measured = np.reshape(np.array(a['Measured_values'][j]),
                                           (-1, 1))
 
@@ -80,11 +90,18 @@ for k in range(len(visual_areas)):
                 if i != j:
                     # Compute angle between predicted and empirical
                     # predictions across subj
+
                     # Loading predicted values
                     pred = np.reshape(np.array(a['Predicted_values'][i]),
                                       (-1, 1))
                     pred2 = np.reshape(np.array(a['Predicted_values'][j]),
                                        (-1, 1))
+
+                    # Uncomment the two lines bellow and comment the two lines
+                    # above to evaluate the performance of the average map
+                    pred = np.reshape(np.array(PA_average), (-1, 1))
+                    pred2 = np.reshape(np.array(PA_average), (-1, 1))
+
                     measured = np.reshape(np.array(a['Measured_values'][j]),
                                           (-1, 1))
                     measured2 = np.reshape(np.array(a['Measured_values'][i]),
@@ -97,12 +114,15 @@ for k in range(len(visual_areas)):
                     pred[minus] = pred[minus] - 180
                     pred[sum] = pred[sum] + 180
                     pred = np.array(pred) * (np.pi / 180)
+                    # print(pred)
 
                     minus = pred2 > 180
                     sum = pred2 < 180
                     pred2[minus] = pred2[minus] - 180
                     pred2[sum] = pred2[sum] + 180
                     pred2 = np.array(pred2) * (np.pi / 180)
+                    # print(pred2)
+
 
                     minus = measured > 180
                     sum = measured < 180
@@ -129,6 +149,7 @@ for k in range(len(visual_areas)):
                     # Computing delta theta, angle between vector defined
                     # pred i versus pred j
                     theta_pred = smallest_angle(pred, pred2)
+                    # print(np.mean(theta_pred))
                     theta_pred_across_temp.append(theta_pred)
 
             # theta_acrosssubj.append(np.mean(theta_across_temp,axis=0))
@@ -149,6 +170,13 @@ for k in range(len(visual_areas)):
 
     mean_delta = np.reshape(np.array(mean_delta), (1, -1))
     mean_across = np.reshape(np.array(mean_across), (1, -1))
+
+# np.savez('../../ErrorPerParticipant_WangParcels_model.npz',list=np.reshape(theta_withinsubj,(10,-1))[:,mask>1])
+np.savez('../../ErrorPerParticipant_WangParcels_averageMap.npz',list=np.reshape(theta_withinsubj,(10,-1))[:,mask>1])
+
+
+
+
 
 # Primary visual cortex
 label_primary_visual_areas = ['V1d', 'V1v', 'fovea_V1', 'V2d', 'V2v',
@@ -192,6 +220,11 @@ for m in range(len(models)):
             if i == j:
                 # Loading predicted values
                 pred = np.reshape(np.array(a['Predicted_values'][i]), (-1, 1))
+
+                # Uncomment the line bellow and comment the line above
+                # to evaluate the performance of the average map
+                pred = np.reshape(np.array(PA_average), (-1, 1))
+
                 measured = np.reshape(np.array(a['Measured_values'][j]),
                                       (-1, 1))
 
@@ -217,9 +250,16 @@ for m in range(len(models)):
             if i != j:
                 # Compute angle between predicted and empirical predictions
                 # across subj
+
                 # Loading predicted values
                 pred = np.reshape(np.array(a['Predicted_values'][i]), (-1, 1))
                 pred2 = np.reshape(np.array(a['Predicted_values'][j]), (-1, 1))
+
+                # Uncomment the line bellow and comment the line above
+                # to evaluate the performance of the average map
+                pred = np.reshape(np.array(PA_average), (-1, 1))
+                pred2 = np.reshape(np.array(PA_average), (-1, 1))
+
                 measured = np.reshape(np.array(a['Measured_values'][j]),
                                       (-1, 1))
                 measured2 = np.reshape(np.array(a['Measured_values'][i]),
@@ -282,15 +322,23 @@ for m in range(len(models)):
 mean_delta_2 = np.reshape(np.array(mean_delta_2), (1, -1))
 mean_across_2 = np.reshape(np.array(mean_across_2), (1, -1))
 
-mean_earlyVisualCortex = np.mean(mean_delta_2[0])
-std_earlyVisualCortex = np.std(mean_delta_2[0])
+
+# np.savez('../../ErrorPerParticipant_EarlyVisualCortex_model.npz',list=np.reshape(theta_withinsubj,(10,-1))[:,mask>1])
+np.savez('../../ErrorPerParticipant_EarlyVisualCortex_averageMap.npz',list=np.reshape(theta_withinsubj,(10,-1))[:,mask>1])
+
+
 mean_all = np.mean(np.concatenate((mean_delta[0], mean_delta_2[0])))
 std_all = np.std(np.concatenate((mean_delta[0], mean_delta_2[0])))
 
 # print(len(np.concatenate((mean_delta[0],mean_delta_2[0]))))
 print(
     f'Mean error and std in early visual cortex (V1, V2, V3) including the '
-    f'fovea: {mean_earlyVisualCortex}, {std_earlyVisualCortex}')
+    f'fovea: {np.mean(mean_delta_2[0])}, {np.std(mean_delta_2[0])}')
 print(
-    f'Mean error and std in all visual areas (Wang et al., 2015) including the '
+    f'Mean error and std in all visual areas (Wang et al., 2015) including '
+    f'the '
     f'fovea: {mean_all}, {std_all}')
+
+
+
+

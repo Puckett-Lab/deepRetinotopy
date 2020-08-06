@@ -14,8 +14,8 @@ visual_areas = [['hV4'], ['VO1', 'VO2', 'PHC1', 'PHC2'], ['V3a', 'V3b'],
                 ['LO1', 'LO2', 'TO1', 'TO2'],
                 ['IPS0', 'IPS1', 'IPS2', 'IPS3', 'IPS4', 'IPS5', 'SPL1']]
 
-models = ['pred', 'shuffled-myelincurv', 'constant']
-models_name = ['Default', 'Shuffled', 'Constant']
+models = ['pred', 'shuffled-myelincurv', 'constant', 'constantZero']
+models_name = ['Default', 'Shuffled', 'Constant', 'Zeros']
 
 color = [['darkblue', 'royalblue'], ['steelblue', 'lightskyblue'],
          ['green', 'lightgreen'], ['darkgoldenrod', 'goldenrod'],
@@ -59,8 +59,8 @@ for k in range(len(visual_areas)):
             theta_emp_across_temp = []
 
             for i in range(len(a['Predicted_values'])):
-                # Compute angle difference between predicted and empirical
-                # predictions within subj
+                # Compute angle between predicted and empirical predictions
+                # within subj
                 if i == j:
                     # Loading predicted values
                     pred = np.reshape(np.array(a['Predicted_values'][i]),
@@ -91,7 +91,6 @@ for k in range(len(visual_areas)):
                 if i != j:
                     # Compute angle between predicted and empirical
                     # predictions across subj
-
                     # Loading predicted values
                     pred = np.reshape(np.array(a['Predicted_values'][i]),
                                       (-1, 1))
@@ -159,31 +158,13 @@ for k in range(len(visual_areas)):
         mean_delta.append(mean_theta_withinsubj[mask > 1])
         mean_across.append(mean_theta_acrosssubj_pred[mask > 1])
 
-    mean_delta = np.reshape(np.array(mean_delta), (3, -1))
+    mean_delta = np.reshape(np.array(mean_delta), (4, -1))
     # print('cluster'+str(k))
     # print(scipy.stats.mannwhitneyu(mean_delta[0], mean_delta[1]))
     # print(scipy.stats.mannwhitneyu(mean_delta[0], mean_delta[2]))
-    mean_across = np.reshape(np.array(mean_across), (3, -1))
+    mean_across = np.reshape(np.array(mean_across), (4, -1))
 
     ax = fig.add_subplot(1, 6, k + 2)
-    # data = np.concatenate(
-    #     [[mean_across[0], len(mean_across[0]) * [models[0]],
-    #     len(mean_across[0]) * ['Between predicted maps']],
-    #      [mean_across[1], len(mean_across[1]) * [models[1]],
-    #      len(mean_across[1]) * ['Between predicted maps']],
-    #      [mean_across[2], len(mean_across[2]) * [models[2]],
-    #      len(mean_across[2]) * ['Between predicted maps']],
-    #      [mean_across[3], len(mean_across[3]) * [models[3]],
-    #      len(mean_across[3]) * ['Between predicted maps']],
-    #      [mean_delta[0], len(mean_across[0]) * [models[0]],
-    #       len(mean_across[0]) * ['Between predicted map and ground truth']],
-    #      [mean_delta[1], len(mean_across[1]) * [models[1]],
-    #       len(mean_across[1]) * ['Between predicted map and ground truth']],
-    #      [mean_delta[2], len(mean_across[2]) * [models[2]],
-    #       len(mean_across[2]) * ['Between predicted map and ground truth']],
-    #      [mean_delta[3], len(mean_across[3]) * [models[3]],
-    #       len(mean_across[3]) * ['Between predicted map and ground
-    #       truth']]], axis=1)
     data = np.concatenate([[mean_delta[0],
                             len(mean_across[0]) * [models_name[0]],
                             len(mean_across[0]) * ['Error'],
@@ -196,6 +177,10 @@ for k in range(len(visual_areas)):
                             len(mean_across[2]) * [models_name[2]],
                             len(mean_across[2]) * ['Error'],
                             len(mean_across[2]) * ['Cluster' + str(k + 1)]],
+                           [mean_delta[3],
+                            len(mean_across[3]) * [models_name[3]],
+                            len(mean_across[3]) * ['Error'],
+                            len(mean_across[3]) * ['Cluster' + str(k + 1)]],
                            [mean_across[0],
                             len(mean_across[0]) * [models_name[0]],
                             len(mean_across[0]) * ['Individual variability'],
@@ -207,7 +192,11 @@ for k in range(len(visual_areas)):
                            [mean_across[2],
                             len(mean_across[2]) * [models_name[2]],
                             len(mean_across[2]) * ['Individual variability'],
-                            len(mean_across[2]) * ['Cluster' + str(k + 1)]]],
+                            len(mean_across[2]) * ['Cluster' + str(k + 1)]],
+                           [mean_across[3],
+                            len(mean_across[3]) * [models_name[3]],
+                            len(mean_across[3]) * ['Individual variability'],
+                            len(mean_across[3]) * ['Cluster' + str(k + 1)]]],
                           axis=1)
     df = pd.DataFrame(
         columns=['$\Delta$$\t\Theta$', 'Input', 'label', 'cluster'],
@@ -229,7 +218,8 @@ for k in range(len(visual_areas)):
     ax.set_xlabel('')
     # plt.savefig('PAdif_cluster'+str(k+1)+'.svg')
 
-plt.show()
+# plt.show()
+
 
 # Primary visual cortex
 label_primary_visual_areas = ['V1d', 'V1v', 'fovea_V1', 'V2d', 'V2v',
@@ -360,35 +350,10 @@ for m in range(len(models)):
     mean_delta_2.append(mean_theta_withinsubj[mask > 1])
     mean_across_2.append(mean_theta_acrosssubj_pred[mask > 1])
 
-mean_delta_2 = np.reshape(np.array(mean_delta_2), (3, -1))
-mean_across_2 = np.reshape(np.array(mean_across_2), (3, -1))
-# print(scipy.stats.mannwhitneyu(mean_delta_2[0], mean_delta_2[1]))
-# print(scipy.stats.mannwhitneyu(mean_delta_2[0], mean_delta_2[2]))
-# fig = plt.figure()
+mean_delta_2 = np.reshape(np.array(mean_delta_2), (4, -1))
+mean_across_2 = np.reshape(np.array(mean_across_2), (4, -1))
+
 ax = fig.add_subplot(1, 6, 1)
-# data = np.concatenate([[mean_across_2[0], len(mean_across_2[0])*[models[
-# 0]], len(mean_across_2[0])*['Between predicted maps']],
-#                        [mean_across_2[1], len(mean_across_2[1])*[models[
-#                        1]], len(mean_across_2[1])*['Between predicted
-#                        maps']],
-#                        [mean_across_2[2], len(mean_across_2[2])*[models[
-#                        2]], len(mean_across_2[2])*['Between predicted
-#                        maps']],
-#                        [mean_across_2[3], len(mean_across_2[3])*[models[
-#                        3]], len(mean_across_2[3])*['Between predicted
-#                        maps']],
-#                        [mean_delta_2[0], len(mean_across_2[0])*[models[
-#                        0]], len(mean_across_2[0])*['Between predicted map
-#                        and ground truth']],
-#                        [mean_delta_2[1], len(mean_across_2[1])*[models[
-#                        1]], len(mean_across_2[1])*['Between predicted map
-#                        and ground truth']],
-#                        [mean_delta_2[2], len(mean_across_2[2])*[models[
-#                        2]], len(mean_across_2[2])*['Between predicted map
-#                        and ground truth']],
-#                        [mean_delta_2[3], len(mean_across_2[3])*[models[
-#                        3]], len(mean_across_2[3])*['Between predicted map
-#                        and ground truth']]], axis=1)
 data = np.concatenate([[mean_delta_2[0],
                         len(mean_across_2[0]) * [models_name[0]],
                         len(mean_across_2[0]) * ['Error']],
@@ -398,6 +363,9 @@ data = np.concatenate([[mean_delta_2[0],
                        [mean_delta_2[2],
                         len(mean_across_2[2]) * [models_name[2]],
                         len(mean_across_2[2]) * ['Error']],
+                       [mean_delta_2[3],
+                        len(mean_across_2[3]) * [models_name[3]],
+                        len(mean_across_2[3]) * ['Error']],
                        [mean_across_2[0],
                         len(mean_across_2[0]) * [models_name[0]],
                         len(mean_across_2[0]) * ['Individual variability']],
@@ -406,15 +374,17 @@ data = np.concatenate([[mean_delta_2[0],
                         len(mean_across_2[1]) * ['Individual variability']],
                        [mean_across_2[2],
                         len(mean_across_2[2]) * [models_name[2]],
-                        len(mean_across_2[2]) * ['Individual variability']]],
+                        len(mean_across_2[2]) * ['Individual variability']],
+                       [mean_across_2[3],
+                        len(mean_across_2[3]) * [models_name[3]],
+                        len(mean_across_2[3]) * ['Individual variability']]],
                       axis=1)
 df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'Input', 'label'],
                   data=data.T)
 df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
 palette = ['dimgray', 'lightgray']
 
-# ax = sns.boxplot(y='$\Delta$$\t\Theta$', x='models', order=models,
-# hue='label', data=df, palette=palette,showfliers=False)
+
 ax = sns.pointplot(y='$\Delta$$\t\Theta$', x='Input', order=models_name,
                    hue='label', data=df, palette=color[0], join=False,
                    dodge=True, ci=95)
@@ -424,5 +394,5 @@ legend = plt.legend()
 ax.set_xlabel('')
 plt.ylim([0, 80])
 
-# plt.savefig('ModelEval_AllClusters.svg', format="svg")
+plt.savefig('ModelEval_AllClusters', format="pdf")
 plt.show()

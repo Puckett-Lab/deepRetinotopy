@@ -3,7 +3,7 @@ import scipy.io
 import torch
 
 from torch_geometric.data import InMemoryDataset
-from read.read_HCPdata_visual_nothr_rotated import read_HCP
+from read.read_HCPdata import read_HCP
 from functions.labels import labels
 from functions.def_ROIs_WangParcelsPlusFovea import roi
 
