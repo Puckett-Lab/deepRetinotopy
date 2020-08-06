@@ -64,6 +64,7 @@ def read_HCP(path, Hemisphere=None, index=None, surface=None, threshold=None,
     if shuffle == True:
         np.random.shuffle(subjects)
 
+
     if Hemisphere == 'Right':
         # Loading connectivity of triangles
         faces = torch.tensor(faces_R.T, dtype=torch.long)  # Transforming data
@@ -252,5 +253,4 @@ def read_HCP(path, Hemisphere=None, index=None, surface=None, threshold=None,
 
         data.face = faces
         data.R2 = R2_values
-
     return data

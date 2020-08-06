@@ -20,7 +20,7 @@ models = ['pred', 'shuffled-myelincurv', 'constant']
 
 mean_delta = []
 mean_across = []
-
+PA_average = np.load('../AveragePolarAngleMap_LH.npz')['list']
 for m in range(len(models)):
     a = torch.load(
         '/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset-' +
@@ -51,7 +51,8 @@ for m in range(len(models)):
             # within subj
             if i == j:
                 # Loading predicted values
-                pred = np.reshape(np.array(a['Predicted_values'][i]), (-1, 1))
+                # pred = np.reshape(np.array(a['Predicted_values'][i]), (-1, 1))
+                pred = np.reshape(np.array(PA_average), (-1, 1))
                 measured = np.reshape(np.array(a['Measured_values'][j]),
                                       (-1, 1))
 
@@ -78,8 +79,10 @@ for m in range(len(models)):
                 # Compute angle between predicted and empirical predictions
                 # across subj
                 # Loading predicted values
-                pred = np.reshape(np.array(a['Predicted_values'][i]), (-1, 1))
-                pred2 = np.reshape(np.array(a['Predicted_values'][j]), (-1, 1))
+                # pred = np.reshape(np.array(a['Predicted_values'][i]), (-1, 1))
+                pred = np.reshape(np.array(PA_average), (-1, 1))
+                # pred2 = np.reshape(np.array(a['Predicted_values'][j]), (-1, 1))
+                pred2 = np.reshape(np.array(PA_average), (-1, 1))
                 measured = np.reshape(np.array(a['Measured_values'][j]),
                                       (-1, 1))
                 measured2 = np.reshape(np.array(a['Measured_values'][i]),
@@ -143,12 +146,12 @@ mean_delta = np.reshape(np.array(mean_delta), (3, -1))
 mean_across = np.reshape(np.array(mean_across), (3, -1))
 
 delta_theta = np.ones((32492, 1))
-delta_theta[final_mask_L == 1] = np.reshape(mean_delta[2],
+delta_theta[final_mask_L == 1] = np.reshape(mean_delta[0],
                                             (3267, 1)) + threshold
 delta_theta[final_mask_L != 1] = 0
 
 delta_across = np.ones((32492, 1))
-delta_across[final_mask_L == 1] = np.reshape(mean_across[2],
+delta_across[final_mask_L == 1] = np.reshape(mean_across[0],
                                              (3267, 1)) + threshold
 delta_across[final_mask_L != 1] = 0
 
@@ -157,7 +160,7 @@ view = plotting.view_surf(
                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'
                        '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
-    surf_map=np.reshape(delta_across[0:32492], (-1)), bg_map=background,
+    surf_map=np.reshape(delta_theta[0:32492], (-1)), bg_map=background,
     cmap='Blues', black_bg=False, symmetric_cmap=False, threshold=threshold,
     vmax=75 + threshold)
 view.open_in_browser()
