@@ -15,7 +15,7 @@ models_name = ['Default']
 
 # Uncomment to evaluate the performance of the average map
 PA_average = np.load('../../AveragePolarAngleMap_LH.npz')['list']
-# print(np.shape(PA_average))
+
 
 for k in range(len(visual_areas)):
     mean_delta = []
@@ -84,7 +84,7 @@ for k in range(len(visual_areas)):
                     # Computing delta theta, angle between vector defined by
                     # the predicted value and the one defined by empirical
                     # value of the same subj
-                    theta = smallest_angle(pred, measured)
+                    theta = np.corrcoef(np.reshape(pred[mask>1],(-1)), np.reshape(measured[mask>1],(-1)))[0,1]
                     theta_withinsubj.append(theta)
 
                 if i != j:
@@ -99,8 +99,8 @@ for k in range(len(visual_areas)):
 
                     # Uncomment the two lines bellow and comment the two lines
                     # above to evaluate the performance of the average map
-                    # pred = np.reshape(np.array(PA_average), (-1, 1))
-                    # pred2 = np.reshape(np.array(PA_average), (-1, 1))
+                    pred = np.reshape(np.array(PA_average), (-1, 1))
+                    pred2 = np.reshape(np.array(PA_average), (-1, 1))
 
                     measured = np.reshape(np.array(a['Measured_values'][j]),
                                           (-1, 1))
@@ -148,7 +148,8 @@ for k in range(len(visual_areas)):
 
                     # Computing delta theta, angle between vector defined
                     # pred i versus pred j
-                    theta_pred = smallest_angle(pred, pred2)
+                    print(np.shape(pred[mask>1]))
+                    theta_pred = np.corrcoef(np.reshape(pred[mask>1],(-1)), np.reshape(pred2[mask>1],(-1)))[0,1]
                     # print(np.mean(theta_pred))
                     theta_pred_across_temp.append(theta_pred)
 
@@ -159,23 +160,14 @@ for k in range(len(visual_areas)):
                 np.mean(theta_pred_across_temp, axis=0))
 
         # mean_theta_acrosssubj=np.mean(np.array(theta_acrosssubj),axis=0)
-        mean_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
+        corr_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
         # mean_theta_acrosssubj_emp=np.mean(np.array(theta_acrosssubj_emp),
         # axis=0)
-        mean_theta_acrosssubj_pred = np.mean(np.array(theta_acrosssubj_pred),
+        corr_theta_acrosssubj_pred = np.mean(np.array(theta_acrosssubj_pred),
                                              axis=0)
 
-        mean_delta.append(mean_theta_withinsubj[mask > 1])
-        mean_across.append(mean_theta_acrosssubj_pred[mask > 1])
-
-    mean_delta = np.reshape(np.array(mean_delta), (1, -1))
-    mean_across = np.reshape(np.array(mean_across), (1, -1))
-
-# np.savez('../../ErrorPerParticipant_WangParcels_model.npz',list=np.reshape(theta_withinsubj,(10,-1))[:,mask>1])
-# np.savez('../../ErrorPerParticipant_WangParcels_averageMap.npz',list=np.reshape(theta_withinsubj,(10,-1))[:,mask>1])
-
-
-
+print(corr_theta_acrosssubj_pred)
+print(corr_theta_withinsubj)
 
 
 # Primary visual cortex
@@ -244,7 +236,7 @@ for m in range(len(models)):
 
                 # Computing delta theta, angle between vector defined
                 # predicted value and empirical value same subj
-                theta = smallest_angle(pred, measured)
+                theta = np.corrcoef(np.reshape(pred[mask>1],(-1)), np.reshape(measured[mask>1],(-1)))[0,1]
                 theta_withinsubj.append(theta)
 
             if i != j:
@@ -257,8 +249,8 @@ for m in range(len(models)):
 
                 # Uncomment the line bellow and comment the line above
                 # to evaluate the performance of the average map
-                # pred = np.reshape(np.array(PA_average), (-1, 1))
-                # pred2 = np.reshape(np.array(PA_average), (-1, 1))
+                pred = np.reshape(np.array(PA_average), (-1, 1))
+                pred2 = np.reshape(np.array(PA_average), (-1, 1))
 
                 measured = np.reshape(np.array(a['Measured_values'][j]),
                                       (-1, 1))
@@ -303,7 +295,7 @@ for m in range(len(models)):
 
                 # Computing delta theta, angle between vector defined pred i
                 # versus pred j
-                theta_pred = smallest_angle(pred, pred2)
+                theta_pred = np.corrcoef(np.reshape(pred[mask>1],(-1)), np.reshape(pred2[mask>1],(-1)))[0,1]
                 theta_pred_across_temp.append(theta_pred)
 
         # theta_acrosssubj.append(np.mean(theta_across_temp,axis=0))
@@ -311,34 +303,12 @@ for m in range(len(models)):
         theta_acrosssubj_pred.append(np.mean(theta_pred_across_temp, axis=0))
 
     # mean_theta_acrosssubj=np.mean(np.array(theta_acrosssubj),axis=0)
-    mean_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
+    corr_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
     # mean_theta_acrosssubj_emp=np.mean(np.array(theta_acrosssubj_emp),axis=0)
-    mean_theta_acrosssubj_pred = np.mean(np.array(theta_acrosssubj_pred),
+    corr_theta_acrosssubj_pred = np.mean(np.array(theta_acrosssubj_pred),
                                          axis=0)
-
-    mean_delta_2.append(mean_theta_withinsubj[mask > 1])
-    mean_across_2.append(mean_theta_acrosssubj_pred[mask > 1])
-
-mean_delta_2 = np.reshape(np.array(mean_delta_2), (1, -1))
-mean_across_2 = np.reshape(np.array(mean_across_2), (1, -1))
-
-
-# np.savez('../../ErrorPerParticipant_EarlyVisualCortex_model.npz',list=np.reshape(theta_withinsubj,(10,-1))[:,mask>1])
-# np.savez('../../ErrorPerParticipant_EarlyVisualCortex_averageMap.npz',list=np.reshape(theta_withinsubj,(10,-1))[:,mask>1])
-
-
-mean_all = np.mean(np.concatenate((mean_delta[0], mean_delta_2[0])))
-std_all = np.std(np.concatenate((mean_delta[0], mean_delta_2[0])))
-
-# print(len(np.concatenate((mean_delta[0],mean_delta_2[0]))))
-print(
-    f'Mean error and std in early visual cortex (V1, V2, V3) including the '
-    f'fovea: {np.mean(mean_delta_2[0])}, {np.std(mean_delta_2[0])}')
-print(
-    f'Mean error and std in all visual areas (Wang et al., 2015) including '
-    f'the '
-    f'fovea: {mean_all}, {std_all}')
-
+print(corr_theta_acrosssubj_pred)
+print(corr_theta_withinsubj)
 
 
 

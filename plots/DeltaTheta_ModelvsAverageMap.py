@@ -19,14 +19,15 @@ error_higherOrder_average = np.reshape(np.array(
 
 # Reformatting data from early visual cortex
 data_earlyVisualCortex = np.concatenate([
-    [np.mean(error_EarlyVisualCortex_model, axis=1),
-     np.shape(error_EarlyVisualCortex_model)[0] * ['Model'],
-     np.shape(error_EarlyVisualCortex_model)[0] * [
-         'Early Visual Cortex']],
     [np.mean(error_EarlyVisualCortex_average, axis=1),
      np.shape(error_EarlyVisualCortex_average)[0] * [
          'Average Map'],
      np.shape(error_EarlyVisualCortex_average)[0] * [
+         'Early Visual Cortex']
+     ],
+    [np.mean(error_EarlyVisualCortex_model, axis=1),
+     np.shape(error_EarlyVisualCortex_model)[0] * ['Model'],
+     np.shape(error_EarlyVisualCortex_model)[0] * [
          'Early Visual Cortex']]],
     axis=1)
 
@@ -35,17 +36,20 @@ df_1 = pd.DataFrame(
     data=data_earlyVisualCortex.T)
 df_1['Mean Error'] = df_1['Mean Error'].astype(float)
 
+print(df_1)
+
 # Reformatting data from higher order visual areas
 data_HigherOrder = np.concatenate([
-    [np.mean(error_higherOrder_model, axis=1),
-     np.shape(error_higherOrder_model)[0] * ['Model'],
-     np.shape(error_higherOrder_model)[0] * [
-         'Higher Order Visual Areas']],
     [np.mean(error_higherOrder_average, axis=1),
      np.shape(error_higherOrder_average)[0] * [
          'Average Map'],
      np.shape(error_higherOrder_average)[0] * [
-         'Higher Order Visual Areas']]],
+         'Higher Order Visual Areas']],
+    [np.mean(error_higherOrder_model, axis=1),
+     np.shape(error_higherOrder_model)[0] * ['Model'],
+     np.shape(error_higherOrder_model)[0] * [
+         'Higher Order Visual Areas']]
+],
     axis=1)
 
 df_2 = pd.DataFrame(
@@ -64,15 +68,27 @@ for i in range(2):
     plt.title(title[i])
 
     # Prediction error for the same participants
-
-    idx0 = 0
-    idx1 = 1
-    locs1 = ax.get_children()[idx0].get_offsets()
-    locs2 = ax.get_children()[idx1].get_offsets()
-
-    for i in range(locs1.shape[0]):
-        x = [locs1[i, 0], locs2[i, 0]]
-        y = [locs1[i, 1], locs2[i, 1]]
+    for j in range(10):
+        x = [eval('df_' + str(i + 1))['Prediction'][j],
+             eval('df_' + str(i + 1))['Prediction'][j + 10]]
+        y = [eval('df_' + str(i + 1))['Mean Error'][j],
+             eval('df_' + str(i + 1))['Mean Error'][j + 10]]
         ax.plot(x, y, color='black', alpha=0.1)
 
 plt.show()
+
+# Plotting the difference
+# data = pd.DataFrame({'DiffEarly': np.mean(
+#     error_EarlyVisualCortex_average,
+#     axis=1) - np.mean(error_EarlyVisualCortex_model,
+#                       axis=1),
+#                      'DiffHigher': np.mean(error_higherOrder_average,
+#                                            axis=1) - np.mean(
+#                          error_higherOrder_model, axis=1)})
+#
+# data = pd.melt(data)
+# sns.swarmplot(x='variable', y='value',
+#               data=data,
+#               palette='colorblind')
+# plt.show()
+#
