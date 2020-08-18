@@ -12,26 +12,27 @@ from functions.least_difference_angles import smallest_angle
 visual_areas = [['hV4'], ['VO1', 'VO2', 'PHC1', 'PHC2'], ['V3a', 'V3b'],
                 ['LO1', 'LO2', 'TO1', 'TO2'],
                 ['IPS0', 'IPS1', 'IPS2', 'IPS3', 'IPS4', 'IPS5', 'SPL1']]
-number_layers = ['9', '10', '11', '12', '14', '16', '18', '20']
+number_layers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                 '14', '16', '18', '20']
 
 sns.set_style("whitegrid")
 for k in range(len(visual_areas)):
-    mean_delta = np.zeros((5, 8))
-    mean_across = np.zeros((5, 8))
+    mean_delta = np.zeros((5, 16))
+    mean_across = np.zeros((5, 16))
 
     l = 0
     while l < 5:
         mean_delta_temp = []
         mean_across_temp = []
 
-        for m in range(8):
-            if m < 4:
+        for m in range(16):
+            if m < 12:
                 a = torch.load(
-                    '/home/uqfribe1/Desktop/Wiener/July/output_RH'
-                    '/model4_nothresh_RH_' + str(
-                        m + 9) +
+                    '/home/uqfribe1/Desktop/Wiener/July/output'
+                    '/model4_nothresh_rotated_' + str(
+                        m + 1) +
                     'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
-                        l + 1) + '_output_epoch100.pt', map_location='cpu')
+                        l + 1) + '_output_epoch200.pt', map_location='cpu')
 
                 theta_withinsubj = []
                 theta_acrosssubj = []
@@ -44,12 +45,12 @@ for k in range(len(visual_areas)):
                 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
                     label_primary_visual_areas)
                 ROI1 = np.zeros((32492, 1))
-                ROI1[final_mask_R == 1] = 1
+                ROI1[final_mask_L == 1] = 1
 
                 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi2(
                     visual_areas[k])
                 primary_visual_areas = np.zeros((32492, 1))
-                primary_visual_areas[final_mask_R == 1] = 1
+                primary_visual_areas[final_mask_L == 1] = 1
 
                 mask = ROI1 + primary_visual_areas
                 mask = mask[ROI1 == 1]
@@ -171,10 +172,10 @@ for k in range(len(visual_areas)):
 
             else:
                 a = torch.load(
-                    '/home/uqfribe1/Desktop/Wiener/July/output_RH'
-                    '/model4_nothresh_RH_' + str(
+                    '/home/uqfribe1/Desktop/Wiener/July/output'
+                    '/model4_nothresh_rotated_' + str(
                         12 + (
-                                    m - 4) * 2) +
+                                m - 12) * 2) +
                     'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
                         l + 1) + '_output_epoch200.pt', map_location='cpu')
 
@@ -189,12 +190,12 @@ for k in range(len(visual_areas)):
                 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
                     label_primary_visual_areas)
                 ROI1 = np.zeros((32492, 1))
-                ROI1[final_mask_R == 1] = 1
+                ROI1[final_mask_L == 1] = 1
 
                 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi2(
                     visual_areas[k])
                 primary_visual_areas = np.zeros((32492, 1))
-                primary_visual_areas[final_mask_R == 1] = 1
+                primary_visual_areas[final_mask_L == 1] = 1
 
                 mask = ROI1 + primary_visual_areas
                 mask = mask[ROI1 == 1]
@@ -319,46 +320,42 @@ for k in range(len(visual_areas)):
         l += 1
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    data = np.concatenate([[mean_across[0], number_layers,
-                            len(number_layers) * ['Between predicted maps']],
-                           [mean_across[1], number_layers,
-                            len(number_layers) * ['Between predicted maps']],
-                           [mean_across[2], number_layers,
-                            len(number_layers) * ['Between predicted maps']],
-                           [mean_across[3], number_layers,
-                            len(number_layers) * ['Between predicted maps']],
-                           [mean_across[4], number_layers,
-                            len(number_layers) * ['Between predicted maps']],
-                           [mean_delta[0], number_layers,
-                            len(number_layers) * [
-                                'Between predicted map and ground truth']],
+    data = np.concatenate([[mean_delta[0], number_layers,
+                            len(number_layers) * ['Error']],
                            [mean_delta[1], number_layers,
-                            len(number_layers) * [
-                                'Between predicted map and ground truth']],
+                            len(number_layers) * ['Error']],
                            [mean_delta[2], number_layers,
-                            len(number_layers) * [
-                                'Between predicted map and ground truth']],
+                            len(number_layers) * ['Error']],
                            [mean_delta[3], number_layers,
-                            len(number_layers) * [
-                                'Between predicted map and ground truth']],
+                            len(number_layers) * ['Error']],
                            [mean_delta[4], number_layers,
-                            len(number_layers) * [
-                                'Between predicted map and ground truth']]],
-                          axis=1)
+                            len(number_layers) * ['Error']],
+                           [mean_across[0], number_layers,
+                            len(number_layers) * ['Individual variability']],
+                           [mean_across[1], number_layers,
+                            len(number_layers) * ['Individual variability']],
+                           [mean_across[2], number_layers,
+                            len(number_layers) * ['Individual variability']],
+                           [mean_across[3], number_layers,
+                            len(number_layers) * ['Individual variability']],
+                           [mean_across[4], number_layers,
+                            len(number_layers) * ['Individual variability']]
+                           ], axis=1)
     df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'Layers', 'label'],
                       data=data.T)
     df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
     palette = ['dimgray', 'lightgray']
     ax = sns.boxplot(y='$\Delta$$\t\Theta$', x='Layers', order=number_layers,
                      hue='label', data=df, palette=palette)
-    ax.set_title('Cluster ' + str(k + 1))
+    title = ['V4', 'Ventral', 'V3a/b', 'Lateral', 'Parietal']
+    ax.set_title(title[k])
     legend = plt.legend()
     legend.remove()
 
     plt.ylim([0, 70])
     # x = sns.swarmplot(data=mean_delta,color='gray')
 
-    plt.savefig('PAdif_RH_cluster' + str(k + 1) + '.svg')
+    # plt.savefig('PAdif_cluster' + str(k + 1) + '.svg')
     plt.show()
 
 # Primary visual cortex
@@ -372,22 +369,22 @@ label = ['Early visual cortex']
 
 fig = plt.figure()
 
-mean_delta_2 = np.zeros((5, 8))
-mean_across_2 = np.zeros((5, 8))
+mean_delta_2 = np.zeros((5, 16))
+mean_across_2 = np.zeros((5, 16))
 
 l = 0
 while l < 5:
     mean_delta_temp = []
     mean_across_temp = []
 
-    for m in range(8):
-        if m < 4:
+    for m in range(16):
+        if m < 12:
             a = torch.load(
-                '/home/uqfribe1/Desktop/Wiener/July/output_RH'
-                '/model4_nothresh_RH_' + str(
-                    m + 9) +
+                '/home/uqfribe1/Desktop/Wiener/July/output'
+                '/model4_nothresh_rotated_' + str(
+                    m + 1) +
                 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
-                    l + 1) + '_output_epoch100.pt', map_location='cpu')
+                    l + 1) + '_output_epoch200.pt', map_location='cpu')
 
             theta_withinsubj = []
             # theta_withinsubj_shuffled=[]
@@ -401,7 +398,7 @@ while l < 5:
             final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
                 label_primary_visual_areas)
             ROI1 = np.zeros((32492, 1))
-            ROI1[final_mask_R == 1] = 1
+            ROI1[final_mask_L == 1] = 1
             mask = ROI1 + np.reshape(primary_visual_areas, (32492, 1))
             mask = mask[ROI1 == 1]
 
@@ -536,10 +533,10 @@ while l < 5:
         else:
 
             a = torch.load(
-                '/home/uqfribe1/Desktop/Wiener/July/output_RH'
-                '/model4_nothresh_RH_' + str(
+                '/home/uqfribe1/Desktop/Wiener/July/output'
+                '/model4_nothresh_rotated_' + str(
                     12 + (
-                                m - 4) * 2) +
+                            m - 12) * 2) +
                 'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
                     l + 1) + '_output_epoch200.pt', map_location='cpu')
 
@@ -555,7 +552,7 @@ while l < 5:
             final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
                 label_primary_visual_areas)
             ROI1 = np.zeros((32492, 1))
-            ROI1[final_mask_R == 1] = 1
+            ROI1[final_mask_L == 1] = 1
             mask = ROI1 + np.reshape(primary_visual_areas, (32492, 1))
             mask = mask[ROI1 == 1]
 
@@ -676,7 +673,8 @@ while l < 5:
 
             mean_theta_acrosssubj = np.mean(np.array(theta_acrosssubj), axis=0)
             mean_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
-            # mean_theta_withinsubj_shuffled=np.mean(np.array(theta_withinsubj_shuffled),axis=0)
+            # mean_theta_withinsubj_shuffled=np.mean(np.array(
+            # theta_withinsubj_shuffled),axis=0)
             mean_theta_acrosssubj_emp = np.mean(np.array(theta_acrosssubj_emp),
                                                 axis=0)
             mean_theta_acrosssubj_pred = np.mean(
@@ -690,26 +688,22 @@ while l < 5:
     l += 1
 
 ax = fig.add_subplot(1, 1, 1)
-data = np.concatenate([[mean_across_2[0], number_layers,
-                        len(number_layers) * ['Between predicted maps']],
-                       [mean_across_2[1], number_layers,
-                        len(number_layers) * ['Between predicted maps']],
-                       [mean_across_2[2], number_layers,
-                        len(number_layers) * ['Between predicted maps']],
-                       [mean_across_2[3], number_layers,
-                        len(number_layers) * ['Between predicted maps']],
-                       [mean_across_2[4], number_layers,
-                        len(number_layers) * ['Between predicted maps']],
-                       [mean_delta_2[0], number_layers, len(number_layers) * [
-                           'Between predicted map and ground truth']],
-                       [mean_delta_2[1], number_layers, len(number_layers) * [
-                           'Between predicted map and ground truth']],
-                       [mean_delta_2[2], number_layers, len(number_layers) * [
-                           'Between predicted map and ground truth']],
-                       [mean_delta_2[3], number_layers, len(number_layers) * [
-                           'Between predicted map and ground truth']],
-                       [mean_delta_2[4], number_layers, len(number_layers) * [
-                           'Between predicted map and ground truth']]], axis=1)
+data = np.concatenate(
+    [[mean_delta_2[0], number_layers, len(number_layers) * ['Error']],
+     [mean_delta_2[1], number_layers, len(number_layers) * ['Error']],
+     [mean_delta_2[2], number_layers, len(number_layers) * ['Error']],
+     [mean_delta_2[3], number_layers, len(number_layers) * ['Error']],
+     [mean_delta_2[4], number_layers, len(number_layers) * ['Error']],
+     [mean_across_2[0], number_layers,
+      len(number_layers) * ['Individual variability']],
+     [mean_across_2[1], number_layers,
+      len(number_layers) * ['Individual variability']],
+     [mean_across_2[2], number_layers,
+      len(number_layers) * ['Individual variability']],
+     [mean_across_2[3], number_layers,
+      len(number_layers) * ['Individual variability']],
+     [mean_across_2[4], number_layers,
+      len(number_layers) * ['Individual variability']]], axis=1)
 df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'Layers', 'label'],
                   data=data.T)
 df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
@@ -719,5 +713,5 @@ ax = sns.boxplot(y='$\Delta$$\t\Theta$', x='Layers', order=number_layers,
 ax.set_title('' + label[0])
 plt.legend(loc='upper right')
 plt.ylim([0, 70])
-plt.savefig('PAdif_RH_EarlyVisualArea.svg')
+# plt.savefig('PAdif_EarlyVisualArea.svg')
 plt.show()
