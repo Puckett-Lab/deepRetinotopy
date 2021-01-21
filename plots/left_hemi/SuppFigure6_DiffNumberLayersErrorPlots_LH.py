@@ -24,6 +24,7 @@ ROI1[final_mask_L == 1] = 1
 
 
 sns.set_style("whitegrid")
+# Higher order visual areas
 for k in range(len(clusters)):
     mean_delta = np.zeros((5, 16))
     mean_across = np.zeros((5, 16))
@@ -57,13 +58,12 @@ for k in range(len(clusters)):
                 # Compute difference between predicted and empirical maps
                 # across subjs
                 for j in range(len(prediction['Predicted_values'])):
-                    theta_across_temp = []
                     theta_pred_across_temp = []
-                    theta_emp_across_temp = []
 
                     for i in range(len(prediction['Predicted_values'])):
-                        # Compute angle between predicted and empirical
-                        # predictions within subj
+                        # Compute the difference between predicted and
+                        # empirical angles
+                        # within subj - error
                         if i == j:
                             # Loading predicted values
                             pred = np.reshape(
@@ -85,16 +85,15 @@ for k in range(len(clusters)):
                             measured[sum] = measured[sum] + 180
                             measured = np.array(measured) * (np.pi / 180)
 
-
                             # Computing delta theta, difference between
-                            # defined pred and empirical maps of the
-                            # same subj
+                            # predicted and
+                            # empirical angles
                             theta = smallest_angle(pred, measured)
                             theta_withinsubj.append(theta)
 
                         if i != j:
-                            # Compute angle difference between predicted
-                            # maps
+                            # Compute the difference between predicted maps
+                            # across subj - individual variability
 
                             # Loading predicted values
                             pred = np.reshape(
@@ -117,7 +116,7 @@ for k in range(len(clusters)):
                             pred2 = np.array(pred2) * (np.pi / 180)
 
                             # Computing delta theta, difference between
-                            # defined pred i versus pred j
+                            # predicted maps
                             theta_pred = smallest_angle(pred, pred2)
                             theta_pred_across_temp.append(theta_pred)
 
@@ -155,16 +154,10 @@ for k in range(len(clusters)):
                 mask = ROI1 + cluster
                 mask = mask[ROI1 == 1]
 
-                # Compute difference between predicted and empirical maps
-                # across subjs
                 for j in range(len(prediction['Predicted_values'])):
-                    theta_across_temp = []
                     theta_pred_across_temp = []
-                    theta_emp_across_temp = []
 
                     for i in range(len(prediction['Predicted_values'])):
-                        # Compute angle between predicted and empirical
-                        # predictions within subj
                         if i == j:
                             # Loading predicted values
                             pred = np.reshape(
@@ -189,15 +182,11 @@ for k in range(len(clusters)):
                             measured = np.array(measured) * (np.pi / 180)
 
                             # Computing delta theta, difference between
-                            # defined pred and empirical maps of the
-                            # same subj
+                            # predicted and empirical angles
                             theta = smallest_angle(pred, measured)
                             theta_withinsubj.append(theta)
 
                         if i != j:
-                            # Compute angle difference between predicted
-                            # maps
-
                             # Loading predicted values
                             pred = np.reshape(
                                 np.array(prediction['Predicted_values'][i]),
@@ -221,7 +210,7 @@ for k in range(len(clusters)):
                             pred2 = np.array(pred2) * (np.pi / 180)
 
                             # Computing delta theta, difference between
-                            # defined pred i versus pred j
+                            # predicted maps
                             theta_pred = smallest_angle(pred, pred2)
                             theta_pred_across_temp.append(theta_pred)
 
@@ -276,11 +265,8 @@ for k in range(len(clusters)):
     ax.set_title(title[k])
     legend = plt.legend()
     legend.remove()
-
     plt.ylim([0, 70])
-    # x = sns.swarmplot(data=mean_delta,color='gray')
-
-    # plt.savefig('PAdif_cluster' + str(k + 1) + '.svg')
+    # plt.savefig('./../output/PAdif_cluster' + str(k + 1) + '_LH.svg')
     plt.show()
 
 
@@ -294,7 +280,6 @@ cluster = np.sum(
      np.reshape(V3, (-1, 1))], axis=0)
 label = ['Early visual cortex']
 
-
 visual_hierarchy = ['ROI']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
                 visual_hierarchy)
@@ -302,7 +287,6 @@ ROI1 = np.zeros((32492, 1))
 ROI1[final_mask_L == 1] = 1
 mask = ROI1 + np.reshape(cluster, (32492, 1))
 mask = mask[ROI1 == 1]
-
 
 mean_delta_2 = np.zeros((5, 16))
 mean_across_2 = np.zeros((5, 16))
@@ -326,16 +310,10 @@ while l < 5:
             theta_withinsubj = []
             theta_acrosssubj_pred = []
 
-            # Compute difference between predicted and empirical maps
-            # across subjs
             for j in range(len(prediction['Predicted_values'])):
-                theta_across_temp = []
                 theta_pred_across_temp = []
-                theta_emp_across_temp = []
 
                 for i in range(len(prediction['Predicted_values'])):
-                    # Compute angle between predicted and empirical
-                    # predictions within subj
                     if i == j:
                         # Loading predicted values
                         pred = np.reshape(
@@ -359,16 +337,11 @@ while l < 5:
                         measured[sum] = measured[sum] + 180
                         measured = np.array(measured) * (np.pi / 180)
 
-                        # Computing delta theta, difference between
-                        # defined pred and empirical maps of the
-                        # same subj
+                        # delta theta
                         theta = smallest_angle(pred, measured)
                         theta_withinsubj.append(theta)
 
                     if i != j:
-                        # Compute angle difference between predicted
-                        # maps
-
                         # Loading predicted values
                         pred = np.reshape(
                             np.array(prediction['Predicted_values'][i]),
@@ -391,14 +364,12 @@ while l < 5:
                         pred2[sum] = pred2[sum] + 180
                         pred2 = np.array(pred2) * (np.pi / 180)
 
-                        # Computing delta theta, difference between
-                        # defined pred i versus pred j
+                        # delta theta
                         theta_pred = smallest_angle(pred, pred2)
                         theta_pred_across_temp.append(theta_pred)
 
                 theta_acrosssubj_pred.append(
                     np.mean(theta_pred_across_temp, axis=0))
-
 
             mean_theta_withinsubj = np.mean(np.array(theta_withinsubj),
                                             axis=0)
@@ -424,16 +395,10 @@ while l < 5:
             theta_withinsubj = []
             theta_acrosssubj_pred = []
 
-            # Compute difference between predicted and empirical maps
-            # across subjs
             for j in range(len(prediction['Predicted_values'])):
-                theta_across_temp = []
                 theta_pred_across_temp = []
-                theta_emp_across_temp = []
 
                 for i in range(len(prediction['Predicted_values'])):
-                    # Compute angle between predicted and empirical
-                    # predictions within subj
                     if i == j:
                         # Loading predicted values
                         pred = np.reshape(
@@ -457,16 +422,11 @@ while l < 5:
                         measured[sum] = measured[sum] + 180
                         measured = np.array(measured) * (np.pi / 180)
 
-                        # Computing delta theta, difference between
-                        # defined pred and empirical maps of the
-                        # same subj
+                        # delta theta
                         theta = smallest_angle(pred, measured)
                         theta_withinsubj.append(theta)
 
                     if i != j:
-                        # Compute angle difference between predicted
-                        # maps
-
                         # Loading predicted values
                         pred = np.reshape(
                             np.array(prediction['Predicted_values'][i]),
@@ -489,14 +449,12 @@ while l < 5:
                         pred2[sum] = pred2[sum] + 180
                         pred2 = np.array(pred2) * (np.pi / 180)
 
-                        # Computing delta theta, difference between
-                        # defined pred i versus pred j
+                        # delta theta
                         theta_pred = smallest_angle(pred, pred2)
                         theta_pred_across_temp.append(theta_pred)
 
                 theta_acrosssubj_pred.append(
                     np.mean(theta_pred_across_temp, axis=0))
-
 
             mean_theta_withinsubj = np.mean(np.array(theta_withinsubj),
                                             axis=0)
@@ -538,5 +496,5 @@ ax = sns.boxplot(y='$\Delta$$\t\Theta$', x='Layers', order=number_layers,
 ax.set_title('' + label[0])
 plt.legend(loc='upper right')
 plt.ylim([0, 70])
-# plt.savefig('PAdif_EarlyVisualArea.svg')
+# plt.savefig('./../output/PAdif_EarlyVisualArea_LH.svg')
 plt.show()
