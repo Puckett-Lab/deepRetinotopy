@@ -15,8 +15,8 @@ clusters = [['hV4'], ['VO1', 'VO2', 'PHC1', 'PHC2'], ['V3a', 'V3b'],
                 ['IPS0', 'IPS1', 'IPS2', 'IPS3', 'IPS4', 'IPS5', 'SPL1']]
 clusters_title = ['V4', 'Ventral', 'V3a/b', 'Lateral', 'Parietal']
 
-models = ['pred', 'shuffled-myelincurv', 'constant', 'constantZero']
-models_name = ['Default', 'Shuffled', 'Constant', 'Zeros']
+models = ['pred', 'rotatedROI','shuffled-myelincurv', 'constant']
+models_name = ['Default', 'Rotated', 'Shuffled', 'Constant']
 
 color = [['darkblue', 'royalblue'], ['steelblue', 'lightskyblue'],
          ['green', 'lightgreen'], ['darkgoldenrod', 'goldenrod'],
@@ -24,13 +24,14 @@ color = [['darkblue', 'royalblue'], ['steelblue', 'lightskyblue'],
 
 sns.set_style("whitegrid")
 fig = plt.figure(figsize=(25, 7))
+# Higher order visual areas
 for k in range(len(clusters)):
-    mean_delta = []
-    mean_across = []
+    mean_delta = [] # error
+    mean_across = [] # individual variability
 
     for m in range(len(models)):
         predictions = torch.load(
-            '/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results'
+            './../../testset_results/left_hemi'
             '/testset-' +
             models[m] + '_Model3_PA_LH.pt', map_location='cpu')
 
@@ -51,16 +52,15 @@ for k in range(len(clusters)):
         mask = ROI1 + cluster
         mask = mask[ROI1 == 1]
 
-        # Compute difference between predicted and empirical maps
-        # across subjs
+        # Compute angle between predicted and empirical predictions across subj
         for j in range(len(predictions['Predicted_values'])):
             theta_across_temp = []
             theta_pred_across_temp = []
             theta_emp_across_temp = []
 
             for i in range(len(predictions['Predicted_values'])):
-                # Compute angle between predicted and empirical
-                # predictions within subj
+                # Compute the difference between predicted and empirical angles
+                # within subj - error
                 if i == j:
                     # Loading predicted values
                     pred = np.reshape(np.array(predictions['Predicted_values'][i]),
@@ -82,15 +82,14 @@ for k in range(len(clusters)):
                     measured[sum] = measured[sum] + 180
                     measured = np.array(measured) * (np.pi / 180)
 
-                    # Computing delta theta, difference between
-                    # defined pred and empirical maps of the
-                    # same subj
+                    # Computing delta theta, difference between predicted and
+                    # empirical angles
                     theta = smallest_angle(pred, measured)
                     theta_withinsubj.append(theta)
 
                 if i != j:
-                    # Compute angle difference between predicted
-                    # maps
+                    # Compute the difference between predicted maps
+                    # across subj - individual variability
 
                     # Loading predicted values
                     pred = np.reshape(np.array(predictions['Predicted_values'][i]),
@@ -112,8 +111,7 @@ for k in range(len(clusters)):
                     pred2[sum] = pred2[sum] + 180
                     pred2 = np.array(pred2) * (np.pi / 180)
 
-                    # Computing delta theta, difference between
-                    # defined pred i versus pred j
+                    # Computing delta theta, difference between predicted maps
                     theta_pred = smallest_angle(pred, pred2)
                     theta_pred_across_temp.append(theta_pred)
 
@@ -127,9 +125,10 @@ for k in range(len(clusters)):
         mean_delta.append(mean_theta_withinsubj[mask > 1])
         mean_across.append(mean_theta_acrosssubj_pred[mask > 1])
 
-    mean_delta = np.reshape(np.array(mean_delta), (4, -1))
-    mean_across = np.reshape(np.array(mean_across), (4, -1))
+    mean_delta = np.reshape(np.array(mean_delta), (len(models), -1))
+    mean_across = np.reshape(np.array(mean_across), (len(models), -1))
 
+    # Figure setting
     ax = fig.add_subplot(1, 6, k + 2)
     data = np.concatenate([[mean_delta[0],
                             len(mean_across[0]) * [models_name[0]],
@@ -176,9 +175,9 @@ for k in range(len(clusters)):
     legend = plt.legend()
     legend.remove()
 
-    plt.ylim([0, 80])
+    plt.ylim([0, 100])
     ax.set_xlabel('')
-    # plt.savefig('PAdif_cluster'+str(k+1)+'.svg')
+    # plt.savefig('./../output/PAdif_cluster'+str(k+1)+'.svg')
 
 
 
@@ -194,16 +193,13 @@ label = ['Early visual cortex']
 mean_delta_2 = []
 mean_across_2 = []
 
-theta_within_subj = []
 for m in range(len(models)):
     predictions = torch.load(
-        '/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset-' +
+        './../../testset_results/left_hemi/testset-' +
         models[m] + '_Model3_PA_LH.pt', map_location='cpu')
 
     theta_withinsubj = []
-    theta_acrosssubj = []
     theta_acrosssubj_pred = []
-    theta_acrosssubj_emp = []
 
     visual_hierarchy = ['ROI']
     final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
@@ -213,16 +209,15 @@ for m in range(len(models)):
     mask = ROI1 + np.reshape(cluster, (32492, 1))
     mask = mask[ROI1 == 1]
 
-    # Compute difference between predicted and empirical maps
-    # across subjs
+    # Compute angle between predicted and empirical predictions across subj
     for j in range(len(predictions['Predicted_values'])):
         theta_across_temp = []
         theta_pred_across_temp = []
         theta_emp_across_temp = []
 
         for i in range(len(predictions['Predicted_values'])):
-            # Compute angle between predicted and empirical
-            # predictions within subj
+            # Compute the difference between predicted and empirical angles
+            # within subj - error
             if i == j:
                 # Loading predicted values
                 pred = np.reshape(np.array(predictions['Predicted_values'][i]),
@@ -245,15 +240,14 @@ for m in range(len(models)):
                 measured[sum] = measured[sum] + 180
                 measured = np.array(measured) * (np.pi / 180)
 
-                # Computing delta theta, difference between
-                # defined pred and empirical maps of the
-                # same subj
+                # Computing delta theta, difference between predicted and
+                # empirical angles
                 theta = smallest_angle(pred, measured)
                 theta_withinsubj.append(theta)
 
             if i != j:
-                # Compute angle difference between predicted
-                # maps
+                # Compute the difference between predicted maps
+                # across subj - individual variability
 
                 # Loading predicted values
                 pred = np.reshape(np.array(predictions['Predicted_values'][i]),
@@ -276,8 +270,7 @@ for m in range(len(models)):
                 pred2[sum] = pred2[sum] + 180
                 pred2 = np.array(pred2) * (np.pi / 180)
 
-                # Computing delta theta, difference between
-                # defined pred i versus pred j
+                # Computing delta theta, difference between predicted maps
                 theta_pred = smallest_angle(pred, pred2)
                 theta_pred_across_temp.append(theta_pred)
 
@@ -291,8 +284,8 @@ for m in range(len(models)):
     mean_delta_2.append(mean_theta_withinsubj[mask > 1])
     mean_across_2.append(mean_theta_acrosssubj_pred[mask > 1])
 
-mean_delta_2 = np.reshape(np.array(mean_delta_2), (4, -1))
-mean_across_2 = np.reshape(np.array(mean_across_2), (4, -1))
+mean_delta_2 = np.reshape(np.array(mean_delta_2), (len(models), -1))
+mean_across_2 = np.reshape(np.array(mean_across_2), (len(models), -1))
 
 ax = fig.add_subplot(1, 6, 1)
 data = np.concatenate([[mean_delta_2[0],
@@ -332,6 +325,6 @@ ax = sns.pointplot(y='$\Delta$$\t\Theta$', x='Input', order=models_name,
 ax.set_title('Early visual cortex ')
 legend = plt.legend()
 ax.set_xlabel('')
-plt.ylim([0, 80])
-# plt.savefig('ModelEval_AllClusters', format="pdf")
+plt.ylim([0, 100])
+# plt.savefig('./../output/ModelEval_AllClusters.pdf', format="pdf")
 plt.show()

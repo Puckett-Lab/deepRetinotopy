@@ -88,12 +88,6 @@ for m in range(len(models)):
                                   (-1, 1))
                 pred2 = np.reshape(
                     np.array(predictions['Predicted_values'][j]), (-1, 1))
-                measured = np.reshape(
-                    np.array(predictions['Measured_values'][j]),
-                    (-1, 1))
-                measured2 = np.reshape(
-                    np.array(predictions['Measured_values'][i]),
-                    (-1, 1))
 
                 # # Uncomment for comparison with predictions based on
                 # # average map
@@ -113,18 +107,6 @@ for m in range(len(models)):
                 pred2[minus] = pred2[minus] - 180
                 pred2[sum] = pred2[sum] + 180
                 pred2 = np.array(pred2) * (np.pi / 180)
-
-                minus = measured > 180
-                sum = measured < 180
-                measured[minus] = measured[minus] - 180
-                measured[sum] = measured[sum] + 180
-                measured = np.array(measured) * (np.pi / 180)
-
-                minus = measured2 > 180
-                sum = measured2 < 180
-                measured2[minus] = measured2[minus] - 180
-                measured2[sum] = measured2[sum] + 180
-                measured2 = np.array(measured2) * (np.pi / 180)
 
                 # Computing delta theta, difference between predicted maps
                 theta_pred = smallest_angle(pred, pred2)
