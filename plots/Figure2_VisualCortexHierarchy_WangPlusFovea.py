@@ -7,11 +7,10 @@ from functions.def_ROIs_WangParcels import roi
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from nilearn import plotting
 
-path = '/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
+path = './../data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
 background_L = np.reshape(curv['x942658_curvature'][0][0][0:32492], (-1))
 background_R = np.reshape(curv['x942658_curvature'][0][0][32492:], (-1))
-# background_R[background_R>1]=1 #outlier
 threshold = 1
 
 nocurv = np.isnan(background_L)
@@ -83,49 +82,8 @@ fair_pink = np.array([235 / 255, 206 / 255, 229 / 255, 1])
 newcolors[-1] = fair_pink
 newcmp = ListedColormap(newcolors, name='VisualAreas')
 
-# visual_areas=np.concatenate((np.reshape(visual_cortex[:,2],(-1,1)),
-# np.reshape(visual_cortex[:,5],(-1,1)),np.reshape(visual_cortex[:,8],(-1,
-# 1))),axis=1)
-# visual_areas=np.sum(visual_areas,axis=1)
-#
-#
 
-# plotting.plot_surf_roi(surf_mesh=osp.join(osp.dirname(osp.realpath(
-# __file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk
-# /S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k
-# /S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),roi_map=np.reshape(
-# visual_areas_L[0:32492],(-1)),hemi='left',bg_map=background_L,cmap=newcmp,
-# symmetric_cbar=False,vmax=21,view='medial',
-# output_file='L_visualareas_sphere.svg')
-# plotting.show()
-#
-# plotting.plot_surf_roi(surf_mesh=osp.join(osp.dirname(osp.realpath(
-# __file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk
-# /S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k
-# /S1200_7T_Retinotopy181.R.sphere.32k_fs_LR.surf.gii'),roi_map=np.reshape(
-# visual_areas_R[0:32492],(-1)),hemi='right',bg_map=background_R,
-# cmap=newcmp,symmetric_cbar=False,vmax=21,view='medial',
-# output_file='R_visualareas_sphere.svg')
-# plotting.show()
-#
-# plotting.plot_surf_roi(surf_mesh=osp.join(osp.dirname(osp.realpath(
-# __file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk
-# /S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k
-# /S1200_7T_Retinotopy181.L.midthickness_MSMAll.32k_fs_LR.surf.gii'),
-# roi_map=np.reshape(visual_areas_L[0:32492],(-1)),hemi='left',
-# bg_map=background_L,cmap=newcmp,symmetric_cbar=False,vmax=21,
-# view='posterior',output_file='L_visualareas_posterior.svg')
-# plotting.show()
-#
-# plotting.plot_surf_roi(surf_mesh=osp.join(osp.dirname(osp.realpath(
-# __file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk
-# /S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k
-# /S1200_7T_Retinotopy181.R.midthickness_MSMAll.32k_fs_LR.surf.gii'),
-# roi_map=np.reshape(visual_areas_R[0:32492],(-1)),hemi='right',
-# bg_map=background_R,cmap=newcmp,symmetric_cbar=False,vmax=21,
-# view='posterior',output_file='R_visualareas_posterior.svg')
-# plotting.show()
-
+# # Posterior views
 plotting.plot_surf_roi(
     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '..',
                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'
@@ -134,27 +92,65 @@ plotting.plot_surf_roi(
                        '.32k_fs_LR.surf.gii'),
     roi_map=np.reshape(visual_areas_L[0:32492], (-1)), hemi='left',
     bg_map=background_L, cmap=newcmp, symmetric_cbar=False, vmax=21,
-    view='lateral', output_file='L_visualareas_lateral.svg')
+    view='posterior', output_file='L_visualareas_posterior.svg')
 plotting.show()
-print(np.sum(visual_areas_L[0:32492] > 0))
 
-plotting.plot_surf_roi(
+#
+# plotting.plot_surf_roi(surf_mesh=osp.join(osp.dirname(osp.realpath(
+#     __file__)), '..',
+#     'data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181'
+#     '/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.R'
+#     '.midthickness_MSMAll.32k_fs_LR.surf.gii'),
+#     roi_map=np.reshape(visual_areas_R[0:32492], (-1)), hemi='right',
+#     bg_map=background_R, cmap=newcmp, symmetric_cbar=False, vmax=21,
+#     view='posterior', output_file='R_visualareas_posterior.svg')
+
+
+# # Lateral views
+# plotting.plot_surf_roi(
+#     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '..',
+#                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'
+#                        '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
+#                        '/S1200_7T_Retinotopy181.L.midthickness_MSMAll'
+#                        '.32k_fs_LR.surf.gii'),
+#     roi_map=np.reshape(visual_areas_L[0:32492], (-1)), hemi='left',
+#     bg_map=background_L, cmap=newcmp, symmetric_cbar=False, vmax=21,
+#     view='lateral', output_file='L_visualareas_lateral.svg')
+#
+# plotting.plot_surf_roi(
+#     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '..',
+#                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'
+#                        '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
+#                        '/S1200_7T_Retinotopy181.R.midthickness_MSMAll'
+#                        '.32k_fs_LR.surf.gii'),
+#     roi_map=np.reshape(visual_areas_R[0:32492], (-1)), hemi='right',
+#     bg_map=background_R, cmap=newcmp, symmetric_cbar=False, vmax=21,
+#     view='lateral', output_file='R_visualareas_lateral.svg')
+
+
+# # Sphere plots
+background_L[background_L < 0] = 0
+background_L[background_L > 0] = 1
+
+background_R[background_R < 0] = 0
+background_R[background_R > 0] = 1
+
+view = plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(
+    __file__)), '..',
+    'data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181'
+    '/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.R.sphere.32k_fs_LR'
+    '.surf.gii'),
+    surf_map=np.reshape(visual_areas_R[0:32492], (-1)), bg_map=background_R,
+    cmap=newcmp, black_bg=False, symmetric_cmap=False, threshold=threshold,
+    vmax=22)
+view.open_in_browser()
+
+view = plotting.view_surf(
     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '..',
                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'
                        '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
-                       '/S1200_7T_Retinotopy181.R.midthickness_MSMAll'
-                       '.32k_fs_LR.surf.gii'),
-    roi_map=np.reshape(visual_areas_R[0:32492], (-1)), hemi='right',
-    bg_map=background_R, cmap=newcmp, symmetric_cbar=False, vmax=21,
-    view='lateral', output_file='R_visualareas_lateral.svg')
-print(np.sum(visual_areas_R[0:32492] > 0))
-plotting.show()
-
-#
-# view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(
-# __file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk
-# /S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.R.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(visual_areas_R[0:32492],(-1)),bg_map=background_R,cmap=newcmp,black_bg=False,symmetric_cmap=False,threshold=threshold,vmax=22)
-# view.open_in_browser()
-#
-# view=plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),'..','data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),surf_map=np.reshape(visual_areas_L[0:32492],(-1)),bg_map=background_L,cmap=newcmp,black_bg=False,symmetric_cmap=False,threshold=threshold,vmax=22)
-# view.open_in_browser()
+                       '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
+    surf_map=np.reshape(visual_areas_L[0:32492], (-1)), bg_map=background_L,
+    cmap=newcmp, black_bg=False, symmetric_cmap=False, threshold=threshold,
+    vmax=22)
+view.open_in_browser()
