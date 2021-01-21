@@ -177,7 +177,6 @@ for k in range(len(clusters)):
 
     plt.ylim([0, 100])
     ax.set_xlabel('')
-    # plt.savefig('./../output/PAdif_cluster'+str(k+1)+'.svg')
 
 
 
