@@ -37,8 +37,7 @@ measured = np.zeros((32492, 1))
 
 # Loading the predictions
 predictions = torch.load(
-    '/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset'
-    '-pred_Model4_ecc_RH.pt',
+    './../../testset_results/right_hemi/testset-pred_Model4_ecc_RH.pt',
     map_location='cpu')
 
 subject_index = 0
