@@ -6,9 +6,15 @@ import torch
 from functions.def_ROIs_WangParcelsPlusFovea import roi
 from nilearn import plotting
 
-path = '/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
+subject_index = 7
+
+hcp_id = ['617748', '191336', '572045', '725751', '198653',
+          '601127', '644246', '191841', '680957', '157336']
+
+path = './../../data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
-background = np.reshape(curv['x191841_curvature'][0][0][0:32492], (-1))
+background = np.reshape(
+    curv['x' + hcp_id[subject_index] + '_curvature'][0][0][0:32492], (-1))
 
 threshold = 1  # threshold for the curvature map
 
@@ -31,33 +37,29 @@ measured = np.zeros((32492, 1))
 
 # Loading the predictions
 predictions = torch.load(
-    '/home/uqfribe1/PycharmProjects/deepRetinotopy'
-    '/model4_nothresh_rotated_12layers_smoothL1lossR2_curv_ROI1_k25_batchnorm_dropout010_output_epoch200.pt',
+    './../../testset_results/left_hemi'
+    '/testset-pred_Model3_PA_LH.pt',
     map_location='cpu')
-
-subject_index = 0
 
 pred[final_mask_L == 1] = np.reshape(
     np.array(predictions['Predicted_values'][subject_index]),
     (-1, 1))
 
-# # To generate the mean predicted map, just uncomment the following lines
-# pred_mean = []
-# for i in range(10):
-#     pred_mean.append(np.reshape(np.array(a['Predicted_values'][i]),
-#                                 (-1, 1)))
-# pred[final_mask_L == 1] = np.mean(pred_mean, 0)
-
-
 measured[final_mask_L == 1] = np.reshape(
     np.array(predictions['Measured_values'][subject_index]),
     (-1, 1))
 
-# # To generate the mean empirical map, just uncomment the following lines
+# # To generate the mean predicted and mean empirical maps, just uncomment the
+# # following lines:
+# pred_mean = []
 # measured_mean = []
-# for j in range(10):
-#     measured_mean.append(np.reshape(np.array(a['Measured_values'][j]),
+# for i in range(10):
+#     pred_mean.append(np.reshape(np.array(predictions['Predicted_values'][i]),
+#                                 (-1, 1)))
+#     measured_mean.append(np.reshape(np.array(predictions[
+#     'Measured_values'][i]),
 #                                              (-1, 1)))
+# pred[final_mask_L == 1] = np.mean(pred_mean, 0)
 # measured[final_mask_L == 1] = np.mean(measured_mean, 0)
 
 
@@ -101,35 +103,3 @@ view = plotting.view_surf(
     cmap='gist_rainbow_r', black_bg=False, symmetric_cmap=False,
     threshold=threshold, vmax=361)
 view.open_in_browser()
-
-# # Plotting the curvature and myelin values
-# # Curvature
-# pred[final_mask_L == 1] = np.reshape(
-#     np.array(predictions['Shuffled_curv'][subject_index]),
-#     (-1, 1)) + threshold + 2
-# view = plotting.view_surf(
-#     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),
-#                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'
-#                        '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
-#                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf'
-#                        '.gii'),
-#     surf_map=np.reshape(pred[0:32492], (-1)),
-#     cmap='gist_gray', black_bg=False, symmetric_cmap=False,
-#     vmin=1, vmax=3.5,
-#     threshold=threshold)
-# view.open_in_browser()
-#
-# # # Myelin
-# pred[final_mask_L == 1] = np.reshape(
-#     np.array(predictions['Shuffled_myelin'][subject_index]),
-#     (-1, 1)) + threshold
-# view = plotting.view_surf(
-#     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)),
-#                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'
-#                        '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
-#                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf'
-#                        '.gii'),
-#     surf_map=np.reshape(pred[0:32492], (-1)),
-#     cmap='gist_gray', black_bg=False, symmetric_cmap=False,
-#     threshold=threshold, vmin=1, vmax=3)
-# view.open_in_browser()
