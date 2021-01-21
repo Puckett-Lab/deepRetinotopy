@@ -9,9 +9,15 @@ sys.path.append('..')
 from nilearn import plotting
 from functions.def_ROIs_WangParcelsPlusFovea import roi
 
-path = '/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
+subject_index = 7
+
+hcp_id = ['617748', '191336', '572045', '725751', '198653',
+          '601127', '644246', '191841', '680957', '157336']
+
+path = './../../data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
-background = np.reshape(curv['x680957_curvature'][0][0][32492:], (-1))
+background = np.reshape(
+    curv['x' + hcp_id[subject_index] + '_curvature'][0][0][32492:], (-1))
 
 threshold = 10  # threshold for the curvature map
 

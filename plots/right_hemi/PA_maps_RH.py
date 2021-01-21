@@ -6,9 +6,15 @@ import torch
 from functions.def_ROIs_WangParcelsPlusFovea import roi
 from nilearn import plotting
 
-path = '/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
+subject_index = 7
+
+hcp_id = ['617748', '191336', '572045', '725751', '198653',
+          '601127', '644246', '191841', '680957', '157336']
+
+path = './../../data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
-background = np.reshape(curv['x680957_curvature'][0][0][32492:], (-1))
+background = np.reshape(
+    curv['x' + hcp_id[subject_index] + '_curvature'][0][0][32492:], (-1))
 
 threshold = 1
 
@@ -30,30 +36,29 @@ predictions = torch.load(
     '/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset'
     '-pred_Model3_PA_RH.pt',
     map_location='cpu')
-subject_index = 0
 
 pred[final_mask_R == 1] = np.reshape(
     np.array(predictions['Predicted_values'][subject_index]),
     (-1, 1))
-# # To generate the mean predicted map, just uncomment the following lines
-# pred_mean = []
-# for i in range(10):
-#     pred_mean.append(np.reshape(np.array(predictions['Predicted_values'][i]),
-#                                 (-1, 1)))
-# pred[final_mask_R == 1] = np.mean(pred_mean, 0)
-
 
 measured[final_mask_R == 1] = np.reshape(
     np.array(predictions['Measured_values'][subject_index]),
     (-1, 1))
 
-# # To generate the mean predicted map, just uncomment the following lines
+# # To generate the mean predicted and empirical maps, just uncomment the following
+# # lines:
+# pred_mean = []
 # measured_mean = []
-# for j in range(10):
+# for i in range(10):
+#     pred_mean.append(np.reshape(np.array(predictions['Predicted_values'][i]),
+#                                 (-1, 1)))
 #     measured_mean.append(np.reshape(np.array(predictions[
-#     'Measured_values'][j]),
+#         'Measured_values'][i]),
 #                                              (-1, 1)))
+# pred[final_mask_R == 1] = np.mean(pred_mean, 0)
 # measured[final_mask_R == 1] = np.mean(measured_mean, 0)
+
+
 
 # Rescaling
 pred = np.array(pred)
