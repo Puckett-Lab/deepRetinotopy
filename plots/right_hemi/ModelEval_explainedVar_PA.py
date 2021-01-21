@@ -4,7 +4,7 @@ import pandas as pd
 
 from functions.def_ROIs_WangParcels import roi as roi2
 from functions.def_ROIs_WangParcelsPlusFovea import roi
-from functions.plusFovea import add_fovea
+from functions.plusFovea import add_fovea_R
 from functions.least_difference_angles import smallest_angle
 
 visual_areas = [
@@ -14,7 +14,7 @@ models = ['pred']
 models_name = ['Default']
 
 # Uncomment to evaluate the performance of the average map
-PA_average = np.load('../../AveragePolarAngleMap_LH.npz')['list']
+PA_average = np.load('../../AveragePolarAngleMap_RH.npz')['list']
 
 
 for k in range(len(visual_areas)):
@@ -25,7 +25,7 @@ for k in range(len(visual_areas)):
         a = torch.load(
             '/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results'
             '/testset-' +
-            models[m] + '_Model3_PA_LH.pt', map_location='cpu')
+            models[m] + '_Model3_PA_RH.pt', map_location='cpu')
 
         theta_withinsubj = []
         theta_acrosssubj = []
@@ -36,12 +36,12 @@ for k in range(len(visual_areas)):
         final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
             label_primary_visual_areas)
         ROI1 = np.zeros((32492, 1))
-        ROI1[final_mask_L == 1] = 1
+        ROI1[final_mask_R == 1] = 1
 
         final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi2(
             visual_areas[k])
         primary_visual_areas = np.zeros((32492, 1))
-        primary_visual_areas[final_mask_L == 1] = 1
+        primary_visual_areas[final_mask_R == 1] = 1
 
         mask = ROI1 + primary_visual_areas
         mask = mask[ROI1 == 1]
@@ -62,7 +62,7 @@ for k in range(len(visual_areas)):
 
                     # Uncomment the line bellow and comment the line above
                     # to evaluate the performance of the average map
-                    # pred = np.reshape(np.array(PA_average), (-1, 1))
+                    pred = np.reshape(np.array(PA_average), (-1, 1))
 
                     measured = np.reshape(np.array(a['Measured_values'][j]),
                                           (-1, 1))
@@ -136,28 +136,22 @@ for k in range(len(visual_areas)):
                     measured2[sum] = measured2[sum] + 180
                     measured2 = np.array(measured2) * (np.pi / 180)
 
-                    # # Computing delta theta, angle between vector defined
-                    # predicted i and empirical j map
-                    # theta = smallest_angle(pred,measured)
-                    # theta_across_temp.append(theta)
-                    #
-                    # # Computing delta theta, angle between vector defined
-                    # measured i versus measured j
-                    # theta_emp = smallest_angle(measured,measured2)
-                    # theta_emp_across_temp.append(theta_emp)
 
                     # Computing delta theta, angle between vector defined
                     # pred i versus pred j
-                    print(np.shape(pred[mask>1]))
+                    # print(np.shape(pred[mask>1]))
                     theta_pred = np.corrcoef(np.reshape(pred[mask>1],(-1)), np.reshape(pred2[mask>1],(-1)))[0,1]
                     # print(np.mean(theta_pred))
                     theta_pred_across_temp.append(theta_pred)
 
-            # theta_acrosssubj.append(np.mean(theta_across_temp,axis=0))
-            # theta_acrosssubj_emp.append(np.mean(theta_emp_across_temp,
-            # axis=0))
             theta_acrosssubj_pred.append(
                 np.mean(theta_pred_across_temp, axis=0))
+
+        np.savez('./output/corr_higherOrder_RH_PA_averageMap.npz',
+        list=np.reshape(theta_withinsubj,(10,-1)))
+        # np.savez('./output/corr_higherOrder_RH_PA_Model.npz',
+        #          list=np.reshape(theta_withinsubj, (10, -1)))
+
 
         # mean_theta_acrosssubj=np.mean(np.array(theta_acrosssubj),axis=0)
         corr_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
@@ -166,14 +160,16 @@ for k in range(len(visual_areas)):
         corr_theta_acrosssubj_pred = np.mean(np.array(theta_acrosssubj_pred),
                                              axis=0)
 
-print(corr_theta_acrosssubj_pred)
+# print(corr_theta_acrosssubj_pred)
+
 print(corr_theta_withinsubj)
+print(corr_theta_withinsubj**2)
 
 
 # Primary visual cortex
 label_primary_visual_areas = ['V1d', 'V1v', 'fovea_V1', 'V2d', 'V2v',
                               'fovea_V2', 'V3d', 'V3v', 'fovea_V3']
-V1, V2, V3 = add_fovea(label_primary_visual_areas)
+V1, V2, V3 = add_fovea_R(label_primary_visual_areas)
 primary_visual_areas = np.sum(
     [np.reshape(V1, (-1, 1)), np.reshape(V2, (-1, 1)),
      np.reshape(V3, (-1, 1))], axis=0)
@@ -185,7 +181,7 @@ mean_across_2 = []
 for m in range(len(models)):
     a = torch.load(
         '/home/uqfribe1/PycharmProjects/DEEP-fMRI/testset_results/testset-' +
-        models[m] + '_Model3_PA_LH.pt', map_location='cpu')
+        models[m] + '_Model3_PA_RH.pt', map_location='cpu')
 
     theta_withinsubj = []
     theta_acrosssubj = []
@@ -196,7 +192,7 @@ for m in range(len(models)):
     final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
         label_primary_visual_areas)
     ROI1 = np.zeros((32492, 1))
-    ROI1[final_mask_L == 1] = 1
+    ROI1[final_mask_R == 1] = 1
     mask = ROI1 + np.reshape(primary_visual_areas, (32492, 1))
     mask = mask[ROI1 == 1]
 
@@ -215,7 +211,7 @@ for m in range(len(models)):
 
                 # Uncomment the line bellow and comment the line above
                 # to evaluate the performance of the average map
-                # pred = np.reshape(np.array(PA_average), (-1, 1))
+                pred = np.reshape(np.array(PA_average), (-1, 1))
 
                 measured = np.reshape(np.array(a['Measured_values'][j]),
                                       (-1, 1))
@@ -283,32 +279,59 @@ for m in range(len(models)):
                 measured2[sum] = measured2[sum] + 180
                 measured2 = np.array(measured2) * (np.pi / 180)
 
-                # # Computing delta theta, angle between vector defined
-                # predicted i and empirical j map
-                # theta = smallest_angle(pred,measured)
-                # theta_across_temp.append(theta)
-                #
-                # # Computing delta theta, angle between vector defined
-                # measured i versus measured j
-                # theta_emp = smallest_angle(measured,measured2)
-                # theta_emp_across_temp.append(theta_emp)
 
                 # Computing delta theta, angle between vector defined pred i
                 # versus pred j
                 theta_pred = np.corrcoef(np.reshape(pred[mask>1],(-1)), np.reshape(pred2[mask>1],(-1)))[0,1]
                 theta_pred_across_temp.append(theta_pred)
 
-        # theta_acrosssubj.append(np.mean(theta_across_temp,axis=0))
-        # theta_acrosssubj_emp.append(np.mean(theta_emp_across_temp, axis=0))
+
         theta_acrosssubj_pred.append(np.mean(theta_pred_across_temp, axis=0))
+
+    np.savez('./output/corr_earlyVisualCortex_RH_PA_averageMap.npz',
+             list=np.reshape(theta_withinsubj, (10, -1)))
+    # np.savez('./output/corr_earlyVisualCortex_RH_PA_Model.npz',
+    #          list=np.reshape(theta_withinsubj, (10, -1)))
 
     # mean_theta_acrosssubj=np.mean(np.array(theta_acrosssubj),axis=0)
     corr_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
     # mean_theta_acrosssubj_emp=np.mean(np.array(theta_acrosssubj_emp),axis=0)
     corr_theta_acrosssubj_pred = np.mean(np.array(theta_acrosssubj_pred),
                                          axis=0)
-print(corr_theta_acrosssubj_pred)
+# print(corr_theta_acrosssubj_pred)
 print(corr_theta_withinsubj)
+print(corr_theta_withinsubj**2)
 
 
+import scipy.stats
+# Loading the data
+corr_EarlyVisualCortex_model = np.reshape(np.array(
+    np.load('./corr_earlyVisualCortex_RH_PA_Model.npz')['list']),
+    (10, -1))
+corr_higherOrder_model = np.reshape(np.array(
+    np.load('./corr_higherOrder_RH_PA_Model.npz')['list']), (10, -1))
 
+corr_EarlyVisualCortex_average = np.reshape(np.array(
+    np.load('./corr_earlyVisualCortex_RH_PA_averageMap.npz')[
+        'list']), (10, -1))
+corr_higherOrder_average = np.reshape(np.array(
+    np.load('./corr_higherOrder_RH_PA_averageMap.npz')['list']),
+    (10, -1))
+
+print(f'Mean explained variance and std of model in early visual cortex:'
+      f'{np.mean(corr_EarlyVisualCortex_model**2)}, {np.std(corr_EarlyVisualCortex_model**2)}')
+
+print(f'Mean explained variance and std of model in higher order areas:'
+      f'{np.mean(corr_higherOrder_model**2)}, {np.std(corr_higherOrder_model**2)}')
+
+
+print(f'Mean explained variance and std of average in early visual cortex:'
+      f'{np.mean(corr_EarlyVisualCortex_average**2)}, {np.std(corr_EarlyVisualCortex_average**2)}')
+print(f'Mean explained variance and std of average in higher order areas:'
+      f'{np.mean(corr_higherOrder_average**2)}, {np.std(corr_higherOrder_average**2)}')
+
+test= scipy.stats.ttest_rel(corr_EarlyVisualCortex_model,corr_EarlyVisualCortex_average)
+print(test)
+
+test= scipy.stats.ttest_rel(corr_higherOrder_model,corr_higherOrder_average)
+print(test)

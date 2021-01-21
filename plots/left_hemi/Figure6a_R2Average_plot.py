@@ -11,7 +11,7 @@ from nilearn import plotting
 from dataset.HCP_3sets_ROI import Retinotopy
 from torch_geometric.data import DataLoader
 
-path = '/home/uqfribe1/PycharmProjects/DEEP-fMRI/data/raw/converted'
+path = './../data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
 background = np.reshape(curv['x100610_curvature'][0][0][0:32492], (-1))
 
@@ -29,25 +29,15 @@ R2_thr = np.zeros((32492, 1))
 # Loading data - left hemisphere
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data')
 pre_transform = T.Compose([T.FaceToEdge()])
-train_dataset = Retinotopy(path, 'Train', transform=T.Cartesian(),
+test_dataset = Retinotopy(path, 'Test', transform=T.Cartesian(),
                            pre_transform=pre_transform, n_examples=181,
                            prediction='polarAngle', myelination=True,
                            hemisphere='Left')
-dev_dataset = Retinotopy(path, 'Development', transform=T.Cartesian(),
-                         pre_transform=pre_transform, n_examples=181,
-                         prediction='polarAngle', myelination=True,
-                         hemisphere='Left')
-test_dataset = Retinotopy(path, 'Test', transform=T.Cartesian(),
-                          pre_transform=pre_transform, n_examples=181,
-                          prediction='polarAngle', myelination=True,
-                          hemisphere='Left')
-test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
-dev_loader = DataLoader(dev_dataset, batch_size=1, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=1, shuffle=True)
 
 # Average explained variance map
 R2 = []
-for data in train_loader:
+for data in test_loader:
     R2.append(np.array(data.R2))
 R2 = np.mean(R2, 0)
 
