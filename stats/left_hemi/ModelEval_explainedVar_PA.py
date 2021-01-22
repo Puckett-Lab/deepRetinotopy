@@ -13,7 +13,7 @@ models = ['pred']
 models_name = ['Default']
 
 # # Uncomment to evaluate the performance of the average map
-# PA_average = np.load('./../output/AveragePolarAngleMap_LH.npz')['list']
+# PA_average = np.load('./../../plots/output/AveragePolarAngleMap_LH.npz')['list']
 for k in range(len(visual_areas)):
     mean_delta = []
     for m in range(len(models)):
@@ -22,9 +22,6 @@ for k in range(len(visual_areas)):
             models[m] + '_Model3_PA_LH.pt', map_location='cpu')
 
         theta_withinsubj = []
-        theta_acrosssubj = []
-        theta_acrosssubj_pred = []
-        theta_acrosssubj_emp = []
 
         label_primary_visual_areas = ['ROI']
         final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
@@ -56,7 +53,7 @@ for k in range(len(visual_areas)):
                     # performance of the average map
                     # pred = np.reshape(np.array(PA_average), (-1, 1))
 
-                    # Rescaling polar angles to match the right visual field
+                    # Rescaling polar angles to match the correct visual field
                     # (left hemisphere)
                     minus = pred > 180
                     sum = pred < 180
@@ -77,9 +74,9 @@ for k in range(len(visual_areas)):
                                                         (-1)))[0, 1]
                     theta_withinsubj.append(corr_theta)
 
-        # np.savez('./output/corr_higherOrder_LH_PA_Model.npz',
+        # np.savez('./../output/corr_higherOrder_LH_PA_Model.npz',
         #          list=np.reshape(theta_withinsubj, (10, -1)))
-        # np.savez('./output/corr_higherOrder_LH_PA_averageMap.npz',
+        # np.savez('./../output/corr_higherOrder_LH_PA_averageMap.npz',
         # list=np.reshape(theta_withinsubj,(10,-1)))
 
         corr_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
@@ -145,9 +142,9 @@ for m in range(len(models)):
                     0, 1]
                 theta_withinsubj.append(corr_theta)
 
-    # np.savez('./output/corr_earlyVisualCortex_LH_PA_averageMap.npz',
+    # np.savez('./../output/corr_earlyVisualCortex_LH_PA_averageMap.npz',
     #          list=np.reshape(theta_withinsubj, (10, -1)))
-    # np.savez('./output/corr_earlyVisualCortex_LH_PA_Model.npz',
+    # np.savez('./../output/corr_earlyVisualCortex_LH_PA_Model.npz',
     #          list=np.reshape(theta_withinsubj, (10, -1)))
 
     corr_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
