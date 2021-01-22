@@ -1,55 +1,79 @@
 # DeepRetinotopy
 
-This repository contains all Python codes from our recent work on "Predicting brain function from anatomy using geometric deep learning" available on [bioRxiv](https://www.biorxiv.org/content/10.1101/2020.02.11.934471v2).
+This repository contains all Python source code necessary to replicate our recent work entitled "Predicting brain function from anatomy 
+using geometric deep learning" available on [bioRxiv](https://www.biorxiv.org/content/10.1101/2020.02.11.934471v2).
 
-## How to install pytorch and torch_geometric to run locally on cpu
+## Table of Contents
+* [General information](#general-info)
+* [Installation and requirements](#installation-and-requirements)
+* [Processed data](#processed-data)
+* [Figures](#figures)
 
-- Create a new conda environment (or docker container)
+## General Information
+
+## Installation and requirements 
+
+Models were generated using Pytorch Geometric. Since this package is under constant updates, we highly recommend that 
+you follow the following steps:
+
+- Create a conda environment (or docker container)
 - Install pytorch first:
 	
+	
 	conda install pytorch==1.5.0 torchvision cpuonly -c pytorch
-- Install torch-scatter, torch-sparse, torch-cluster, tprch-spline-conv and torch-geometric:
+	
+- Install torch-scatter, torch-sparse, torch-cluster, torch-spline-conv and torch-geometric:
 	 
-	 pip install torch-scatter==latest+cpu -f https://pytorch-geometric.com/whl/torch-1.5.0.html
 	 
-	 pip install torch-sparse==latest+cpu -f https://pytorch-geometric.com/whl/torch-1.5.0.html
-	 
-	 pip install torch-cluster==latest+cpu -f https://pytorch-geometric.com/whl/torch-1.5.0.html
-	 
-	 pip install torch-spline-conv==latest+cpu -f https://pytorch-geometric.com/whl/torch-1.5.0.html
-	 
-	 pip install torch-geometric
+	pip install torch-scatter==1.0.4
 
-## Packages
+	pip install torch-sparse==0.2.2
 
-- 
+	pip install torch-cluster==1.1.5
 
-## Setting up the dataset for preprocessing
+	pip install torch-spline-conv==1.0.4
+
+    pip install torch-geometric==0.3.1
 
 
+- Install the remaining required packages that are available at requirements.txt: 
 
 
-## Figures codes
+    pip install -r requirement.txt
+    
+- Clone DeepRetinotopy:
 
-### Figure 1
-./plots/VisualCortexHierarchy_WangPlusFovea.py
 
-### Figure 3
+    git clone git@github.com:Puckett-Lab/deepRetinotopy.git
 
-#### Left Hemisphere
-./plots/left_hemi/Eccentricity_maps_LH.py
-./plots/left_hemi/PA_maps_LH.py
+Finally, note that in order to generate the left and right hemisphere 
+views of the retinotopic maps (as in our manuscript), you have to install the following git repository:
 
-#### Right Hemisphere
-./plots/right_hemi/Eccentricity_maps_LH.py
-./plots/right_hemi/PA_maps_LH.py
+    pip install git+https://github.com/felenitaribeiro/nilearn.git
 
-### Figure 4a
-./plots/left_hemi/Eccentricity_maps_LH.py
-./plots/left_hemi/PA_maps_LH.py
 
-### Figure 4b
-./plots/DeltaThetaVisualCortex_PA_subjvsGroup.py
+## Processed data
+
+All processed data are available at https://osf.io/95w4y/.
+
+## Figures
+
+Polar angle and eccentricity maps, as shown in the manuscript (Figure 3-5), were generated using the following scripts:
+
+- ./plots/left(right)_hemi/Eccentricity_maps_L(R)H.py
+- ./plots/left(right)_hemi/PA_maps_L(R)H.py
+
+Final model (among 5 that were trained with the final architecture) was selected based on their performance using the 
+development dataset. Scripts for this assessment are:
+
+- ./plots/left(right)_hemi/ModelEval_FinalModel_ecc.py
+- ./plots/left(right)_hemi/ModelEval_FinalModel_PA.py
+## Descriptive statistics
+
+Explained variance and mean errors of predictions based on our model vs an average map were determined with the following scripts:
+
+- ./plots/left(right)_hemi/ModelEval_explainedVar_ecc.py
+- ./plots/left(right)_hemi/ModelEval_explainedVar_PA.py
 
 ### Figure 5
 ./plots/R2Average_plot.py
@@ -80,7 +104,7 @@ This repository contains all Python codes from our recent work on "Predicting br
 ./plots/left_hemi/PA_maps_LH.py
 
 ### Supplementary Figure 4
-./plots/DiffNumberLayersErrorPlots_LH.py
+./plots/left_hemi/DiffNumberLayersErrorPlots_LH.py
 
 ## Final model selection
 
