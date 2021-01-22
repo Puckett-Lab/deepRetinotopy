@@ -27,16 +27,15 @@ for k in range(len(visual_areas)):
 
         for m in range(8):
             if m < 4:
-                prediction = torch.load(
-                    '/home/uqfribe1/Desktop/Wiener/July/output_RH'
+                predictions = torch.load(
+                    '/home/uqfribe1/Desktop/Wiener/Project1/July/output_RH'
                     '/model4_nothresh_RH_' + str(
                         m + 9) +
                     'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
-                        l + 1) + '_output_epoch100.pt', map_location='cpu')
+                        l + 1) + '_output_epoch200.pt', map_location='cpu')
 
                 theta_withinsubj = []
                 theta_acrosssubj_pred = []
-
 
                 label_primary_visual_areas = ['ROI']
                 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
@@ -52,15 +51,15 @@ for k in range(len(visual_areas)):
                 mask = ROI1 + primary_visual_areas
                 mask = mask[ROI1 == 1]
 
-                for j in range(len(prediction['Predicted_values'])):
+                for j in range(len(predictions['Predicted_values'])):
                     theta_pred_across_temp = []
 
-                    for i in range(len(prediction['Predicted_values'])):
+                    for i in range(len(predictions['Predicted_values'])):
                         if i == j:
                             # Loading predicted values
                             pred = np.reshape(
-                                np.array(prediction['Predicted_values'][i]), (-1, 1))
-                            measured = np.reshape(np.array(prediction['Measured_values'
+                                np.array(predictions['Predicted_values'][i]), (-1, 1))
+                            measured = np.reshape(np.array(predictions['Measured_values'
                                                              ''][j]), (-1, 1))
 
                             # Rescaling polar angles to match the right
@@ -84,9 +83,9 @@ for k in range(len(visual_areas)):
                         if i != j:
                             # Loading predicted values
                             pred = np.reshape(
-                                np.array(prediction['Predicted_values'][i]), (-1, 1))
+                                np.array(predictions['Predicted_values'][i]), (-1, 1))
                             pred2 = np.reshape(
-                                np.array(prediction['Predicted_values'][j]), (-1, 1))
+                                np.array(predictions['Predicted_values'][j]), (-1, 1))
 
                             # Rescaling polar angles to match the right
                             # visual field (left hemisphere)
@@ -120,8 +119,8 @@ for k in range(len(visual_areas)):
                     np.mean(mean_theta_acrosssubj_pred[mask > 1]))
 
             else:
-                prediction = torch.load(
-                    '/home/uqfribe1/Desktop/Wiener/July/output_RH'
+                predictions = torch.load(
+                    '/home/uqfribe1/Desktop/Wiener/Project1/July/output_RH'
                     '/model4_nothresh_RH_' + str(
                         12 + (
                                     m - 4) * 2) +
@@ -145,16 +144,15 @@ for k in range(len(visual_areas)):
                 mask = ROI1 + primary_visual_areas
                 mask = mask[ROI1 == 1]
 
-                for j in range(len(prediction['Predicted_values'])):
+                for j in range(len(predictions['Predicted_values'])):
                     theta_pred_across_temp = []
-
-                    for i in range(len(prediction['Predicted_values'])):
+                    for i in range(len(predictions['Predicted_values'])):
                         if i == j:
                             # Loading predicted values
                             pred = np.reshape(
-                                np.array(prediction['Predicted_values'][i]), (-1, 1))
+                                np.array(predictions['Predicted_values'][i]), (-1, 1))
                             measured = np.reshape(
-                                np.array(prediction['Measured_values'][j]), (-1, 1))
+                                np.array(predictions['Measured_values'][j]), (-1, 1))
 
                             # Rescaling polar angles to match the correct
                             # visual field (left hemisphere)
@@ -177,9 +175,9 @@ for k in range(len(visual_areas)):
                         if i != j:
                             # Loading predicted values
                             pred = np.reshape(
-                                np.array(prediction['Predicted_values'][i]), (-1, 1))
+                                np.array(predictions['Predicted_values'][i]), (-1, 1))
                             pred2 = np.reshape(
-                                np.array(prediction['Predicted_values'][j]), (-1, 1))
+                                np.array(predictions['Predicted_values'][j]), (-1, 1))
 
                             # Rescaling polar angles to match the right
                             # visual field (left hemisphere)
@@ -278,12 +276,13 @@ while l < 5:
 
     for m in range(8):
         if m < 4:
-            prediction = torch.load(
-                '/home/uqfribe1/Desktop/Wiener/July/output_RH'
+            predictions = torch.load(
+                '/home/uqfribe1/Desktop/Wiener/Project1/July/output_RH'
                 '/model4_nothresh_RH_' + str(
                     m + 9) +
-                'layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
-                    l + 1) + '_output_epoch100.pt', map_location='cpu')
+                'layers_smoothL1lossR2_'
+                'curvnmyelin_ROI1_k25_batchnorm_dropout010_' + str(
+                    l + 1) + '_output_epoch200.pt', map_location='cpu')
 
             theta_withinsubj = []
             theta_acrosssubj_pred = []
@@ -296,15 +295,15 @@ while l < 5:
             mask = ROI1 + np.reshape(primary_visual_areas, (32492, 1))
             mask = mask[ROI1 == 1]
 
-            for j in range(len(prediction['Predicted_values'])):
+            for j in range(len(predictions['Predicted_values'])):
                 theta_pred_across_temp = []
 
-                for i in range(len(prediction['Predicted_values'])):
+                for i in range(len(predictions['Predicted_values'])):
                     if i == j:
                         # Loading predicted values
-                        pred = np.reshape(np.array(prediction['Predicted_values'][i]),
+                        pred = np.reshape(np.array(predictions['Predicted_values'][i]),
                                           (-1, 1))
-                        measured = np.reshape(np.array(prediction['Measured_values'][
+                        measured = np.reshape(np.array(predictions['Measured_values'][
                                                            j]), (-1, 1))
 
                         # Rescaling polar angles to match the correct visual
@@ -327,9 +326,9 @@ while l < 5:
 
                     if i != j:
                         # Loading predicted values
-                        pred = np.reshape(np.array(prediction['Predicted_values'][i]),
+                        pred = np.reshape(np.array(predictions['Predicted_values'][i]),
                                           (-1, 1))
-                        pred2 = np.reshape(np.array(prediction['Predicted_values'][j]),
+                        pred2 = np.reshape(np.array(predictions['Predicted_values'][j]),
                                            (-1, 1))
 
                         # Rescaling polar angles to match the correct visual
@@ -363,8 +362,8 @@ while l < 5:
 
         else:
 
-            a = torch.load(
-                '/home/uqfribe1/Desktop/Wiener/July/output_RH'
+            predictions = torch.load(
+                '/home/uqfribe1/Desktop/Wiener/Project1/July/output_RH'
                 '/model4_nothresh_RH_' + str(
                     12 + (
                                 m - 4) * 2) +
@@ -374,7 +373,6 @@ while l < 5:
             theta_withinsubj = []
             theta_acrosssubj_pred = []
 
-
             label_primary_visual_areas = ['ROI']
             final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
                 label_primary_visual_areas)
@@ -383,16 +381,16 @@ while l < 5:
             mask = ROI1 + np.reshape(primary_visual_areas, (32492, 1))
             mask = mask[ROI1 == 1]
 
-            for j in range(len(prediction['Predicted_values'])):
+            for j in range(len(predictions['Predicted_values'])):
                 theta_pred_across_temp = []
 
-                for i in range(len(prediction['Predicted_values'])):
+                for i in range(len(predictions['Predicted_values'])):
                     if i == j:
                         # Loading predicted values
-                        pred = np.reshape(np.array(prediction['Predicted_values'][i]),
+                        pred = np.reshape(np.array(predictions['Predicted_values'][i]),
                                           (-1, 1))
                         measured = np.reshape(
-                            np.array(prediction['Measured_values'][j]), (-1, 1))
+                            np.array(predictions['Measured_values'][j]), (-1, 1))
 
                         # Rescaling polar angles to match the right visual
                         # field (left hemisphere)
@@ -414,9 +412,9 @@ while l < 5:
 
                     if i != j:
                         # Loading predicted values
-                        pred = np.reshape(np.array(prediction['Predicted_values'][i]),
+                        pred = np.reshape(np.array(predictions['Predicted_values'][i]),
                                           (-1, 1))
-                        pred2 = np.reshape(np.array(prediction['Predicted_values'][j]),
+                        pred2 = np.reshape(np.array(predictions['Predicted_values'][j]),
                                            (-1, 1))
 
                         # Rescaling polar angles to match the right visual
