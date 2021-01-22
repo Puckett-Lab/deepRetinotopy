@@ -21,7 +21,7 @@ for k in range(len(visual_areas)):
     mean_across = []
     for m in range(len(models)):
         predictions = torch.load(
-            './../../devset_results/Final-pred_Model' +
+            './../../devset_results/devset-pred_Model' +
             models[m] + '_ecc_LH.pt', map_location='cpu')
 
         theta_withinsubj = []
@@ -167,7 +167,7 @@ mean_delta_2 = []
 mean_across_2 = []
 for m in range(len(models)):
     predictions = torch.load(
-        './../../devset_results/Final-pred_Model' +
+        './../../devset_results/devset-pred_Model' +
         models[m] + '_ecc_LH.pt',
         map_location='cpu')
 
