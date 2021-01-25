@@ -1,6 +1,6 @@
 # DeepRetinotopy
 
-This repository contains all Python source code necessary to replicate our recent work entitled "Predicting brain function from anatomy 
+This repository contains all source code necessary to replicate our recent work entitled "Predicting brain function from anatomy 
 using geometric deep learning" available on [bioRxiv](https://www.biorxiv.org/content/10.1101/2020.02.11.934471v2).
 
 ## Table of Contents
@@ -8,12 +8,16 @@ using geometric deep learning" available on [bioRxiv](https://www.biorxiv.org/co
 * [Installation and requirements](#installation-and-requirements)
 * [Processed data](#processed-data)
 * [Figures](#figures)
+* [Descriptive statistics](#descriptive-statistics)
+* [Generalization](#generalization)
+* [License](#license)
 
 ## General Information
 
+
 ## Installation and requirements 
 
-Models were generated using Pytorch Geometric. Since this package is under constant updates, we highly recommend that 
+Models were generated using [Pytorch Geometric](https://pytorch-geometric.readthedocs.io/en/latest/). Since this package is under constant updates, we highly recommend that 
 you follow the following steps:
 
 - Create a conda environment (or docker container)
@@ -63,63 +67,46 @@ Polar angle and eccentricity maps, as shown in the manuscript (Figure 3-5), were
 - ./plots/left(right)_hemi/Eccentricity_maps_L(R)H.py
 - ./plots/left(right)_hemi/PA_maps_L(R)H.py
 
-Final model (among 5 that were trained with the final architecture) was selected based on their performance using the 
+Final model (among the five models that were trained with the final architecture) was selected based on their performance using the 
 development dataset. Scripts for this assessment are:
 
 - ./plots/left(right)_hemi/ModelEval_FinalModel_ecc.py
 - ./plots/left(right)_hemi/ModelEval_FinalModel_PA.py
+
 ## Descriptive statistics
 
-Explained variance and mean errors of predictions based on our model vs an average map were determined with the following scripts:
+Explained variance and mean error of our models' predictions versus an average map were determined with the following scripts:
 
 - ./plots/left(right)_hemi/ModelEval_explainedVar_ecc.py
 - ./plots/left(right)_hemi/ModelEval_explainedVar_PA.py
-
-### Figure 5
-./plots/R2Average_plot.py
-
-### Figure 6a
-./plots/DeltaThetaVisualCortex_PA.py
-
-### Figure 6b
-./plots/left_hemi/ModelEval_featureImportance_PA.py
-
-### Supplementary Figure 1
-#### Left Hemisphere
-./plots/left_hemi/PA_maps_LH.py
-
-#### Right Hemisphere
-./plots/right_hemi/PA_maps_RH.py
-
-### Supplementary Figure 2
-#### Left Hemisphere
-./plots/left_hemi/Eccentricity_maps_LH.py
-
-#### Right Hemisphere
-./plots/right_hemi/Eccentricity_maps_RH.py
+- ./plots/left(right)_hemi/ModelEval_MeanDeltaTheta_ecc.py
+- ./plots/left(right)_hemi/ModelEval_MeanDeltaTheta_PA.py
 
 
-### Supplementary Figure 3
-#### Left Hemisphere
-./plots/left_hemi/PA_maps_LH.py
+## Generalization
 
-### Supplementary Figure 4
-./plots/left_hemi/DiffNumberLayersErrorPlots_LH.py
+Scripts to load our model and apply to the test dataset are the following:
 
-## Final model selection
+- ./ModelEvalGeneralizability_ecc.py
+- ./ModelEvalGeneralizability_PA.py
 
-./plots/left(right)_hemi/ModelEval_FinalModel_PA.py
+## Citation
 
-./plots/left(right)_hemi/ModelEval_FinalModel_ecc.py
+Please cite our paper if you use our model or if it was somewhat useful for you :wink:
 
-## Load model and apply to test dataset
+    @article{Ribeiro2020,
+        title = {{Predicting brain function from anatomy using geometric deep learning}},
+        author = {Ribeiro, Fernanda L and Bollmann, Steffen and Puckett, Alexander M},
+        doi = {10.1101/2020.02.11.934471},
+        journal = {bioRxiv},
+        url = {http://biorxiv.org/content/early/2020/02/12/2020.02.11.934471.abstract},
+        year = {2020}
+    }
 
-./ModelEvalGeneralizability_ecc.py
-./ModelEvalGeneralizability_PA.py
+
+## Contact
+Fernanda L. Ribeiro <[fernanda.ribeiro@uq.edu.au](fernanda.ribeiro@uq.edu.au)>
 
 
-## Mean error and standard deviation
+## License
 
-./plots/left(right)_hemi/ModelEval_MeanDeltaTheta_ecc.py
-
-./plots/left(right)_hemi/ModelEval_MeanDeltaTheta_PA.py
