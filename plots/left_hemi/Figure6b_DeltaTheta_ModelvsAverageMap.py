@@ -6,22 +6,22 @@ import scipy.stats
 
 # Loading the data
 error_DorsalEarlyVisualCortex_model = np.reshape(np.array(
-    np.load('../ErrorPerParticipant_dorsalV1-3_model.npz')['list']),
+    np.load('./../../stats/output/ErrorPerParticipant_dorsalV1-3_model.npz')['list']),
     (10, -1))
 error_EarlyVisualCortex_model = np.reshape(np.array(
-    np.load('../ErrorPerParticipant_EarlyVisualCortex_model.npz')['list']),
+    np.load('./../../stats/output/ErrorPerParticipant_EarlyVisualCortex_model.npz')['list']),
     (10, -1))
 error_higherOrder_model = np.reshape(np.array(
-    np.load('../ErrorPerParticipant_WangParcels_model.npz')['list']), (10, -1))
+    np.load('./../../stats/output/ErrorPerParticipant_WangParcels_model.npz')['list']), (10, -1))
 
 error_DorsalEarlyVisualCortex_average = np.reshape(np.array(
-    np.load('../ErrorPerParticipant_dorsalV1-3_averageMap.npz')['list']),
+    np.load('./../../stats/output/ErrorPerParticipant_dorsalV1-3_averageMap.npz')['list']),
     (10, -1))
 error_EarlyVisualCortex_average = np.reshape(np.array(
-    np.load('../ErrorPerParticipant_EarlyVisualCortex_averageMap.npz')[
+    np.load('./../../stats/output/ErrorPerParticipant_EarlyVisualCortex_averageMap.npz')[
         'list']), (10, -1))
 error_higherOrder_average = np.reshape(np.array(
-    np.load('../ErrorPerParticipant_WangParcels_averageMap.npz')['list']),
+    np.load('./../../stats/output/ErrorPerParticipant_WangParcels_averageMap.npz')['list']),
     (10, -1))
 
 # Reformatting data from dorsal early visual cortex
@@ -113,10 +113,10 @@ for i in range(3):
 
         plt.ylim([15, 45])
 plt.ylim([30, 75])
-plt.savefig('./../output/DeltaTheta_ModelvsAverage.pdf', format="pdf")
+# plt.savefig('./../output/DeltaTheta_ModelvsAverage.pdf', format="pdf")
 plt.show()
 
-# Plotting the difference
+# # Plotting the difference
 # data = pd.DataFrame({'DiffEarly': np.mean(
 #     error_EarlyVisualCortex_average,
 #     axis=1) - np.mean(error_EarlyVisualCortex_model,

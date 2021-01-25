@@ -12,7 +12,7 @@ subject_index = 0
 hcp_id=['617748','191336','572045','725751','198653',
         '601127','644246','191841','680957','157336']
 
-path = './../data/raw/converted'
+path = './../../data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
 background = np.reshape(curv['x'+hcp_id[subject_index]+'_curvature'][0][0][0:32492], (-1))
 
@@ -28,7 +28,7 @@ mean_delta = [] # error
 mean_across = [] # individual variability
 for m in range(len(models)):
     prediction = torch.load(
-        './../testset_results/left_hemi/testset-' +
+        './../../testset_results/left_hemi/testset-' +
         models[m] + '_Model3_PA_LH.pt', map_location='cpu')
 
     theta_withinsubj = []
@@ -123,7 +123,7 @@ delta_across[final_mask_L != 1] = 0
 
 # Error map
 view = plotting.view_surf(
-    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '..',
+    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../..',
                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'
                        '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
@@ -134,7 +134,7 @@ view.open_in_browser()
 
 # Individual variability map
 view = plotting.view_surf(
-    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '..',
+    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../..',
                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'
                        '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
