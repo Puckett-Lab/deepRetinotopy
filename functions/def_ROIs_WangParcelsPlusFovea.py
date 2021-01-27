@@ -4,7 +4,8 @@ import scipy.io
 
 
 def roi(list_of_labels):
-    """Mask for selection of the region of interest from the surface template.
+    """Mask for the selection of the region of interest in the surface
+    template.
 
     Args:
         list_of_labels (list): list with the file name (.mat) containing the

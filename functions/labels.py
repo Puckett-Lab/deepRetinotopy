@@ -2,7 +2,8 @@ import numpy as np
 
 
 def labels(input, labels):
-    """Selection of triangular faces from the region of interest
+    """Function for the selection of triangular faces from the region of
+    interest.
 
     Args:
         input (.mat file): .mat file with the triangular faces composing the

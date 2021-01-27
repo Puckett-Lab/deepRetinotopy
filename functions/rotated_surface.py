@@ -1,11 +1,24 @@
 import numpy as np
 
-# Explain
-
 rotated_info = open('/home/uqfribe1/Desktop/Rotation/SurfToSurf.1D')
 lines = rotated_info.readlines()
 
 def rotate_roi(index_L_mask):
+    """New mask for the selection of an ROI placed elsewhere in the cortical
+    surface.
+
+    Args:
+        index_L_mask (list): Indices of the non-zero elements from
+            final_mask_L (number of nonzero elements,)
+
+    Returns:
+        mask (numpy array): Mask of the new ROI from the left
+            hemisphere (32492,)
+
+        new_L_mask_indexes (list): Indices of the non-zero elements from
+            final_mask_L (number of nonzero elements,)
+    """
+
     new_index = []
     old_index = []
     for i in range(14,len(lines)):

@@ -3,8 +3,8 @@ from functions.def_ROIs_WangParcels import roi
 
 
 def add_fovea(list):
-    """Adding fovea to the left hemisphere V1, V2 and V3 parcels definition
-    (Wang et at., 2015)
+    """Adding fovea to the left hemisphere V1, V2 and V3 parcels
+    (Wang et at., 2015).
 
     Args:
       list: [v1_dorsal, v1_ventral, v1_fovea, v2_dorsal, v2_ventral,
@@ -54,8 +54,8 @@ def add_fovea(list):
 
 
 def add_fovea_R(list):
-    """Adding fovea to the right hemisphere V1, V2 and V3 parcels definition
-    (Wang et at., 2015)
+    """Adding fovea to the right hemisphere V1, V2 and V3 parcels
+    (Wang et at., 2015).
 
     Args:
       list: [v1_dorsal, v1_ventral, v1_fovea, v2_dorsal, v2_ventral,
