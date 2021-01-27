@@ -2,7 +2,7 @@ import numpy as np
 
 
 def smallest_angle(x, y):
-    """Least difference between two angles
+    """Least difference between two angles.
 
     Args:
       x (numpy array): An array of shape (number of vertices,1) containing
