@@ -67,7 +67,7 @@ for m in range(len(models)):
 
             # Computing delta theta
             theta = smallest_angle(pred, measured)
-            theta_withinsubj.append(theta)
+            theta_withinsubj.append(theta) # Prediction error
 
         if i != subject_index:
             # Compute angle between predicted and empirical predictions
@@ -92,7 +92,7 @@ for m in range(len(models)):
 
             # Computing delta theta
             theta_pred = smallest_angle(pred, pred2)
-            theta_pred_across_temp.append(theta_pred)
+            theta_pred_across_temp.append(theta_pred) # Individual variability
 
     theta_acrosssubj_pred.append(np.mean(theta_pred_across_temp, axis=0))
 
