@@ -10,6 +10,8 @@ using geometric deep learning" available on [bioRxiv](https://www.biorxiv.org/co
 * [Figures](#figures)
 * [Descriptive statistics](#descriptive-statistics)
 * [Generalization](#generalization)
+* [Citation](#citation)
+* [Contact](#contact)
 * [License](#license)
 
 ## General Information
@@ -18,13 +20,15 @@ using geometric deep learning" available on [bioRxiv](https://www.biorxiv.org/co
 ## Installation and requirements 
 
 Models were generated using [Pytorch Geometric](https://pytorch-geometric.readthedocs.io/en/latest/). Since this package is under constant updates, we highly recommend that 
-you follow the following steps:
+you follow the following steps to run models locally:
 
 - Create a conda environment (or docker container)
-- Install pytorch first:
-	
-	
-	conda install pytorch==1.5.0 torchvision cpuonly -c pytorch
+- Install torch first:
+		
+
+    pip install torch==0.4.1    
+
+    pip install torchvision==0.2.1
 	
 - Install torch-scatter, torch-sparse, torch-cluster, torch-spline-conv and torch-geometric:
 	 
@@ -43,7 +47,7 @@ you follow the following steps:
 - Install the remaining required packages that are available at requirements.txt: 
 
 
-    pip install -r requirement.txt
+    pip install -r requirements.txt
     
 - Clone DeepRetinotopy:
 
