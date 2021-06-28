@@ -5,7 +5,7 @@ import torch
 
 from nilearn import plotting
 from functions.def_ROIs_WangParcelsPlusFovea import roi
-from functions.least_difference_angles import smallest_angle
+from functions.error_metrics import smallest_angle
 
 path = './../../data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
@@ -19,9 +19,8 @@ background[nocurv == 1] = 0
 # Predictions generated with 4 sets of features (pred = intact features)
 models = ['pred', 'rotatedROI', 'shuffled-myelincurv', 'constant']
 
-mean_delta = [] # error
-mean_across = [] # individual variability
-# PA_average = np.load('../AveragePolarAngleMap_LH.npz')['list']
+mean_delta = [] # Prediction error
+mean_across = [] # Individual variability
 
 for m in range(len(models)):
     predictions = torch.load(
@@ -55,9 +54,6 @@ for m in range(len(models)):
                     np.array(predictions['Measured_values'][j]),
                     (-1, 1))
 
-                # # Uncomment for comparison with predictions based on
-                # # average map
-                # pred = np.reshape(np.array(PA_average), (-1, 1))
 
                 # Rescaling polar angles to match the correct visual field (
                 # left hemisphere)
@@ -87,11 +83,6 @@ for m in range(len(models)):
                                   (-1, 1))
                 pred2 = np.reshape(
                     np.array(predictions['Predicted_values'][j]), (-1, 1))
-
-                # # Uncomment for comparison with predictions based on
-                # # average map
-                # pred = np.reshape(np.array(PA_average), (-1, 1))
-                # pred2 = np.reshape(np.array(PA_average), (-1, 1))
 
                 # Rescaling polar angles to match the correct visual field (
                 # left hemisphere)
@@ -125,7 +116,7 @@ mean_across = np.reshape(np.array(mean_across), (len(models), -1))
 
 # Generating plots
 # Select predictions generated with a given set of features
-model_index = np.where(np.array(models) == 'constant')
+model_index = np.where(np.array(models) == 'rotatedROI')
 
 # Region of interest
 delta_theta = np.ones((32492, 1))
