@@ -5,7 +5,7 @@ import scipy.io
 import os.path as osp
 import torch
 from functions.def_ROIs_WangParcelsPlusFovea import roi
-from functions.least_difference_angles import smallest_angle
+from functions.error_metrics import smallest_angle
 
 subject_index = 0
 
