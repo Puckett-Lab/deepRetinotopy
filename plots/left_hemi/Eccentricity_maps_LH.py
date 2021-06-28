@@ -27,7 +27,7 @@ background[nocurv == 1] = 0
 background[background < 0] = 0
 background[background > 0] = 1
 
-# Setting the ROI
+# ROI settings
 label_primary_visual_areas = ['ROI']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
     label_primary_visual_areas)
