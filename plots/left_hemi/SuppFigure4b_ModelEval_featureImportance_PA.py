@@ -7,13 +7,13 @@ import pandas as pd
 from functions.def_ROIs_WangParcels import roi as roi2
 from functions.def_ROIs_WangParcelsPlusFovea import roi
 from functions.plusFovea import add_fovea
-from functions.least_difference_angles import smallest_angle
+from functions.error_metrics import smallest_angle
 
 # Clusters
 clusters = [['hV4'], ['VO1', 'VO2', 'PHC1', 'PHC2'], ['V3a', 'V3b'],
                 ['LO1', 'LO2', 'TO1', 'TO2'],
                 ['IPS0', 'IPS1', 'IPS2', 'IPS3', 'IPS4', 'IPS5', 'SPL1']]
-clusters_title = ['V4', 'Ventral', 'V3a/b', 'Lateral', 'Parietal']
+clusters_title = ['V4', 'Ventral', 'V3a-b', 'Lateral', 'Parietal']
 
 models = ['pred', 'rotatedROI','shuffled-myelincurv', 'constant']
 models_name = ['Default', 'Rotated', 'Shuffled', 'Constant']
@@ -21,6 +21,10 @@ models_name = ['Default', 'Rotated', 'Shuffled', 'Constant']
 color = [['darkblue', 'royalblue'], ['steelblue', 'lightskyblue'],
          ['green', 'lightgreen'], ['darkgoldenrod', 'goldenrod'],
          ['saddlebrown', 'chocolate'], ['hotpink', 'pink']]
+
+# Eccentricity-based mask
+eccentricity_mask = np.reshape(np.load('./../../plots/output/MaskEccentricity_'
+                                       'above1below8ecc_LH.npz')['list'], (-1))
 
 sns.set_style("whitegrid")
 fig = plt.figure(figsize=(25, 7))
@@ -84,8 +88,8 @@ for k in range(len(clusters)):
 
                     # Computing delta theta, difference between predicted and
                     # empirical angles
-                    theta = smallest_angle(pred, measured)
-                    theta_withinsubj.append(theta)
+                    theta = smallest_angle(pred[eccentricity_mask], measured[eccentricity_mask])
+                    theta_withinsubj.append(theta[mask[eccentricity_mask] > 1])
 
                 if i != j:
                     # Compute the difference between predicted maps
@@ -112,18 +116,18 @@ for k in range(len(clusters)):
                     pred2 = np.array(pred2) * (np.pi / 180)
 
                     # Computing delta theta, difference between predicted maps
-                    theta_pred = smallest_angle(pred, pred2)
-                    theta_pred_across_temp.append(theta_pred)
+                    theta_pred = smallest_angle(pred[eccentricity_mask], pred2[eccentricity_mask])
+                    theta_pred_across_temp.append(theta_pred[mask[eccentricity_mask] > 1])
 
             theta_acrosssubj_pred.append(
                 np.mean(theta_pred_across_temp, axis=0))
 
-        mean_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
+        mean_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=1)
         mean_theta_acrosssubj_pred = np.mean(np.array(theta_acrosssubj_pred),
-                                             axis=0)
+                                             axis=1)
 
-        mean_delta.append(mean_theta_withinsubj[mask > 1])
-        mean_across.append(mean_theta_acrosssubj_pred[mask > 1])
+        mean_delta.append(mean_theta_withinsubj)
+        mean_across.append(mean_theta_acrosssubj_pred)
 
     mean_delta = np.reshape(np.array(mean_delta), (len(models), -1))
     mean_across = np.reshape(np.array(mean_across), (len(models), -1))
@@ -167,6 +171,7 @@ for k in range(len(clusters)):
         columns=['$\Delta$$\t\Theta$', 'Input', 'label', 'cluster'],
         data=data.T)
     df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
+    # df.to_excel('featuteManipulation_'+ clusters_title[k] +'.xlsx')
     palette = ['dimgray', 'lightgray']
     ax = sns.pointplot(y='$\Delta$$\t\Theta$', x='Input', order=models_name,
                        hue='label', data=df, palette=color[k + 1],
@@ -241,8 +246,8 @@ for m in range(len(models)):
 
                 # Computing delta theta, difference between predicted and
                 # empirical angles
-                theta = smallest_angle(pred, measured)
-                theta_withinsubj.append(theta)
+                theta = smallest_angle(pred[eccentricity_mask], measured[eccentricity_mask])
+                theta_withinsubj.append(theta[mask[eccentricity_mask] > 1])
 
             if i != j:
                 # Compute the difference between predicted maps
@@ -270,21 +275,23 @@ for m in range(len(models)):
                 pred2 = np.array(pred2) * (np.pi / 180)
 
                 # Computing delta theta, difference between predicted maps
-                theta_pred = smallest_angle(pred, pred2)
-                theta_pred_across_temp.append(theta_pred)
+                theta_pred = smallest_angle(pred[eccentricity_mask], pred2[eccentricity_mask])
+                theta_pred_across_temp.append(theta_pred[mask[eccentricity_mask] > 1])
 
         theta_acrosssubj_pred.append(
             np.mean(theta_pred_across_temp, axis=0))
 
-    mean_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=0)
+    mean_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=1)
     mean_theta_acrosssubj_pred = np.mean(np.array(theta_acrosssubj_pred),
-                                         axis=0)
+                                         axis=1)
 
-    mean_delta_2.append(mean_theta_withinsubj[mask > 1])
-    mean_across_2.append(mean_theta_acrosssubj_pred[mask > 1])
+    mean_delta_2.append(mean_theta_withinsubj)
+    mean_across_2.append(mean_theta_acrosssubj_pred)
 
 mean_delta_2 = np.reshape(np.array(mean_delta_2), (len(models), -1))
 mean_across_2 = np.reshape(np.array(mean_across_2), (len(models), -1))
+
+print(np.shape(mean_delta_2))
 
 ax = fig.add_subplot(1, 6, 1)
 data = np.concatenate([[mean_delta_2[0],
@@ -314,6 +321,7 @@ data = np.concatenate([[mean_delta_2[0],
                       axis=1)
 df = pd.DataFrame(columns=['$\Delta$$\t\Theta$', 'Input', 'label'],
                   data=data.T)
+# df.to_excel('featuteManipulation_EarlyVisualCortex.xlsx')
 df['$\Delta$$\t\Theta$'] = df['$\Delta$$\t\Theta$'].astype(float)
 palette = ['dimgray', 'lightgray']
 
@@ -325,5 +333,5 @@ ax.set_title('Early visual cortex ')
 legend = plt.legend()
 ax.set_xlabel('')
 plt.ylim([0, 100])
-# plt.savefig('./../output/ModelEval_AllClusters.pdf', format="pdf")
+plt.savefig('./../output/ModelEval_AllClusters.pdf', format="pdf")
 plt.show()
