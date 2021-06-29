@@ -107,7 +107,7 @@ for i in range(len(models)):
     print(summary)
 
     print(np.mean(np.mean(error_dorsalEarlyVisualCortex_fit1_fit2, axis=1)),
-          np.std(np.mean(error_dorsalEarlyVisualCortex_fit1_fit3, axis=1)))
+          np.std(np.mean(error_dorsalEarlyVisualCortex_fit1_fit2, axis=1)))
     print(np.mean(np.mean(error_dorsalEarlyVisualCortex_fit1_fit3, axis=1)),
           np.std(np.mean(error_dorsalEarlyVisualCortex_fit1_fit3, axis=1)))
 
