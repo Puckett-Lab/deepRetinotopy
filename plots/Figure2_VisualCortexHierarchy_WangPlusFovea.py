@@ -4,7 +4,7 @@ import os.path as osp
 
 from matplotlib import cm
 from functions.def_ROIs_WangParcels import roi
-from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+from matplotlib.colors import ListedColormap
 from nilearn import plotting
 from functions.plusFovea import add_fovea
 from functions.plusFovea import add_fovea_R
@@ -77,7 +77,7 @@ newcmp = ListedColormap(newcolors, name='VisualAreas')
 #                        '.32k_fs_LR.surf.gii'),
 #     roi_map=np.reshape(visual_areas_L[0:32492], (-1)), hemi='left',
 #     bg_map=background_L, cmap=newcmp, symmetric_cbar=False, vmax=21,
-#     view='posterior', output_file='L_visualareas_posterior.svg')
+#     view='posterior', output_file='./output/L_visualareas_posterior.svg')
 # plotting.show()
 #
 #
@@ -88,9 +88,9 @@ newcmp = ListedColormap(newcolors, name='VisualAreas')
 #     '.midthickness_MSMAll.32k_fs_LR.surf.gii'),
 #     roi_map=np.reshape(visual_areas_R[0:32492], (-1)), hemi='right',
 #     bg_map=background_R, cmap=newcmp, symmetric_cbar=False, vmax=21,
-#     view='posterior', output_file='R_visualareas_posterior.svg')
-
-
+#     view='posterior', output_file='./output/R_visualareas_posterior.svg')
+#
+#
 # # Lateral views
 # plotting.plot_surf_roi(
 #     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '..',
@@ -100,7 +100,7 @@ newcmp = ListedColormap(newcolors, name='VisualAreas')
 #                        '.32k_fs_LR.surf.gii'),
 #     roi_map=np.reshape(visual_areas_L[0:32492], (-1)), hemi='left',
 #     bg_map=background_L, cmap=newcmp, symmetric_cbar=False, vmax=21,
-#     view='lateral', output_file='L_visualareas_lateral.svg')
+#     view='lateral', output_file='./output/L_visualareas_lateral.svg')
 #
 # plotting.plot_surf_roi(
 #     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '..',
@@ -110,7 +110,7 @@ newcmp = ListedColormap(newcolors, name='VisualAreas')
 #                        '.32k_fs_LR.surf.gii'),
 #     roi_map=np.reshape(visual_areas_R[0:32492], (-1)), hemi='right',
 #     bg_map=background_R, cmap=newcmp, symmetric_cbar=False, vmax=21,
-#     view='lateral', output_file='R_visualareas_lateral.svg')
+#     view='lateral', output_file='./output/R_visualareas_lateral.svg')
 
 
 # # Sphere plots
@@ -120,6 +120,7 @@ background_L[background_L > 0] = 1
 background_R[background_R < 0] = 0
 background_R[background_R > 0] = 1
 
+# Right hemisphere
 view = plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(
     __file__)), '..',
     'data/raw/original/S1200_7T_Retinotopy_9Zkk/S1200_7T_Retinotopy181'
@@ -130,6 +131,7 @@ view = plotting.view_surf(surf_mesh=osp.join(osp.dirname(osp.realpath(
     vmax=22)
 view.open_in_browser()
 
+# Left hemisphere
 view = plotting.view_surf(
     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '..',
                        'data/raw/original/S1200_7T_Retinotopy_9Zkk'

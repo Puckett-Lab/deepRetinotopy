@@ -24,7 +24,6 @@ curv = scipy.io.loadmat(osp.join(path_curv, 'cifti_curv_all.mat'))[
 # Right hemisphere
 background = np.reshape(
     curv['x' + hcp_id[subject_index] + '_curvature'][0][0][32492:], (-1))
-
 threshold = 1  # threshold for the curvature map
 
 # Background settings
@@ -33,6 +32,7 @@ background[nocurv == 1] = 0
 background[background < 0] = 0
 background[background > 0] = 1
 
+# Loading training data
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data')
 pre_transform = T.Compose([T.FaceToEdge()])
 train_dataset_right = Retinotopy(path, 'Train', transform=T.Cartesian(),
@@ -42,6 +42,7 @@ train_dataset_right = Retinotopy(path, 'Train', transform=T.Cartesian(),
 train_loader_right = DataLoader(train_dataset_right, batch_size=1,
                                 shuffle=True)
 
+# ROI settings
 label_primary_visual_areas = ['ROI']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
     label_primary_visual_areas)
@@ -79,6 +80,7 @@ view = plotting.view_surf(
 view.open_in_browser()
 
 
+
 # Left hemisphere
 background = np.reshape(
     curv['x' + hcp_id[subject_index] + '_curvature'][0][0][0:32492], (-1))
@@ -91,12 +93,14 @@ background[nocurv == 1] = 0
 background[background < 0] = 0
 background[background > 0] = 1
 
+# Loading training data
 train_dataset_left = Retinotopy(path, 'Train', transform=T.Cartesian(),
                                 pre_transform=pre_transform, n_examples=181,
                                 prediction='polarAngle', myelination=True,
                                 hemisphere='Left')
 train_loader_left = DataLoader(train_dataset_left, batch_size=1, shuffle=True)
 
+# ROI settings
 label_primary_visual_areas = ['ROI']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
     label_primary_visual_areas)
