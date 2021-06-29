@@ -21,7 +21,6 @@ curv = scipy.io.loadmat(osp.join(path_curv, 'cifti_curv_all.mat'))[
     'cifti_curv']
 background = np.reshape(
     curv['x' + hcp_id[subject_index] + '_curvature'][0][0][32492:], (-1))
-
 threshold = 10  # threshold for the curvature map
 
 # Background settings
@@ -31,6 +30,7 @@ background[background < 0] = 0
 background[background > 0] = 1
 
 # Right hemisphere
+# Loading training data
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data')
 pre_transform = T.Compose([T.FaceToEdge()])
 
@@ -41,6 +41,7 @@ train_dataset_right = Retinotopy(path, 'Train', transform=T.Cartesian(),
 train_loader_right = DataLoader(train_dataset_right, batch_size=1,
                                 shuffle=True)
 
+# ROI settings
 label_primary_visual_areas = ['ROI']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
     label_primary_visual_areas)
@@ -54,6 +55,17 @@ ecc = np.mean(ecc, 0)
 
 # # Saving the average map
 # np.savez('./output/AverageEccentricityMap_RH.npz', list=ecc)
+
+# # Mask for prediction errors
+# ecc_1to8 = []
+# for i in range(len(ecc)):
+#     if ecc[i][0] < 1 or ecc[i][0] > 8:
+#         ecc_1to8.append(0)
+#     else:
+#         ecc_1to8.append(ecc[i][0])
+# ecc_1to8 = np.reshape(np.array(ecc_1to8),(-1))
+# np.savez('./output/MaskEccentricity_above1below8ecc_RH', list = ecc_1to8 > 0)
+
 
 # Masking
 ecc_thr[final_mask_R == 1] = np.reshape(ecc, (-1, 1)) * 10 + threshold
@@ -81,12 +93,14 @@ background[nocurv == 1] = 0
 background[background < 0] = 0
 background[background > 0] = 1
 
+# Loading training data
 train_dataset_left = Retinotopy(path, 'Train', transform=T.Cartesian(),
                                 pre_transform=pre_transform, n_examples=181,
                                 prediction='eccentricity', myelination=True,
                                 hemisphere='Left')
 train_loader_left = DataLoader(train_dataset_left, batch_size=1, shuffle=True)
 
+# ROI settings
 label_primary_visual_areas = ['ROI']
 final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
     label_primary_visual_areas)
@@ -100,6 +114,17 @@ ecc = np.mean(ecc, 0)
 
 # # Saving the average map
 # np.savez('./output/AverageEccentricityMap_LH.npz', list=ecc)
+
+# # Mask for prediction errors
+# ecc_1to8 = []
+# for i in range(len(ecc)):
+#     if ecc[i][0] < 1 or ecc[i][0] > 8:
+#         ecc_1to8.append(0)
+#     else:
+#         ecc_1to8.append(ecc[i][0])
+# ecc_1to8 = np.reshape(np.array(ecc_1to8),(-1))
+# np.savez('./output/MaskEccentricity_above1below8ecc_LH', list = ecc_1to8 > 0)
+
 
 # Masking
 ecc_thr[final_mask_L == 1] = np.reshape(ecc, (-1, 1)) * 10 + threshold
