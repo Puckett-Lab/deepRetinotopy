@@ -79,11 +79,14 @@ def PA_difference(model):
                             (-1, 1))
 
                         # Rescaling
-                        minus = pred > 180
-                        sum = pred < 180
-                        pred[minus] = pred[minus] - 180
-                        pred[sum] = pred[sum] + 180
-                        pred = np.array(pred) * (np.pi / 180)
+                        if model == 'Benson14':
+                            pred = np.array(pred) * (np.pi / 180)
+                        else:
+                            minus = pred > 180
+                            sum = pred < 180
+                            pred[minus] = pred[minus] - 180
+                            pred[sum] = pred[sum] + 180
+                            pred = np.array(pred) * (np.pi / 180)
 
                         minus = measured > 180
                         sum = measured < 180
@@ -146,11 +149,14 @@ def PA_difference(model):
                         (-1, 1))
 
                     # Rescaling
-                    minus = pred > 180
-                    sum = pred < 180
-                    pred[minus] = pred[minus] - 180
-                    pred[sum] = pred[sum] + 180
-                    pred = np.array(pred) * (np.pi / 180)
+                    if model == 'Benson14':
+                        pred = np.array(pred) * (np.pi / 180)
+                    else:
+                        minus = pred > 180
+                        sum = pred < 180
+                        pred[minus] = pred[minus] - 180
+                        pred[sum] = pred[sum] + 180
+                        pred = np.array(pred) * (np.pi / 180)
 
                     minus = measured > 180
                     sum = measured < 180
@@ -217,11 +223,14 @@ def PA_difference(model):
                             (-1, 1))
 
                         # Rescaling
-                        minus = pred > 180
-                        sum = pred < 180
-                        pred[minus] = pred[minus] - 180
-                        pred[sum] = pred[sum] + 180
-                        pred = np.array(pred) * (np.pi / 180)
+                        if model == 'Benson14':
+                            pred = np.array(pred) * (np.pi / 180)
+                        else:
+                            minus = pred > 180
+                            sum = pred < 180
+                            pred[minus] = pred[minus] - 180
+                            pred[sum] = pred[sum] + 180
+                            pred = np.array(pred) * (np.pi / 180)
 
                         minus = measured > 180
                         sum = measured < 180
