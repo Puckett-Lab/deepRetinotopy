@@ -1,3 +1,4 @@
+import os
 import os.path as osp
 import torch
 import torch.nn.functional as F
@@ -6,30 +7,24 @@ import sys
 
 sys.path.append('../..')
 
-from dataset.HCP_3sets_ROI_notwin import Retinotopy
+from dataset.HCP_3sets_ROI_splitHalves import Retinotopy
 from torch_geometric.data import DataLoader
 from torch_geometric.nn import SplineConv
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), 'data')
 pre_transform = T.Compose([T.FaceToEdge()])
-train_dataset = Retinotopy(path, 'Train', transform=T.Cartesian(),
-                           pre_transform=pre_transform, n_examples=181,
-                           prediction='polarAngle', myelination=True,
-                           hemisphere='Left')
-dev_dataset = Retinotopy(path, 'Development', transform=T.Cartesian(),
-                         pre_transform=pre_transform, n_examples=181,
-                         prediction='polarAngle', myelination=True,
-                         hemisphere='Left')
+
+fit = '2'  # or '3'
+# Loading test dataset
 test_dataset = Retinotopy(path, 'Test', transform=T.Cartesian(),
                           pre_transform=pre_transform, n_examples=181,
                           prediction='polarAngle', myelination=True,
-                          hemisphere='Left')
+                          hemisphere='Left', fit=fit)
 
-train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
-dev_loader = DataLoader(dev_dataset, batch_size=1, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
 
+# Model
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -120,29 +115,30 @@ class Net(torch.nn.Module):
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = Net().to(device)
+# Loading trained model
 model.load_state_dict(torch.load(
-    '/home/uqfribe1/PycharmProjects/DEEP-fMRI'
-    '/model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_'
-    'batchnorm_dropout010_notwin10_5.pt',
-    map_location='cpu'))
+    './polarAngle/output/deepRetinotopy_PA_LH_model.pt',
+    map_location='cpu'))  # Left hemisphere
+
+# Create an output folder if it doesn't already exist
+directory = './testset_results'
+if not osp.exists(directory):
+    os.makedirs(directory)
 
 
-# Evaluating trained model on the test dataset (empirical curvature/myelin
-# values)
+# Evaluating trained model on the test dataset
 def test():
     model.eval()
-    MeanAbsError = 0
+
     y = []
     y_hat = []
     for data in test_loader:
         pred = model(data.to(device)).detach()
+
         y_hat.append(pred)
         y.append(data.to(device).y.view(-1))
-        MAE = torch.mean(abs(data.to(device).y.view(-1) - pred)).item()
-        MeanAbsError += MAE
-    test_MAE = MeanAbsError / len(test_loader)
-    output = {'Predicted_values': y_hat, 'Measured_values': y,
-              'MAE': test_MAE}
+
+    output = {'Predicted_values': y_hat, 'Measured_values': y}
     return output
 
 
@@ -150,4 +146,5 @@ evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'],
             'Measured_values': evaluation['Measured_values']},
            osp.join(osp.dirname(osp.realpath(__file__)), 'testset_results',
-                    'testset-pred_Model5_PA_LH_notwin10.pt'))
+                    'testset-pred_deepRetinotopy_PA_LH_fit' + str(
+                        fit) + '.pt'))
