@@ -17,11 +17,11 @@ path = osp.join(osp.dirname(osp.realpath(__file__)), '..', '..', 'data')
 pre_transform = T.Compose([T.FaceToEdge()])
 train_dataset = Retinotopy(path, 'Train', transform=T.Cartesian(),
                            pre_transform=pre_transform, n_examples=181,
-                           prediction='polarAngle', myelination=True,
+                           prediction='eccentricity', myelination=True,
                            hemisphere='Left')
 dev_dataset = Retinotopy(path, 'Development', transform=T.Cartesian(),
                          pre_transform=pre_transform, n_examples=181,
-                         prediction='polarAngle', myelination=True,
+                         prediction='eccentricity', myelination=True,
                          hemisphere='Left')
 train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
 dev_loader = DataLoader(dev_dataset, batch_size=1, shuffle=False)
@@ -196,8 +196,8 @@ for epoch in range(1, 201):
     loss, MAE = train(epoch)
     test_output = test()
     print(
-        'Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: '
-        '{:.4f}, Test_MAE_thr: {:.4f}'.format(
+        'Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {'
+        ':.4f}, Test_MAE_thr: {:.4f}'.format(
             epoch, loss, MAE, test_output['MAE'], test_output['MAE_thr']))
     if epoch % 25 == 0:  # To save intermediate predictions
         torch.save({'Epoch': epoch,
@@ -207,13 +207,13 @@ for epoch in range(1, 201):
                     'Dev_MAE': test_output['MAE']},
                    osp.join(osp.dirname(osp.realpath(__file__)),
                             'output',
-                            'deepRetinotopy_PA_LH_output_epoch' + str(
+                            'deepRetinotopy_ecc_LH_output_epoch' + str(
                                 epoch) + '.pt'))
 
 # Saving model's learned parameters
 torch.save(model.state_dict(),
            osp.join(osp.dirname(osp.realpath(__file__)), 'output',
-                    'deepRetinotopy_PA_LH_model.pt'))
+                    'deepRetinotopy_ecc_LH_model.pt'))
 
 # end = time.time() # To find out how long it takes to train the model
 # time = (end - init) / 60
