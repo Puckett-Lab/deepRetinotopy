@@ -1,10 +1,16 @@
 import numpy as np
 import pandas as pd
 import sys
+import os
 
 sys.path.append('..')
 
 models=['PA']
+
+# Create an output folder if it doesn't already exist
+directory = './../output'
+if not os.path.exists(directory):
+    os.makedirs(directory)
 
 for i in range(len(models)):
     # Loading the data
