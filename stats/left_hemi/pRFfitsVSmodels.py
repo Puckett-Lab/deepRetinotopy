@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import os
 
 from functions.def_ROIs_WangParcels import roi as roi2
 from functions.def_ROIs_WangParcelsPlusFovea import roi
@@ -300,6 +301,11 @@ def PA_difference_fits(model):
         np.savez('./../output/ErrorPerParticipant_PA_LH_dorsalV1-3_' + str(model) + '_1-8_' +
                      models[m] + '.npz',
                  list=np.reshape(theta_withinsubj, (10, -1)))
+
+# Create an output folder if it doesn't already exist
+directory = './../output'
+if not os.path.exists(directory):
+    os.makedirs(directory)
 
 PA_difference_fits('average')
 PA_difference_fits('deepRetinotopy')

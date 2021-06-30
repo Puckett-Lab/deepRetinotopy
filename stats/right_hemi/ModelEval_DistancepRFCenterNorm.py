@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import os
 
 from functions.def_ROIs_WangParcels import roi as roi2
 from functions.def_ROIs_WangParcelsPlusFovea import roi
@@ -332,22 +333,10 @@ def pRF_distance(model):
         model) + '_1-8.npz',
              list=np.reshape(theta_withinsubj, (10, -1)))
 
+# Create an output folder if it doesn't already exist
+directory = './../output'
+if not os.path.exists(directory):
+    os.makedirs(directory)
+
 pRF_distance('average')
 pRF_distance('deepRetinotopy')
-
-# TODO
-# mean_all = np.mean(np.concatenate((mean_delta[0], mean_delta_2[0])))
-# std_all = np.std(np.concatenate((mean_delta[0], mean_delta_2[0])))
-#
-# print(
-#     f'Mean error and std in early visual cortex (V1, V2, V3) including '
-#     f'the '
-#     f'fovea: {np.mean(mean_delta_2[0])}, {np.std(mean_delta_2[0])}')
-# print(
-#     f'Mean error and std in higher order areas (Wang et al., 2015):'
-#     f' {np.mean(mean_delta[0])}, {np.std(mean_delta[0])}')
-#
-#     print(
-#         f'Mean error and std in dorsal early visual cortex (V1, V2, V3) not '
-#         f'including the '
-#         f'fovea: {np.mean(mean_delta[0])}, {np.std(mean_delta[0])}')

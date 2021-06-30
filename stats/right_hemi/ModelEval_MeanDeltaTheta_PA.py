@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import os
 import torch
 
 from functions.def_ROIs_WangParcels import roi as roi2
@@ -223,23 +223,10 @@ def PA_difference(model):
     np.savez('./../output/ErrorPerParticipant_PA_RH_dorsalV1-3_' + str(model) + '_1-8.npz',
                 list=np.reshape(theta_withinsubj,(10,-1)))
 
+# Create an output folder if it doesn't already exist
+directory = './../output'
+if not os.path.exists(directory):
+    os.makedirs(directory)
+
 PA_difference('average')
 PA_difference('deepRetinotopy')
-
-# TODO
-# mean_earlyVisualCortex = np.mean(mean_delta_2[0])
-# std_earlyVisualCortex = np.std(mean_delta_2[0])
-# mean_all = np.mean(mean_delta[0])
-# std_all = np.std(mean_delta[0])
-#
-# print(
-#     f'Mean error and std in early visual cortex (V1, V2, V3) including '
-#     f'the '
-#     f'fovea: {mean_earlyVisualCortex}, {std_earlyVisualCortex}')
-# print(
-#     f'Mean error and std in higher order areas (Wang et al., 2015):'
-# #     f' {mean_all}, {std_all}')
-#     print(
-#         f'Mean error and std in dorsal early visual cortex (V1, V2, V3) not '
-#         f'including the '
-#         f'fovea: {np.mean(mean_delta[0])}, {np.std(mean_delta[0])}')
