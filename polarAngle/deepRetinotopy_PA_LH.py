@@ -27,6 +27,7 @@ train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
 dev_loader = DataLoader(dev_dataset, batch_size=1, shuffle=False)
 
 
+# Model
 class Net(torch.nn.Module):
     def __init__(self):
         super(Net, self).__init__()
@@ -127,14 +128,6 @@ def train(epoch):
         for param_group in optimizer.param_groups:
             param_group['lr'] = 0.005
 
-    '''if epoch == 2000:
-        for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.001
-
-    if epoch == 3500:
-        for param_group in optimizer.param_groups:
-            param_group['lr'] = 0.0005'''
-
     for data in train_loader:
         data = data.to(device)
         optimizer.zero_grad()
@@ -148,7 +141,8 @@ def train(epoch):
 
         MAE = torch.mean(abs(
             data.to(device).y.view(-1)[threshold == 1] - model(data)[
-                threshold == 1])).item()
+                threshold == 1])).item()  # To check the performance of the
+        # model while training
 
         optimizer.step()
     return output_loss.detach(), MAE
@@ -156,11 +150,13 @@ def train(epoch):
 
 def test():
     model.eval()
+
     MeanAbsError = 0
     MeanAbsError_thr = 0
     y = []
     y_hat = []
     R2_plot = []
+
     for data in dev_loader:
         pred = model(data.to(device)).detach()
         y_hat.append(pred)
@@ -172,10 +168,12 @@ def test():
         threshold2 = R2.view(-1) > 17
 
         MAE = torch.mean(abs(data.to(device).y.view(-1)[threshold == 1] - pred[
-            threshold == 1])).item()
+            threshold == 1])).item()  # To check the performance of the
+        # model while training
         MAE_thr = torch.mean(abs(
             data.to(device).y.view(-1)[threshold2 == 1] - pred[
-                threshold2 == 1])).item()
+                threshold2 == 1])).item()  # To check the performance of the
+        # model while training
         MeanAbsError_thr += MAE_thr
         MeanAbsError += MAE
 
@@ -186,33 +184,31 @@ def test():
     return output
 
 
-init = time.time()
+# init = time.time() # To find out how long it takes to train the model
 
 for epoch in range(1, 201):
     loss, MAE = train(epoch)
     test_output = test()
     print(
-        'Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: {'
-        ':.4f}, Test_MAE_thr: {:.4f}'.format(
+        'Epoch: {:02d}, Train_loss: {:.4f}, Train_MAE: {:.4f}, Test_MAE: '
+        '{:.4f}, Test_MAE_thr: {:.4f}'.format(
             epoch, loss, MAE, test_output['MAE'], test_output['MAE_thr']))
-    if epoch % 25 == 0:
+    if epoch % 25 == 0:  # To save intermediate predictions
         torch.save({'Epoch': epoch,
                     'Predicted_values': test_output['Predicted_values'],
                     'Measured_values': test_output['Measured_values'],
                     'R2': test_output['R2'], 'Loss': loss,
                     'Dev_MAE': test_output['MAE']},
-                   osp.join(osp.dirname(osp.realpath(__file__)), '..',
+                   osp.join(osp.dirname(osp.realpath(__file__)),
                             'output',
-                            'model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010_output_epoch' + str(
+                            'deepRetinotopy_PA_LH_output_epoch' + str(
                                 epoch) + '.pt'))
-    if test_output['MAE'] <= 10.94:  # MeanAbsError from Benson2014
-        break
 
-# Saving the model's learned parameter and predicted/y values
+# Saving model's learned parameters
 torch.save(model.state_dict(),
-           osp.join(osp.dirname(osp.realpath(__file__)), '..', 'output',
-                    'model4_nothresh_rotated_12layers_smoothL1lossR2_curvnmyelin_ROI1_k25_batchnorm_dropout010.pt'))
+           osp.join(osp.dirname(osp.realpath(__file__)), 'output',
+                    'deepRetinotopy_PA_LH_model.pt'))
 
-end = time.time()
-time = (end - init) / 60
-print(str(time) + ' minutes')
+# end = time.time() # To find out how long it takes to train the model
+# time = (end - init) / 60
+# print(str(time) + ' minutes')
