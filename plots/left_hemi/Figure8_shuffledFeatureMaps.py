@@ -35,7 +35,7 @@ measured = np.zeros((32492, 1))
 
 predictions = torch.load(
     '/home/uqfribe1/PycharmProjects/deepRetinotopy/testset_results/left_hemi'
-    '/testset-shuffled-myelincurv_Model3_PA_LH.pt',
+    '/testset-shuffled-myelincurv_deepRetinotopy_PA_LH.pt',
     map_location='cpu')
 
 pred[final_mask_L == 1] = np.reshape(
