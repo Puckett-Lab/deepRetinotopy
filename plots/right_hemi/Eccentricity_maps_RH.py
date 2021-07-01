@@ -37,7 +37,7 @@ measured = np.zeros((32492, 1))
 
 # Loading the predictions
 predictions = torch.load(
-    './../../testset_results/right_hemi/testset-pred_Model4_ecc_RH.pt',
+    './../../testset_results/right_hemi/testset-pred_deepRetinotopy_ecc_RH.pt',
     map_location='cpu')
 
 pred[final_mask_R == 1] = np.reshape(
