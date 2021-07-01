@@ -162,4 +162,4 @@ def error_plots(hemisphere, retinotopic_feature):
 
 error_plots('LH', 'PA')
 error_plots('LH', 'ecc')
-error_plots('LH', 'pRFcenter') # TODO - pRF center normalized
+error_plots('LH', 'pRFcenter')

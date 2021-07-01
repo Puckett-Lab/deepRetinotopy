@@ -25,7 +25,7 @@ mean_across = [] # Individual variability
 for m in range(len(models)):
     predictions = torch.load(
         './../../testset_results/left_hemi/testset-' +
-        models[m] + '_Model3_PA_LH.pt', map_location='cpu')
+        models[m] + '_deepRetinotopy_PA_LH.pt', map_location='cpu')
 
     theta_withinsubj = []
     theta_acrosssubj_pred = []

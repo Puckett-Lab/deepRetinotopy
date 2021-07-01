@@ -37,7 +37,7 @@ for k in range(len(clusters)):
         predictions = torch.load(
             './../../testset_results/left_hemi'
             '/testset-' +
-            models[m] + '_Model3_PA_LH.pt', map_location='cpu')
+            models[m] + '_deepRetinotopy_PA_LH.pt', map_location='cpu')
 
         theta_withinsubj = []
         theta_acrosssubj_pred = []
@@ -180,7 +180,7 @@ for k in range(len(clusters)):
     legend = plt.legend()
     legend.remove()
 
-    plt.ylim([0, 100])
+    plt.ylim([0, 80])
     ax.set_xlabel('')
 
 
@@ -200,7 +200,7 @@ mean_across_2 = []
 for m in range(len(models)):
     predictions = torch.load(
         './../../testset_results/left_hemi/testset-' +
-        models[m] + '_Model3_PA_LH.pt', map_location='cpu')
+        models[m] + '_deepRetinotopy_PA_LH.pt', map_location='cpu')
 
     theta_withinsubj = []
     theta_acrosssubj_pred = []
@@ -210,6 +210,7 @@ for m in range(len(models)):
         visual_hierarchy)
     ROI1 = np.zeros((32492, 1))
     ROI1[final_mask_L == 1] = 1
+
     mask = ROI1 + np.reshape(cluster, (32492, 1))
     mask = mask[ROI1 == 1]
 
@@ -332,6 +333,6 @@ ax = sns.pointplot(y='$\Delta$$\t\Theta$', x='Input', order=models_name,
 ax.set_title('Early visual cortex ')
 legend = plt.legend()
 ax.set_xlabel('')
-plt.ylim([0, 100])
+plt.ylim([0, 80])
 plt.savefig('./../output/ModelEval_AllClusters.pdf', format="pdf")
 plt.show()

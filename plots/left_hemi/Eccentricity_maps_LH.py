@@ -9,7 +9,7 @@ sys.path.append('..')
 from nilearn import plotting
 from functions.def_ROIs_WangParcelsPlusFovea import roi
 
-subject_index = 7
+subject_index = 8
 
 hcp_id = ['617748', '191336', '572045', '725751', '198653',
           '601127', '644246', '191841', '680957', '157336']
@@ -35,9 +35,10 @@ final_mask_L, final_mask_R, index_L_mask, index_R_mask = roi(
 pred = np.zeros((32492, 1))
 measured = np.zeros((32492, 1))
 
+
 # Loading the predictions
 predictions = torch.load(
-    './../../testset_results/left_hemi/testset-pred_Model4_ecc_LH.pt',
+    './../../testset_results/left_hemi/testset-pred_deepRetinotopy_ecc_LH.pt',
     map_location='cpu')
 
 pred[final_mask_L == 1] = np.reshape(
