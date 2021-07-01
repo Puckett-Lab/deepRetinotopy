@@ -46,10 +46,10 @@ def pRF_distance(model):
         for m in range(len(models)):
             predictions_PA = torch.load(
                 './../../testset_results/right_hemi/testset-' +
-                models[m] + '_Model3_PA_RH.pt', map_location='cpu')
+                models[m] + '_deepRetinotopy_PA_RH.pt', map_location='cpu')
             predictions_ecc = torch.load(
                 './../../testset_results/right_hemi/testset-' +
-                models[m] + '_Model4_ecc_RH.pt', map_location='cpu')
+                models[m] + '_deepRetinotopy_ecc_RH.pt', map_location='cpu')
 
             # ROI settings
             label_primary_visual_areas = ['ROI']
@@ -151,10 +151,10 @@ def pRF_distance(model):
     for m in range(len(models)):
         predictions_PA = torch.load(
             './../../testset_results/right_hemi/testset-' +
-            models[m] + '_Model3_PA_RH.pt', map_location='cpu')
+            models[m] + '_deepRetinotopy_PA_RH.pt', map_location='cpu')
         predictions_ecc = torch.load(
             './../../testset_results/right_hemi/testset-' +
-            models[m] + '_Model4_ecc_RH.pt', map_location='cpu')
+            models[m] + '_deepRetinotopy_ecc_RH.pt', map_location='cpu')
 
         # ROI settings
         label_primary_visual_areas = ['ROI']
@@ -242,10 +242,10 @@ def pRF_distance(model):
         for m in range(len(models)):
             predictions_PA = torch.load(
                 './../../testset_results/right_hemi/testset-' +
-                models[m] + '_Model3_PA_RH.pt', map_location='cpu')
+                models[m] + '_deepRetinotopy_PA_RH.pt', map_location='cpu')
             predictions_ecc = torch.load(
                 './../../testset_results/right_hemi/testset-' +
-                models[m] + '_Model4_ecc_RH.pt', map_location='cpu')
+                models[m] + '_deepRetinotopy_ecc_RH.pt', map_location='cpu')
 
             # ROI settings
             label_primary_visual_areas = ['ROI']

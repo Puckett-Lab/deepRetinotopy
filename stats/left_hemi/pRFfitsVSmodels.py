@@ -32,7 +32,7 @@ def PA_difference_fits(model):
         'list']
     # Ground truth - fit 1
     GT_fit1 = torch.load(
-        './../../testset_results/left_hemi/testset-pred_Model3_PA_LH.pt',
+        './../../testset_results/left_hemi/testset-pred_deepRetinotopy_PA_LH.pt',
         map_location='cpu')
     # Benson14 template
     Benson14_predictions = np.load('/home/uqfribe1/PycharmProjects/deepRetinotopy/benson14_'
@@ -42,7 +42,7 @@ def PA_difference_fits(model):
         mean_delta = []
         predictions = torch.load(
             './../../testset_results/left_hemi/testset-' +
-            'pred' + '_Model3_PA_LH_' + models[k] + '.pt', map_location='cpu')
+            'pred' + '_deepRetinotopy_PA_LH_' + models[k] + '.pt', map_location='cpu')
 
         # ROI settings
         label_primary_visual_areas = ['ROI']
@@ -135,7 +135,7 @@ def PA_difference_fits(model):
         mean_delta_2 = []
         predictions = torch.load(
             './../../testset_results/left_hemi/testset-' + 'pred' +
-            '_Model3_PA_LH_' +
+            '_deepRetinotopy_PA_LH_' +
                  models[m] + '.pt',
             map_location='cpu')
 
@@ -219,7 +219,7 @@ def PA_difference_fits(model):
         mean_delta = []
         predictions = torch.load(
             './../../testset_results/left_hemi/testset-' +
-            'pred' + '_Model3_PA_LH_' +
+            'pred' + '_deepRetinotopy_PA_LH_' +
              models[m] + '.pt', map_location='cpu')
 
         # ROI seetings

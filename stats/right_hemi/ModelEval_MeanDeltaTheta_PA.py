@@ -36,7 +36,7 @@ def PA_difference(model):
         for m in range(len(models)):
             predictions = torch.load(
                 './../../testset_results/right_hemi/testset-' +
-                models[m] + '_Model3_PA_RH.pt', map_location='cpu')
+                models[m] + '_deepRetinotopy_PA_RH.pt', map_location='cpu')
 
             # ROI settings
             label_primary_visual_areas = ['ROI']
@@ -107,7 +107,7 @@ def PA_difference(model):
     for m in range(len(models)):
         predictions = torch.load(
             './../../testset_results/right_hemi/testset-' +
-            models[m] + '_Model3_PA_RH.pt', map_location='cpu')
+            models[m] + '_deepRetinotopy_PA_RH.pt', map_location='cpu')
 
         # ROI settings
         label_primary_visual_areas = ['ROI']
@@ -165,7 +165,7 @@ def PA_difference(model):
         for m in range(len(models)):
             predictions = torch.load(
                 './../../testset_results/right_hemi/testset-' +
-                models[m] + '_Model3_PA_RH.pt', map_location='cpu')
+                models[m] + '_deepRetinotopy_PA_RH.pt', map_location='cpu')
 
             # ROI seetings
             label_primary_visual_areas = ['ROI']

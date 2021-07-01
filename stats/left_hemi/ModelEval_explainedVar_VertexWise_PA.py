@@ -16,7 +16,7 @@ PA_average = np.load('./../../plots/output/AveragePolarAngleMap_LH.npz')[
     'list']
 # DeepRetinotopy predictions
 predictions = torch.load(
-    './../../testset_results/left_hemi/testset-pred_Model3_PA_LH.pt',
+    './../../testset_results/left_hemi/testset-pred_deepRetinotopy_PA_LH.pt',
     map_location='cpu')
 
 # Create lists with empirical and predicted (average or deepRetinotopy) maps

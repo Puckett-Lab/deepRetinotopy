@@ -14,11 +14,12 @@ from torch_geometric.nn import SplineConv
 path = osp.join(osp.dirname(osp.realpath(__file__)), 'data')
 pre_transform = T.Compose([T.FaceToEdge()])
 
+hemisphere = 'Left'
 # Loading test dataset
 test_dataset = Retinotopy(path, 'Test', transform=T.Cartesian(),
                           pre_transform=pre_transform, n_examples=181,
                           prediction='polarAngle', myelination=True,
-                          hemisphere='Left')
+                          hemisphere=hemisphere)
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
 
@@ -113,13 +114,14 @@ class Net(torch.nn.Module):
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = Net().to(device)
+
 # Loading trained model
 model.load_state_dict(torch.load(
-    './polarAngle/output/deepRetinotopy_ecc_LH_noTwin_model.pt',
+    './polarAngle/output/deepRetinotopy_PA_LH_noTwin_model.pt',
     map_location='cpu'))  # Left hemisphere
 
 # Create an output folder if it doesn't already exist
-directory = './testset_results'
+directory = './testset_results/left_hemi'
 if not osp.exists(directory):
     os.makedirs(directory)
 
@@ -144,5 +146,5 @@ def test():
 evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'],
             'Measured_values': evaluation['Measured_values']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testset_results',
+           osp.join(directory,
                     'testset-pred_deepRetinotopy_PA_LH_notwin.pt'))
