@@ -16,7 +16,7 @@ ecc_average = np.load('./../../plots/output/AverageEccentricityMap_RH.npz')[
     'list']
 # DeepRetinotopy predictions
 predictions = torch.load(
-    './../../testset_results/right_hemi/testset-pred_Model4_ecc_RH.pt',
+    './../../testset_results/right_hemi/testset-pred_deepRetinotopy_ecc_RH.pt',
     map_location='cpu')  #
 
 # Create lists with empirical and predicted (average or deepRetinotopy) maps

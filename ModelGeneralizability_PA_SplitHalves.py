@@ -14,13 +14,13 @@ from torch_geometric.nn import SplineConv
 path = osp.join(osp.dirname(osp.realpath(__file__)), 'data')
 pre_transform = T.Compose([T.FaceToEdge()])
 
-fit = '2'  # or '3'
+fit = '3'  # or '3'
+hemisphere = 'Left'
 # Loading test dataset
 test_dataset = Retinotopy(path, 'Test', transform=T.Cartesian(),
                           pre_transform=pre_transform, n_examples=181,
                           prediction='polarAngle', myelination=True,
-                          hemisphere='Left', fit=fit)
-
+                          hemisphere=hemisphere, fit=fit)
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
 
@@ -121,7 +121,7 @@ model.load_state_dict(torch.load(
     map_location='cpu'))  # Left hemisphere
 
 # Create an output folder if it doesn't already exist
-directory = './testset_results'
+directory = './testset_results/left_hemi'
 if not osp.exists(directory):
     os.makedirs(directory)
 
@@ -145,6 +145,6 @@ def test():
 evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'],
             'Measured_values': evaluation['Measured_values']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testset_results',
+           osp.join(directory,
                     'testset-pred_deepRetinotopy_PA_LH_fit' + str(
                         fit) + '.pt'))

@@ -14,11 +14,12 @@ from torch_geometric.nn import SplineConv
 path = osp.join(osp.dirname(osp.realpath(__file__)), 'data')
 pre_transform = T.Compose([T.FaceToEdge()])
 
+hemisphere = 'Left'  # or 'Right'
 # Loading test dataset
 test_dataset = Retinotopy(path, 'Test', transform=T.Cartesian(),
                           pre_transform=pre_transform, n_examples=181,
                           prediction='eccentricity', myelination=True,
-                          hemisphere='Left')
+                          hemisphere=hemisphere)
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
 
@@ -113,18 +114,29 @@ class Net(torch.nn.Module):
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = Net().to(device)
-# Loading trained model
-model.load_state_dict(torch.load(
-    './eccentricity/output/deepRetinotopy_ecc_LH_model.pt',
-    map_location='cpu'))  # Left hemisphere
+
+if hemisphere == 'Left':
+    model.load_state_dict(torch.load(
+        './eccentricity/output/deepRetinotopy_ecc_LH_model.pt',
+        map_location='cpu'))  # Left hemisphere
+else:
+    model.load_state_dict(torch.load(
+        './eccentricity/output/deepRetinotopy_ecc_RH_model.pt',
+        map_location='cpu'))  # Right hemisphere
 
 # Create an output folder if it doesn't already exist
-directory = './testset_results'
+if hemisphere == 'Left':
+    directory = './testset_results/left_hemi'
+else:
+    directory = './testset_results/right_hemi'
 if not osp.exists(directory):
     os.makedirs(directory)
 
-
-# Evaluating trained model on the test dataset 
+# Evaluating trained model on the test dataset
+if hemisphere == 'Left':
+    hemi = 'LH'
+else:
+    hemi = 'RH'
 def test():
     model.eval()
 
@@ -140,14 +152,15 @@ def test():
     output = {'Predicted_values': y_hat, 'Measured_values': y}
     return output
 
+
 evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'],
             'Measured_values': evaluation['Measured_values']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testset_results',
-                    'testset-pred_deepRetinotopy_ecc_LH.pt'))
+           osp.join(directory,
+                    'testset-pred_deepRetinotopy_ecc_' + str(hemi) + '.pt'))
 
 
-# Evaluating trained model on the test dataset (shuffled curvature/myelin 
+# Evaluating trained model on the test dataset (shuffled curvature/myelin
 # values)
 def test():
     model.eval()
@@ -172,16 +185,18 @@ def test():
               'Shuffled_myelin': myelin, 'Shuffled_curv': curv}
     return output
 
+
 evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'],
             'Measured_values': evaluation['Measured_values'],
             'Shuffled_myelin': evaluation['Shuffled_myelin'],
             'Shuffled_curv': evaluation['Shuffled_curv']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testset_results',
-                    'testset-shuffled-myelincurv_deepRetinotopy_ecc_LH.pt'))
+           osp.join(directory,
+                    'testset-shuffled-myelincurv_deepRetinotopy_ecc_' + str(
+                        hemi) + '.pt'))
 
 
-# Evaluating trained model on the test dataset (constant curvature/myelin 
+# Evaluating trained model on the test dataset (constant curvature/myelin
 # values)
 def test():
     model.eval()
@@ -193,14 +208,16 @@ def test():
         data.x.transpose(0, 1)[1] = 1.4386905
 
         pred = model(data.to(device)).detach()
-        
+
         y_hat.append(pred)
         y.append(data.to(device).y.view(-1))
     output = {'Predicted_values': y_hat, 'Measured_values': y}
     return output
 
+
 evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'],
             'Measured_values': evaluation['Measured_values']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testset_results',
-                    'testset-constant_deepRetinotopy_ecc_LH.pt'))
+           osp.join(directory,
+                    'testset-constant_deepRetinotopy_ecc_' + str(
+                        hemi) + '.pt'))

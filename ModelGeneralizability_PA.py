@@ -14,11 +14,12 @@ from torch_geometric.nn import SplineConv
 path = osp.join(osp.dirname(osp.realpath(__file__)), 'data')
 pre_transform = T.Compose([T.FaceToEdge()])
 
+hemisphere = 'Left'  # or 'Right'
 # Loading test dataset
 test_dataset = Retinotopy(path, 'Test', transform=T.Cartesian(),
                           pre_transform=pre_transform, n_examples=181,
                           prediction='polarAngle', myelination=True,
-                          hemisphere='Left')
+                          hemisphere=hemisphere)
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
 
@@ -113,18 +114,30 @@ class Net(torch.nn.Module):
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = Net().to(device)
+
 # Loading trained model
-model.load_state_dict(torch.load(
-    './polarAngle/output/deepRetinotopy_PA_LH_model.pt',
-    map_location='cpu'))  # Left hemisphere
+if hemisphere == 'Left':
+    model.load_state_dict(torch.load(
+        './polarAngle/output/deepRetinotopy_PA_LH_model.pt',
+        map_location='cpu'))  # Left hemisphere
+else:
+    model.load_state_dict(torch.load(
+        './polarAngle/output/deepRetinotopy_PA_RH_model.pt',
+        map_location='cpu'))  # Right hemisphere
 
 # Create an output folder if it doesn't already exist
-directory = './testset_results'
+if hemisphere == 'Left':
+    directory = './testset_results/left_hemi'
+else:
+    directory = './testset_results/right_hemi'
 if not osp.exists(directory):
     os.makedirs(directory)
 
-
 # Evaluating trained model on the test dataset
+if hemisphere == 'Left':
+    hemi = 'LH'
+else:
+    hemi = 'RH'
 def test():
     model.eval()
 
@@ -144,8 +157,8 @@ def test():
 evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'],
             'Measured_values': evaluation['Measured_values']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testset_results',
-                    'testset-pred_deepRetinotopy_PA_LH.pt'))
+           osp.join(directory,
+                    'testset-pred_deepRetinotopy_PA_' + str(hemi) + '.pt'))
 
 
 # Evaluating trained model on the test dataset (shuffled curvature/myelin
@@ -179,8 +192,9 @@ torch.save({'Predicted_values': evaluation['Predicted_values'],
             'Measured_values': evaluation['Measured_values'],
             'Shuffled_myelin': evaluation['Shuffled_myelin'],
             'Shuffled_curv': evaluation['Shuffled_curv']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testset_results',
-                    'testset-shuffled-myelincurv_deepRetinotopy_PA_LH.pt'))
+           osp.join(directory,
+                    'testset-shuffled-myelincurv_deepRetinotopy_PA_' + str(
+                        hemi) + '.pt'))
 
 
 # Evaluating trained model on the test dataset (constant curvature/myelin
@@ -206,5 +220,5 @@ def test():
 evaluation = test()
 torch.save({'Predicted_values': evaluation['Predicted_values'],
             'Measured_values': evaluation['Measured_values']},
-           osp.join(osp.dirname(osp.realpath(__file__)), 'testset_results',
-                    'testset-constant_deepRetinotopy_PA_LH.pt'))
+           osp.join(directory,
+                    'testset-constant_deepRetinotopy_PA_' + str(hemi) + '.pt'))

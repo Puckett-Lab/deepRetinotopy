@@ -37,7 +37,7 @@ def ecc_difference(model):
         for m in range(len(models)):
             predictions = torch.load(
                 './../../testset_results/right_hemi/testset-' +
-                models[m] + '_Model4_ecc_RH.pt', map_location='cpu')
+                models[m] + '_deepRetinotopy_ecc_RH.pt', map_location='cpu')
 
             # ROI settings
             label_primary_visual_areas = ['ROI']
@@ -100,7 +100,7 @@ def ecc_difference(model):
     for m in range(len(models)):
         predictions = torch.load(
             './../../testset_results/right_hemi/testset-' +
-            models[m] + '_Model4_ecc_RH.pt', map_location='cpu')
+            models[m] + '_deepRetinotopy_ecc_RH.pt', map_location='cpu')
 
         # ROI settings
         label_primary_visual_areas = ['ROI']
@@ -150,7 +150,7 @@ def ecc_difference(model):
         for m in range(len(models)):
             predictions = torch.load(
                 './../../testset_results/right_hemi/testset-' +
-                models[m] + '_Model4_ecc_RH.pt', map_location='cpu')
+                models[m] + '_deepRetinotopy_ecc_RH.pt', map_location='cpu')
 
             # ROI seetings
             label_primary_visual_areas = ['ROI']
