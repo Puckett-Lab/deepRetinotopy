@@ -34,8 +34,13 @@ def ecc_difference(model):
                 'above1below8ecc_LH.npz')['list'], (-1))
     # Average map
     ecc_average = \
-    np.load('./../../plots/output/AverageEccentricityMap_LH.npz')[
-        'list']
+        np.load('./../../plots/output/AverageEccentricityMap_LH.npz')[
+            'list']
+
+    # Benson14 template
+    Benson14_predictions = \
+        np.load('./../..//benson14_testPrediction_ecc_lh.npz')['list']
+
     for k in range(len(visual_areas)):
         mean_delta = []
         for m in range(len(models)):
@@ -72,6 +77,10 @@ def ecc_difference(model):
                                 (-1, 1))
                         if model == 'average':
                             pred = np.reshape(np.array(ecc_average), (-1, 1))
+                        if model == 'Benson14':
+                            pred = np.reshape(
+                                np.array(Benson14_predictions[i]),
+                                (-1, 1))
                         measured = np.reshape(
                             np.array(predictions['Measured_values'][j]),
                             (-1, 1))
@@ -131,6 +140,10 @@ def ecc_difference(model):
                             (-1, 1))
                     if model == 'average':
                         pred = np.reshape(np.array(ecc_average), (-1, 1))
+                    if model == 'Benson14':
+                        pred = np.reshape(
+                            np.array(Benson14_predictions[i]),
+                            (-1, 1))
                     measured = np.reshape(
                         np.array(predictions['Measured_values'][j]),
                         (-1, 1))
@@ -189,6 +202,10 @@ def ecc_difference(model):
                                 (-1, 1))
                         if model == 'average':
                             pred = np.reshape(np.array(ecc_average), (-1, 1))
+                        if model == 'Benson14':
+                            pred = np.reshape(
+                                np.array(Benson14_predictions[i]),
+                                (-1, 1))
                         measured = np.reshape(
                             np.array(predictions['Measured_values'][j]),
                             (-1, 1))
@@ -209,6 +226,7 @@ def ecc_difference(model):
     np.savez('./../output/ErrorPerParticipant_ecc_LH_dorsalV1-3_' + str(
         model) + '_1-8.npz', list=np.reshape(theta_withinsubj, (10, -1)))
 
+
 # Create an output folder if it doesn't already exist
 directory = './../output'
 if not os.path.exists(directory):
@@ -216,3 +234,4 @@ if not os.path.exists(directory):
 
 ecc_difference('average')
 ecc_difference('deepRetinotopy')
+ecc_difference('Benson14')
