@@ -7,6 +7,7 @@ from functions.def_ROIs_WangParcelsPlusFovea import roi
 from functions.error_metrics import smallest_angle
 from functions.plusFovea import add_fovea_R
 
+
 def ecc_difference(model):
     """Function to determine the difference between empirical
     and predicted eccentricity values for higher order visual areas, early
@@ -23,15 +24,22 @@ def ecc_difference(model):
 
     """
     visual_areas = [
-        ['hV4', 'VO1', 'VO2', 'PHC1', 'PHC2', 'V3a', 'V3b', 'LO1', 'LO2', 'TO1',
+        ['hV4', 'VO1', 'VO2', 'PHC1', 'PHC2', 'V3a', 'V3b', 'LO1', 'LO2',
+         'TO1',
          'TO2', 'IPS0', 'IPS1', 'IPS2', 'IPS3', 'IPS4', 'IPS5', 'SPL1']]
     models = ['pred']
 
-    eccentricity_mask = np.reshape(np.load('./../../plots/output/MaskEccentricity_'
-                                           'above1below8ecc_RH.npz')['list'], (-1))
+    eccentricity_mask = np.reshape(
+        np.load('./../../plots/output/MaskEccentricity_'
+                'above1below8ecc_RH.npz')['list'], (-1))
     # Average map
-    ecc_average = np.load('./../../plots/output/AverageEccentricityMap_RH.npz')[
+    ecc_average = \
+    np.load('./../../plots/output/AverageEccentricityMap_RH.npz')[
         'list']
+
+    # Benson14 template
+    Benson14_predictions = \
+        np.load('./../..//benson14_testPrediction_ecc_rh.npz')['list']
     for k in range(len(visual_areas)):
         mean_delta = []
         for m in range(len(models)):
@@ -68,6 +76,10 @@ def ecc_difference(model):
                                 (-1, 1))
                         if model == 'average':
                             pred = np.reshape(np.array(ecc_average), (-1, 1))
+                        if model == 'Benson14':
+                            pred = np.reshape(
+                                np.array(Benson14_predictions[i]),
+                                (-1, 1))
                         measured = np.reshape(
                             np.array(predictions['Measured_values'][j]),
                             (-1, 1))
@@ -79,14 +91,15 @@ def ecc_difference(model):
                         # Computing delta theta
                         theta = smallest_angle(pred[eccentricity_mask],
                                                measured[eccentricity_mask])
-                        theta_withinsubj.append(theta[mask[eccentricity_mask] > 1])
+                        theta_withinsubj.append(
+                            theta[mask[eccentricity_mask] > 1])
             mean_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=1)
             mean_delta.append(mean_theta_withinsubj)
         mean_delta = np.reshape(np.array(mean_delta), (1, -1))
 
-    np.savez('./../output/ErrorPerParticipant_ecc_RH_WangParcels_' + str(model) + '_1-8.npz',
+    np.savez('./../output/ErrorPerParticipant_ecc_RH_WangParcels_' + str(
+        model) + '_1-8.npz',
              list=np.reshape(theta_withinsubj, (10, -1)))
-
 
     # Early visual cortex
     label_primary_visual_areas = ['V1d', 'V1v', 'fovea_V1', 'V2d', 'V2v',
@@ -118,10 +131,15 @@ def ecc_difference(model):
                 if i == j:
                     # Eccentricity
                     if model == 'deepRetinotopy':
-                        pred = np.reshape(np.array(predictions['Predicted_values'][i]),
-                                          (-1, 1))
+                        pred = np.reshape(
+                            np.array(predictions['Predicted_values'][i]),
+                            (-1, 1))
                     if model == 'average':
                         pred = np.reshape(np.array(ecc_average), (-1, 1))
+                    if model == 'Benson14':
+                        pred = np.reshape(
+                            np.array(Benson14_predictions[i]),
+                            (-1, 1))
                     measured = np.reshape(
                         np.array(predictions['Measured_values'][j]),
                         (-1, 1))
@@ -138,9 +156,9 @@ def ecc_difference(model):
         mean_delta_2.append(mean_theta_withinsubj)
     mean_delta_2 = np.reshape(np.array(mean_delta_2), (1, -1))
 
-    np.savez('./../output/ErrorPerParticipant_ecc_RH_EarlyVisualCortex_' + str(model) + '_1-8.npz',
+    np.savez('./../output/ErrorPerParticipant_ecc_RH_EarlyVisualCortex_' + str(
+        model) + '_1-8.npz',
              list=np.reshape(theta_withinsubj, (10, -1)))
-
 
     # Dorsal early visual cortex
     visual_areas = [
@@ -180,6 +198,10 @@ def ecc_difference(model):
                                 (-1, 1))
                         if model == 'average':
                             pred = np.reshape(np.array(ecc_average), (-1, 1))
+                        if model == 'Benson14':
+                            pred = np.reshape(
+                                np.array(Benson14_predictions[i]),
+                                (-1, 1))
                         measured = np.reshape(
                             np.array(predictions['Measured_values'][j]),
                             (-1, 1))
@@ -191,13 +213,16 @@ def ecc_difference(model):
                         # Computing delta theta
                         theta = smallest_angle(pred[eccentricity_mask],
                                                measured[eccentricity_mask])
-                        theta_withinsubj.append(theta[mask[eccentricity_mask] > 1])
+                        theta_withinsubj.append(
+                            theta[mask[eccentricity_mask] > 1])
             mean_theta_withinsubj = np.mean(np.array(theta_withinsubj), axis=1)
             mean_delta.append(mean_theta_withinsubj)
         mean_delta = np.reshape(np.array(mean_delta), (1, -1))
 
-    np.savez('./../output/ErrorPerParticipant_ecc_RH_dorsalV1-3_' + str(model) + '_1-8.npz',
+    np.savez('./../output/ErrorPerParticipant_ecc_RH_dorsalV1-3_' + str(
+        model) + '_1-8.npz',
              list=np.reshape(theta_withinsubj, (10, -1)))
+
 
 # Create an output folder if it doesn't already exist
 directory = './../output'
@@ -206,3 +231,4 @@ if not os.path.exists(directory):
 
 ecc_difference('average')
 ecc_difference('deepRetinotopy')
+ecc_difference('Benson14')
