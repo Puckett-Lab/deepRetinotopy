@@ -1,0 +1,19 @@
+# Manuscript
+
+This folder contains all source code necessary to replicate datasets generation, in addition to the fucntions and labels 
+used for plots and other. 
+
+
+## Citation
+
+Please cite our paper if you use our model or if it was somewhat useful for you :wink:
+
+    @article{Ribeiro2020,
+        title = {{Predicting brain function from anatomy using geometric deep learning}},
+        author = {Ribeiro, Fernanda L and Bollmann, Steffen and Puckett, Alexander M},
+        doi = {10.1101/2020.02.11.934471},
+        journal = {bioRxiv},
+        url = {http://biorxiv.org/content/early/2020/02/12/2020.02.11.934471.abstract},
+        year = {2020}
+    }
+
