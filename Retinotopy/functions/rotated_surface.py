@@ -1,6 +1,9 @@
 import numpy as np
+import os.path as osp
 
-rotated_info = open('/home/uqfribe1/Desktop/Rotation/SurfToSurf.1D')
+
+rotated_info = open(osp.join(osp.dirname(osp.realpath(__file__)),
+                             '../labels/rotated_surf/SurfToSurf.1D'))
 lines = rotated_info.readlines()
 
 def rotate_roi(index_L_mask):

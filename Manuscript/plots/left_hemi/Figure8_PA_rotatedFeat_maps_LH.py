@@ -94,7 +94,7 @@ view.open_in_browser()
 myelin = np.zeros((32492, 1))
 myelin[final_mask_L == 1] = \
     np.reshape(
-        np.reshape(np.array(predictions['Shuffled_myelin'][subject_index]), (-1, 2)).T[
+        np.reshape(np.array(predictions['Input'][subject_index]), (-1, 2)).T[
             1] + threshold, (-1, 1))
 
 view = plotting.view_surf(
