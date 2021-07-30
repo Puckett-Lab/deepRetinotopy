@@ -54,8 +54,13 @@ for data in train_loader_right:
     PA.append(np.array(data.y))
 PA = np.mean(PA, 0)
 
+# Create an output folder if it doesn't already exist
+directory = './output'
+if not osp.exists(directory):
+    osp.makedirs(directory)
+
 # Saving the average map
-# np.savez('./output/AveragePolarAngleMap_RH.npz', list=PA)
+np.savez('./output/AveragePolarAngleMap_RH.npz', list=PA)
 
 # Settings for plot
 PolarAngle[final_mask_R == 1] = np.reshape(PA, (-1, 1))
@@ -111,8 +116,8 @@ for data in train_loader_left:
     PA.append(np.array(data.y))
 PA = np.mean(PA, 0)
 
-# # Saving the average map
-# np.savez('./output/AveragePolarAngleMap_LH.npz', list=PA)
+# Saving the average map
+np.savez('./output/AveragePolarAngleMap_LH.npz', list=PA)
 
 # Settings for plot
 PolarAngle[final_mask_L == 1] = np.reshape(PA, (-1, 1))
