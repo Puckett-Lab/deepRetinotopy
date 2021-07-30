@@ -53,18 +53,23 @@ for data in train_loader_right:
     ecc.append(np.array(data.y))
 ecc = np.mean(ecc, 0)
 
-# # Saving the average map
-# np.savez('./output/AverageEccentricityMap_RH.npz', list=ecc)
+# Create an output folder if it doesn't already exist
+directory = './output'
+if not osp.exists(directory):
+    osp.makedirs(directory)
 
-# # Mask for prediction errors
-# ecc_1to8 = []
-# for i in range(len(ecc)):
-#     if ecc[i][0] < 1 or ecc[i][0] > 8:
-#         ecc_1to8.append(0)
-#     else:
-#         ecc_1to8.append(ecc[i][0])
-# ecc_1to8 = np.reshape(np.array(ecc_1to8),(-1))
-# np.savez('./output/MaskEccentricity_above1below8ecc_RH', list = ecc_1to8 > 0)
+# Saving the average map
+np.savez('./output/AverageEccentricityMap_RH.npz', list=ecc)
+
+# Mask for prediction errors
+ecc_1to8 = []
+for i in range(len(ecc)):
+    if ecc[i][0] < 1 or ecc[i][0] > 8:
+        ecc_1to8.append(0)
+    else:
+        ecc_1to8.append(ecc[i][0])
+ecc_1to8 = np.reshape(np.array(ecc_1to8),(-1))
+np.savez('./output/MaskEccentricity_above1below8ecc_RH', list = ecc_1to8 > 0)
 
 
 # Masking
@@ -111,18 +116,18 @@ for data in train_loader_left:
     ecc.append(np.array(data.y))
 ecc = np.mean(ecc, 0)
 
-# # Saving the average map
-# np.savez('./output/AverageEccentricityMap_LH.npz', list=ecc)
+# Saving the average map
+np.savez('./output/AverageEccentricityMap_LH.npz', list=ecc)
 
-# # Mask for prediction errors
-# ecc_1to8 = []
-# for i in range(len(ecc)):
-#     if ecc[i][0] < 1 or ecc[i][0] > 8:
-#         ecc_1to8.append(0)
-#     else:
-#         ecc_1to8.append(ecc[i][0])
-# ecc_1to8 = np.reshape(np.array(ecc_1to8),(-1))
-# np.savez('./output/MaskEccentricity_above1below8ecc_LH', list = ecc_1to8 > 0)
+# Mask for prediction errors
+ecc_1to8 = []
+for i in range(len(ecc)):
+    if ecc[i][0] < 1 or ecc[i][0] > 8:
+        ecc_1to8.append(0)
+    else:
+        ecc_1to8.append(ecc[i][0])
+ecc_1to8 = np.reshape(np.array(ecc_1to8),(-1))
+np.savez('./output/MaskEccentricity_above1below8ecc_LH', list = ecc_1to8 > 0)
 
 
 # Masking
