@@ -49,6 +49,7 @@ measured[final_mask_L == 1] = np.reshape(
     np.array(predictions['Measured_values'][subject_index]),
     (-1, 1))
 
+
 # # To generate the mean predicted and mean empirical maps, just uncomment the
 # # following lines:
 # pred_mean = []
@@ -77,6 +78,14 @@ sum = measured < 180
 measured[minus] = measured[minus] - 180 + threshold
 measured[sum] = measured[sum] + 180 + threshold
 measured = np.array(measured)
+
+# # Uncomment for Benson14 predictions
+# predictions = np.load('./../../testset_results/benson14/benson14_'
+#                       'testPrediction_PA_lh.npz')['list']
+# pred[final_mask_L == 1] = np.reshape(
+#     np.array(predictions[subject_index]),
+#     (-1, 1))
+# pred = np.array(pred) + threshold
 
 # Masking
 measured[final_mask_L != 1] = 0

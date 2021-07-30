@@ -43,7 +43,7 @@ def PA_difference_fits(model):
         map_location='cpu')
     # Benson14 template
     Benson14_predictions = np.load('./../../testset_results/benson14/benson14_'
-                                   'testPrediction_lh.npz')['list']
+                                   'testPrediction_PA_lh.npz')['list']
 
     for k in range(len(models)):
         mean_delta = []
