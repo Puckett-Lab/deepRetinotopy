@@ -7,7 +7,7 @@ import sys
 sys.path.append('..')
 
 from nilearn import plotting
-from functions.def_ROIs_WangParcelsPlusFovea import roi
+from Retinotopy.functions.def_ROIs_WangParcelsPlusFovea import roi
 
 subject_index = 8
 
@@ -59,8 +59,7 @@ pred[final_mask_L != 1] = 0
 # Empirical map
 view = plotting.view_surf(
     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../../..',
-                       'Retinotopy/data/raw/original/S1200_7T_Retinotopy_9Zkk'
-                       '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
+                       'Retinotopy/data/raw/surfaces'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
     surf_map=np.reshape(measured[0:32492], (-1)), bg_map=background,
     cmap='gist_rainbow_r', black_bg=False, symmetric_cmap=False,
@@ -70,8 +69,7 @@ view.open_in_browser()
 # Predicted map
 view = plotting.view_surf(
     surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../../..',
-                       'Retinotopy/data/raw/original/S1200_7T_Retinotopy_9Zkk'
-                       '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
+                       'Retinotopy/data/raw/surfaces'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
     surf_map=np.reshape(pred[0:32492], (-1)), bg_map=background,
     cmap='gist_rainbow_r', black_bg=False, symmetric_cmap=False,

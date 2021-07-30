@@ -3,16 +3,16 @@ import scipy.io
 import os.path as osp
 import torch
 
-from functions.def_ROIs_WangParcelsPlusFovea import roi
+from Retinotopy.functions.def_ROIs_WangParcelsPlusFovea import roi
 from nilearn import plotting
-from functions.rotated_surface import rotate_roi
+from Retinotopy.functions.rotated_surface import rotate_roi
 
 subject_index = 7
 
 hcp_id = ['617748', '191336', '572045', '725751', '198653',
           '601127', '644246', '191841', '680957', '157336']
 
-path = './../../data/raw/converted'
+path = './../../../Retinotopy/data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
 background = np.reshape(
     curv['x' + hcp_id[subject_index] + '_curvature'][0][0][0:32492], (-1))
@@ -64,27 +64,25 @@ pred[final_mask_L != 1] = 0
 
 # Predicted map
 view = plotting.view_surf(
-    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../..',
-                       'data/raw/original/S1200_7T_Retinotopy_9Zkk'
-                       '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
+    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../../..',
+                       'Retinotopy/data/raw/surfaces'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
     surf_map=np.reshape(pred[0:32492], (-1)), bg_map=background,
     cmap='gist_rainbow_r', black_bg=False, symmetric_cmap=False,
     threshold=threshold, vmax=361)
 view.open_in_browser()
 
-
 # Plotting the curvature and myelin values
 curvature = np.zeros((32492, 1))
 curvature[final_mask_L == 1] = \
-np.reshape(np.reshape(np.array(predictions['Input'][subject_index]), (-1, 2)).T[
-    0] + threshold + 2, (-1,1))
+    np.reshape(
+        np.reshape(np.array(predictions['Input'][subject_index]), (-1, 2)).T[
+            0] + threshold + 2, (-1, 1))
 
 # Curvature
 view = plotting.view_surf(
-    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../..',
-                       'data/raw/original/S1200_7T_Retinotopy_9Zkk'
-                       '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
+    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../../..',
+                       'Retinotopy/data/raw/surfaces'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
     surf_map=np.reshape(curvature[0:32492], (-1)),
     cmap='gist_gray', black_bg=False, symmetric_cmap=False,
@@ -95,13 +93,13 @@ view.open_in_browser()
 # Myelin
 myelin = np.zeros((32492, 1))
 myelin[final_mask_L == 1] = \
-np.reshape(np.reshape(np.array(predictions['Input'][subject_index]), (-1, 2)).T[
-    1] + threshold, (-1,1))
+    np.reshape(
+        np.reshape(np.array(predictions['Shuffled_myelin'][subject_index]), (-1, 2)).T[
+            1] + threshold, (-1, 1))
 
 view = plotting.view_surf(
-    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../..',
-                       'data/raw/original/S1200_7T_Retinotopy_9Zkk'
-                       '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
+    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../../..',
+                       'Retinotopy/data/raw/surfaces'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf'
                        '.gii'),
     surf_map=np.reshape(myelin[0:32492], (-1)),

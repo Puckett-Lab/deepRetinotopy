@@ -4,10 +4,10 @@ import os.path as osp
 import torch
 
 from nilearn import plotting
-from functions.def_ROIs_WangParcelsPlusFovea import roi
-from functions.error_metrics import smallest_angle
+from Retinotopy.functions.def_ROIs_WangParcelsPlusFovea import roi
+from Retinotopy.functions.error_metrics import smallest_angle
 
-path = './../../data/raw/converted'
+path = './../../../Retinotopy/data/raw/converted'
 curv = scipy.io.loadmat(osp.join(path, 'cifti_curv_all.mat'))['cifti_curv']
 background = np.reshape(curv['x100610_curvature'][0][0][0:32492], (-1))
 
@@ -131,9 +131,8 @@ delta_across[final_mask_L != 1] = 0
 
 # Error map
 view = plotting.view_surf(
-    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../..',
-                       'data/raw/original/S1200_7T_Retinotopy_9Zkk'
-                       '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
+    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../../..',
+                       'Retinotopy/data/raw/surfaces'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
     surf_map=np.reshape(delta_theta[0:32492], (-1)), bg_map=background,
     cmap='Reds', black_bg=False, symmetric_cmap=False, threshold=threshold,
@@ -142,9 +141,8 @@ view.open_in_browser()
 
 # Individual variability map
 view = plotting.view_surf(
-    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../..',
-                       'data/raw/original/S1200_7T_Retinotopy_9Zkk'
-                       '/S1200_7T_Retinotopy181/MNINonLinear/fsaverage_LR32k'
+    surf_mesh=osp.join(osp.dirname(osp.realpath(__file__)), '../../..',
+                       'Retinotopy/data/raw/surfaces'
                        '/S1200_7T_Retinotopy181.L.sphere.32k_fs_LR.surf.gii'),
     surf_map=np.reshape(delta_across[0:32492], (-1)), bg_map=background,
     cmap='Blues', black_bg=False, symmetric_cmap=False, threshold=threshold,
