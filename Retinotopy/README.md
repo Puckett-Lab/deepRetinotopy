@@ -1,7 +1,7 @@
 # Manuscript
 
-This folder contains all source code necessary to replicate datasets generation, in addition to the fucntions and labels 
-used for plots and other. 
+This folder contains all source code necessary to replicate datasets generation, in addition to functions and labels 
+used for figures and models' evaluation. 
 
 
 ## Citation
