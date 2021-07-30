@@ -4,10 +4,10 @@ import torch
 import seaborn as sns
 import pandas as pd
 
-from functions.def_ROIs_WangParcels import roi as roi2
-from functions.def_ROIs_WangParcelsPlusFovea import roi
-from functions.plusFovea import add_fovea
-from functions.error_metrics import smallest_angle
+from Retinotopy.functions.def_ROIs_WangParcels import roi as roi2
+from Retinotopy.functions.def_ROIs_WangParcelsPlusFovea import roi
+from Retinotopy.functions.plusFovea import add_fovea
+from Retinotopy.functions.error_metrics import smallest_angle
 
 # Clusters
 clusters = [['hV4'], ['VO1', 'VO2', 'PHC1', 'PHC2'], ['V3a', 'V3b'],
@@ -23,7 +23,7 @@ color = [['darkblue', 'royalblue'], ['steelblue', 'lightskyblue'],
          ['saddlebrown', 'chocolate'], ['hotpink', 'pink']]
 
 # Eccentricity-based mask
-eccentricity_mask = np.reshape(np.load('./../../plots/output/MaskEccentricity_'
+eccentricity_mask = np.reshape(np.load('./../output/MaskEccentricity_'
                                        'above1below8ecc_LH.npz')['list'], (-1))
 
 sns.set_style("whitegrid")
@@ -334,5 +334,5 @@ ax.set_title('Early visual cortex ')
 legend = plt.legend()
 ax.set_xlabel('')
 plt.ylim([0, 80])
-plt.savefig('./../output/ModelEval_AllClusters.pdf', format="pdf")
+# plt.savefig('./../output/ModelEval_AllClusters.pdf', format="pdf")
 plt.show()
