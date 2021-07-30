@@ -1,6 +1,6 @@
 # Manuscript
 
-This folder contains all source code necessary to reproduce all figures and summary statistics of our recent work entitled
+This folder contains all source code necessary to reproduce all figures and summary statistics in our recent work entitled
  "Predicting the retinotopic organization of human visual cortex from anatomy using geometric deep learning" available on 
  [bioRxiv](https://www.biorxiv.org/content/10.1101/2020.02.11.934471v3).
 
