@@ -1,20 +1,16 @@
 # DeepRetinotopy
 
-This repository contains all source code necessary to replicate our recent work entitled "Predicting brain function from anatomy 
-using geometric deep learning" available on [bioRxiv](https://www.biorxiv.org/content/10.1101/2020.02.11.934471v2).
+This repository contains all source code necessary to replicate our recent work entitled "Predicting the retinotopic organization of human visual cortex from anatomy using geometric deep learning" available on 
+ [bioRxiv](https://www.biorxiv.org/content/10.1101/2020.02.11.934471v3).
 
 ## Table of Contents
-* [General information](#general-info)
 * [Installation and requirements](#installation-and-requirements)
-* [Processed data](#processed-data)
-* [Figures](#figures)
-* [Descriptive statistics](#descriptive-statistics)
-* [Generalization](#generalization)
+* [Manuscript](#manuscript)
+* [Models](#models)
+* [Retinotopy](#retinotopy)
 * [Citation](#citation)
 * [Contact](#contact)
 * [License](#license)
-
-## General Information
 
 
 ## Installation and requirements 
@@ -54,49 +50,28 @@ you follow the following steps to run models locally:
 
     git clone git@github.com:Puckett-Lab/deepRetinotopy.git
 
-Finally, note that in order to generate the left and right hemisphere 
-views of the retinotopic maps (as in our manuscript), you have to install the following git repository:
+Finally, install the following git repository for plots:
 
     pip install git+https://github.com/felenitaribeiro/nilearn.git
 
 
-## Processed data
+## Manuscript
 
-All processed data are available at https://osf.io/95w4y/.
+This folder contains all source code necessary to reproduce all figures and summary statistics in our manuscript.
 
-## Figures
+## Models
 
-Polar angle and eccentricity maps, as shown in the manuscript (Figure 3-5), were generated using the following scripts:
+This folder contains all source code necessary to train a new model and to generate predictions on the test dataset 
+using our pre-trained models.
 
-- ./plots/left(right)_hemi/Eccentricity_maps_L(R)H.py
-- ./plots/left(right)_hemi/PA_maps_L(R)H.py
+## Retinotopy
 
-Final model (among the five models that were trained with the final architecture) was selected based on their performance using the 
-development dataset. Scripts for this assessment are:
-
-- ./plots/left(right)_hemi/ModelEval_FinalModel_ecc.py
-- ./plots/left(right)_hemi/ModelEval_FinalModel_PA.py
-
-## Descriptive statistics
-
-Explained variance and mean error of our models' predictions versus an average map were determined with the following scripts:
-
-- ./plots/left(right)_hemi/ModelEval_explainedVar_ecc.py
-- ./plots/left(right)_hemi/ModelEval_explainedVar_PA.py
-- ./plots/left(right)_hemi/ModelEval_MeanDeltaTheta_ecc.py
-- ./plots/left(right)_hemi/ModelEval_MeanDeltaTheta_PA.py
-
-
-## Generalization
-
-Scripts to load our model and apply to the test dataset are the following:
-
-- ./ModelEvalGeneralizability_ecc.py
-- ./ModelEvalGeneralizability_PA.py
+This folder contains all source code necessary to replicate datasets generation, in addition to functions and labels 
+used for figures and models' evaluation. 
 
 ## Citation
 
-Please cite our paper if you use our model or if it was somewhat useful for you :wink:
+Please cite our paper if you used our model or if it was somewhat helpful for you :wink:
 
     @article{Ribeiro2020,
         title = {{Predicting brain function from anatomy using geometric deep learning}},
@@ -113,4 +88,3 @@ Fernanda L. Ribeiro <[fernanda.ribeiro@uq.edu.au](fernanda.ribeiro@uq.edu.au)>
 
 
 ## License
-

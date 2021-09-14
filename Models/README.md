@@ -10,7 +10,7 @@ Scripts for training new models are:
 
 ## Trained models
 Before running the ModelEvalGeneralizability_ecc(PA).py to generate predictions on the test dataset, you first
-need to download the pre-trained models and to put them at ./output.
+need to download the pre-trained models and put them at ./output.
 
 
 ## Generalization
@@ -22,7 +22,7 @@ Scripts for loading our pre-trained models and generating predictions on the tes
 
 ## Citation
 
-Please cite our paper if you use our model or if it was somewhat useful for you :wink:
+Please cite our paper if you used our model or if it was somewhat helpful for you :wink:
 
     @article{Ribeiro2020,
         title = {{Predicting brain function from anatomy using geometric deep learning}},
