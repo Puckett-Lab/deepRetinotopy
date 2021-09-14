@@ -28,7 +28,7 @@ Mean vertex-wise explained variance for polar angle and eccentricity models were
 
 ## Citation
 
-Please cite our paper if you use our model or if it was somewhat useful for you :wink:
+Please cite our paper if you used our model or if it was somewhat helpful for you :wink:
 
     @article{Ribeiro2020,
         title = {{Predicting brain function from anatomy using geometric deep learning}},
