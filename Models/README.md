@@ -8,13 +8,10 @@ Scripts for training new models are:
 - ./deepRetinotopy_ecc_LH.py (eccentricity);
 - ./deepRetinotopy_PA_LH.py (polar angle).
 
-## Trained models
-Before running the ModelEvalGeneralizability_ecc(PA).py to generate predictions on the test dataset, you first
-need to download the pre-trained models and put them at ./output.
-
 
 ## Generalization
-Scripts for loading our pre-trained models and generating predictions on the test dataset are:
+Scripts for loading our pre-trained models (don't forget to download them from OSF, and to place them 
+at ./output), and generating predictions on the test dataset are:
 - ./ModelEvalGeneralizability_ecc.py;
 - ./ModelEvalGeneralizability_PA.py;
 - ./ModelEvalGeneralizability_PA_rotatedROI.py.
