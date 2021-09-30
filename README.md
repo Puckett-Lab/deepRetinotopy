@@ -16,7 +16,7 @@ This repository contains all source code necessary to replicate our recent work 
 ## Installation and requirements 
 
 Models were generated using [Pytorch Geometric](https://pytorch-geometric.readthedocs.io/en/latest/). Since this package is under constant updates, we highly recommend that 
-you follow the following steps to run models locally:
+you follow the following steps to run our models locally:
 
 - Create a conda environment (or docker container)
 - Install torch first:
@@ -25,6 +25,7 @@ you follow the following steps to run models locally:
     pip install torch==0.4.1    
 
     pip install torchvision==0.2.1
+	
 	
 - Install torch-scatter, torch-sparse, torch-cluster, torch-spline-conv and torch-geometric:
 	 
@@ -45,10 +46,12 @@ you follow the following steps to run models locally:
 
     pip install -r requirements.txt
     
+    
 - Clone DeepRetinotopy:
 
 
     git clone git@github.com:Puckett-Lab/deepRetinotopy.git
+    
 
 Finally, install the following git repository for plots:
 
@@ -74,12 +77,12 @@ used for figures and models' evaluation.
 Please cite our paper if you used our model or if it was somewhat helpful for you :wink:
 
     @article{Ribeiro2020,
-        title = {{Predicting brain function from anatomy using geometric deep learning}},
+        title = {{Predicting the retinotopic organization of human visual cortex from anatomy using geometric deep learning}},
         author = {Ribeiro, Fernanda L and Bollmann, Steffen and Puckett, Alexander M},
         doi = {10.1101/2020.02.11.934471},
         journal = {bioRxiv},
         url = {http://biorxiv.org/content/early/2020/02/12/2020.02.11.934471.abstract},
-        year = {2020}
+        year = {2021}
     }
 
 
