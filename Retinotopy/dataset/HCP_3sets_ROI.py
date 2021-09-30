@@ -3,9 +3,9 @@ import scipy.io
 import torch
 
 from torch_geometric.data import InMemoryDataset
-from read.read_HCPdata import read_HCP
-from functions.labels import labels
-from functions.def_ROIs_WangParcelsPlusFovea import roi
+from Retinotopy.read.read_HCPdata import read_HCP
+from Retinotopy.functions.labels import labels
+from Retinotopy.functions.def_ROIs_WangParcelsPlusFovea import roi
 
 
 # Generates the training, dev and test set separately
