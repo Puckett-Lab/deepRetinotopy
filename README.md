@@ -21,41 +21,38 @@ you follow the following steps to run our models locally:
 - Create a conda environment (or docker container)
 - Install torch first:
 		
-
-    pip install torch==0.4.1    
-
-    pip install torchvision==0.2.1
+```bash
+$ pip install torch==0.4.1    
+$ pip install torchvision==0.2.1
+```
 	
 	
 - Install torch-scatter, torch-sparse, torch-cluster, torch-spline-conv and torch-geometric:
-	 
-	 
-	pip install torch-scatter==1.0.4
 
-	pip install torch-sparse==0.2.2
-
-	pip install torch-cluster==1.1.5
-
-	pip install torch-spline-conv==1.0.4
-
-    pip install torch-geometric==0.3.1
-
+```bash
+$ pip install torch-scatter==1.0.4
+$ pip install torch-sparse==0.2.2
+$ pip install torch-cluster==1.1.5
+$ pip install torch-spline-conv==1.0.4
+$ pip install torch-geometric==0.3.1
+```
 
 - Install the remaining required packages that are available at requirements.txt: 
 
-
-    pip install -r requirements.txt
-    
+```bash
+$ pip install -r requirements.txt
+```   
     
 - Clone DeepRetinotopy:
-
-
-    git clone git@github.com:Puckett-Lab/deepRetinotopy.git
-    
+```bash
+$ git clone git@github.com:Puckett-Lab/deepRetinotopy.git
+```   
 
 Finally, install the following git repository for plots:
-
-    pip install git+https://github.com/felenitaribeiro/nilearn.git
+```bash
+$ pip install git+https://github.com/felenitaribeiro/nilearn.git
+```
+    
 
 
 ## Manuscript
