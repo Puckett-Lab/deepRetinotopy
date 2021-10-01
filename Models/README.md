@@ -11,7 +11,7 @@ Scripts for training new models are:
 
 ## Generalization
 Scripts for loading our pre-trained models (don't forget to download them from OSF, and to place them 
-at ./output), and generating predictions on the test dataset are:
+in ./output), and generating predictions on the test dataset are:
 - ./ModelEvalGeneralizability_ecc.py;
 - ./ModelEvalGeneralizability_PA.py;
 - ./ModelEvalGeneralizability_PA_rotatedROI.py.
