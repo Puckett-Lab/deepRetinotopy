@@ -1,7 +1,6 @@
 # DeepRetinotopy
 
-This repository contains all source code necessary to replicate our recent work entitled "Predicting the retinotopic organization of human visual cortex from anatomy using geometric deep learning" available on 
- [bioRxiv](https://www.biorxiv.org/content/10.1101/2020.02.11.934471v3).
+This repository contains all source code necessary to replicate our recent work entitled "Predicting the retinotopic organization of human visual cortex from anatomy using geometric deep learning" available in [NeuroImage](https://www.sciencedirect.com/science/article/pii/S1053811921008971).
 
 ## Table of Contents
 * [Installation and requirements](#installation-and-requirements)
@@ -72,14 +71,17 @@ used for figures and models' evaluation.
 
 Please cite our paper if you used our model or if it was somewhat helpful for you :wink:
 
-    @article{Ribeiro2020,
-        title = {{Predicting the retinotopic organization of human visual cortex from anatomy using geometric deep learning}},
-        author = {Ribeiro, Fernanda L and Bollmann, Steffen and Puckett, Alexander M},
-        doi = {10.1101/2020.02.11.934471},
-        journal = {bioRxiv},
-        url = {http://biorxiv.org/content/early/2020/02/12/2020.02.11.934471.abstract},
-        year = {2021}
-    }
+	@article{Ribeiro2021,
+		author = {Ribeiro, Fernanda L and Bollmann, Steffen and Puckett, Alexander M},
+		doi = {https://doi.org/10.1016/j.neuroimage.2021.118624},
+		issn = {1053-8119},
+		journal = {NeuroImage},
+		keywords = {cortical surface, high-resolution fMRI, machine learning, manifold, visual hierarchy,Vision},
+		pages = {118624},
+		title = {{Predicting the retinotopic organization of human visual cortex from anatomy using geometric deep learning}},
+		url = {https://www.sciencedirect.com/science/article/pii/S1053811921008971},
+		year = {2021}
+	}
 
 
 ## Contact
