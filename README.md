@@ -10,7 +10,6 @@ This repository contains all source code necessary to replicate our recent work 
 * [Retinotopy](#retinotopy)
 * [Citation](#citation)
 * [Contact](#contact)
-* [License](#license)
 
 
 ## Installation and requirements 
@@ -84,7 +83,5 @@ Please cite our paper if you used our model or if it was somewhat helpful for yo
 
 
 ## Contact
-Fernanda L. Ribeiro <[fernanda.ribeiro@uq.edu.au](fernanda.ribeiro@uq.edu.au)>
-
-
-## License
+Fernanda Ribeiro <[fernanda.ribeiro@uq.edu.au](fernanda.ribeiro@uq.edu.au)>
+Alex Puckett <[a.puckett@uq.edu.au](a.puckett@uq.edu.au)>
